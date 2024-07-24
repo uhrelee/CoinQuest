@@ -124,7 +124,8 @@ public class Main {
         return randomelement;
     }
 
-
+    //loop through map
+    //check tiles[y1][x] 
 
     }
 
