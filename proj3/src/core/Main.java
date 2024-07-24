@@ -11,19 +11,27 @@ public class Main {
 
     public static final int WIDTH = 65;
     public static final int HEIGHT = 55;
-    private static final long SEED = 666;
-    public static final Random rand = new Random(SEED);
+    public long SEED;
 
     public static void main(String[] args) {
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
+        if (args.length < 1) {
+            System.out.println("Please enter a seed");
+            return;
+        }
 
+        long SEED = Long.parseLong(args[0]);
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
                 world[x][y] = Tileset.NOTHING;
             }
         }
+        TERenderer ter = new TERenderer();
+        ter.initialize(WIDTH, HEIGHT);
+        createWorld(world);
+        ter.renderFrame(world);
+    }
+    private static void createWorld(TETile[][] world) {
 
         Rooms.fillWithSeveralRooms(world);
         Rooms.connectRooms(world);
@@ -34,8 +42,6 @@ public class Main {
             Rooms.connectRooms(world);
             Rooms.buildWalls(world);
         }
-        System.out.println("Proportion: " + emptySpaceProportion(world));
-        ter.renderFrame(world);
     }
 
     public static double emptySpaceProportion(TETile[][] world) {
