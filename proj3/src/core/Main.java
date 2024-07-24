@@ -4,10 +4,7 @@ import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 //
 public class Main {
@@ -16,6 +13,8 @@ public class Main {
     private static final int HEIGHT = 40;
     private static final long SEED = 987654;
     private static final Random RANDOM = new Random(SEED);
+    private static final List<Rooms> rooms = new ArrayList<>();
+
 
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
@@ -66,7 +65,7 @@ public class Main {
             for (int x = CenterX - width / 2; x < CenterX + width / 2; x += 1) {
                 for (int y = CenterY - height / 2; y < CenterY + height / 2; y += 1) {
                     tiles[x][y] = Tileset.FLOWER;
-
+                    rooms.add(new Rooms(CenterX, CenterY, height, width));
                 }
             }
         } else {
@@ -124,6 +123,8 @@ public class Main {
         System.out.println("Random Y cootdinate" + randomelement);
         return randomelement;
     }
+
+
 
     }
 
