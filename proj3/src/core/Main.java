@@ -22,7 +22,7 @@ public class Main {
             TETile[][] world = new TETile[WIDTH][HEIGHT];
             for (int x = 0; x < WIDTH; x += 1) {
                 for (int y = 0; y < HEIGHT; y += 1) {
-                    world[x][y] = Tileset.NOTHING;
+                    world[x][y] = Tileset.CustomNothing;
                 }
             }
             rand = new Random(SEED);
@@ -56,7 +56,7 @@ public class Main {
         int count = 0;
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.NOTHING) {
+                if (world[x][y] == Tileset.CustomNothing) {
                     count++;
                 }
             }

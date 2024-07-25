@@ -55,10 +55,10 @@ public class Rooms {
         int width = randomTileWidth();
         int CenterX = chooseRoomCenterX();
         int CenterY = chooseRoomCenterY();
-        if (tiles[CenterX][CenterY] != Tileset.FLOWER) {
+        if (tiles[CenterX][CenterY] != Tileset.CustomGrass) {
             for (int x = CenterX - width / 2; x < CenterX + width / 2; x += 1) {
                 for (int y = CenterY - height / 2; y < CenterY + height / 2; y += 1) {
-                    tiles[x][y] = Tileset.FLOWER;
+                    tiles[x][y] = Tileset.CustomGrass;
                     rooms.add(new Rooms(CenterX, CenterY, height, width));
                 }
             }
@@ -124,22 +124,22 @@ public class Rooms {
         if (x1 != x2) {
             if (x1 < x2) {
                 for (int x = x1; x <= x2; x++) {
-                    tiles[x][y1] = Tileset.FLOWER;
+                    tiles[x][y1] = Tileset.CustomGrass;
                 }
             } else {
                 for (int x = x2; x <= x1; x++) {
-                    tiles[x][y1] = Tileset.FLOWER;
+                    tiles[x][y1] = Tileset.CustomGrass;
                 }
             }
         }
         if (y1 != y2) {
             if (y1 < y2) {
                 for (int y = y1; y <= y2; y++) {
-                    tiles[x2][y] = Tileset.FLOWER;
+                    tiles[x2][y] = Tileset.CustomGrass;
                 }
             } else {
                 for (int y = y2; y <= y1; y++) {
-                    tiles[x2][y] = Tileset.FLOWER;
+                    tiles[x2][y] = Tileset.CustomGrass;
                 }
             }
         }
@@ -148,30 +148,30 @@ public class Rooms {
     public static void buildWalls(TETile[][] world) {
         for (int x = 0; x < Main.WIDTH; x++) {
             for (int y = 0; y < Main.HEIGHT; y++) {
-                if (world[x][y] == Tileset.FLOWER) {
-                    if (x > 0 && world[x - 1][y] == Tileset.NOTHING) {
-                        world[x - 1][y] = Tileset.WALL;
+                if (world[x][y] == Tileset.CustomGrass) {
+                    if (x > 0 && world[x - 1][y] == Tileset.CustomNothing) {
+                        world[x - 1][y] = Tileset.CustomWall;
                     }
-                    if (x < Main.WIDTH - 1 && world[x + 1][y] == Tileset.NOTHING) {
-                        world[x + 1][y] = Tileset.WALL;
+                    if (x < Main.WIDTH - 1 && world[x + 1][y] == Tileset.CustomNothing) {
+                        world[x + 1][y] = Tileset.CustomWall;
                     }
-                    if (y > 0 && world[x][y - 1] == Tileset.NOTHING) {
-                        world[x][y - 1] = Tileset.WALL;
+                    if (y > 0 && world[x][y - 1] == Tileset.CustomNothing) {
+                        world[x][y - 1] = Tileset.CustomWall;
                     }
-                    if (y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.NOTHING) {
-                        world[x][y + 1] = Tileset.WALL;
+                    if (y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.CustomNothing) {
+                        world[x][y + 1] = Tileset.CustomWall;
                     }
-                    if (x > 0 && y > 0 && world[x - 1][y - 1] == Tileset.NOTHING) {
-                        world[x - 1][y - 1] = Tileset.WALL;
+                    if (x > 0 && y > 0 && world[x - 1][y - 1] == Tileset.CustomNothing) {
+                        world[x - 1][y - 1] = Tileset.CustomWall;
                     }
-                    if (x < Main.WIDTH - 1 && y > 0 && world[x + 1][y - 1] == Tileset.NOTHING) {
-                        world[x + 1][y - 1] = Tileset.WALL;
+                    if (x < Main.WIDTH - 1 && y > 0 && world[x + 1][y - 1] == Tileset.CustomNothing) {
+                        world[x + 1][y - 1] = Tileset.CustomWall;
                     }
-                    if (x > 0 && y < Main.HEIGHT - 1 && world[x - 1][y + 1] == Tileset.NOTHING) {
-                        world[x - 1][y + 1] = Tileset.WALL;
+                    if (x > 0 && y < Main.HEIGHT - 1 && world[x - 1][y + 1] == Tileset.CustomNothing) {
+                        world[x - 1][y + 1] = Tileset.CustomWall;
                     }
-                    if (x < Main.WIDTH - 1 && y < Main.HEIGHT - 1 && world[x + 1][y + 1] == Tileset.NOTHING) {
-                        world[x + 1][y + 1] = Tileset.WALL;
+                    if (x < Main.WIDTH - 1 && y < Main.HEIGHT - 1 && world[x + 1][y + 1] == Tileset.CustomNothing) {
+                        world[x + 1][y + 1] = Tileset.CustomWall;
                     }
                 }
             }
@@ -183,19 +183,19 @@ public class Rooms {
                 world[x][0] = Tileset.WALL;
             }
             //check top
-            if (world[x][Main.HEIGHT - 1] == Tileset.FLOWER) {
-                world[x][Main.HEIGHT - 1] = Tileset.WALL;
+            if (world[x][Main.HEIGHT - 1] == Tileset.CustomGrass) {
+                world[x][Main.HEIGHT - 1] = Tileset.CustomWall;
             }
         }
 
         for (int y = 0; y < Main.HEIGHT; y++) {
             //check left
-            if (world[0][y] == Tileset.FLOWER) {
-                world[0][y] = Tileset.WALL;
+            if (world[0][y] == Tileset.CustomGrass) {
+                world[0][y] = Tileset.CustomWall;
             }
             //check right
-            if (world[Main.WIDTH - 1][y] == Tileset.FLOWER) {
-                world[Main.WIDTH - 1][y] = Tileset.WALL;
+            if (world[Main.WIDTH - 1][y] == Tileset.CustomGrass) {
+                world[Main.WIDTH - 1][y] = Tileset.CustomWall;
             }
         }
 
