@@ -7,7 +7,7 @@ import java.awt.*;
 public class MainMenu {
     private int width;
     private int height;
-    Color customPink = new Color(255, 160, 254);
+    Color customPink = new Color(232, 127, 231);
 
     public MainMenu(int width, int height) {
         this.width = width;
