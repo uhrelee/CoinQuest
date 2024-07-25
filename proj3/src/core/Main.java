@@ -9,30 +9,36 @@ import java.util.*;
 //
 public class Main {
 
-    public static final int WIDTH = 65;
-    public static final int HEIGHT = 55;
+    public static final int WIDTH = 60;
+    public static final int HEIGHT = 40;
     public static Random rand;
 
     public static void main(String[] args) {
-        if (args.length < 1) {
-            System.out.println("Please enter a seed");
-            return;
-        }
-
-        long SEED = Long.parseLong(args[0]);
-        TETile[][] world = new TETile[WIDTH][HEIGHT];
-        for (int x = 0; x < WIDTH; x += 1) {
-            for (int y = 0; y < HEIGHT; y += 1) {
-                world[x][y] = Tileset.NOTHING;
+        MainMenu menu = new MainMenu(WIDTH, HEIGHT);
+        menu.DisplayMenu();
+        String input = menu.getInput();
+        if (input.startsWith("N")) {
+            long SEED = Long.parseLong(input.substring(1, input.length() - 1));
+            TETile[][] world = new TETile[WIDTH][HEIGHT];
+            for (int x = 0; x < WIDTH; x += 1) {
+                for (int y = 0; y < HEIGHT; y += 1) {
+                    world[x][y] = Tileset.NOTHING;
+                }
             }
+            rand = new Random(SEED);
+            Rooms.rand = rand;
+            TERenderer ter = new TERenderer();
+            ter.initialize(WIDTH, HEIGHT);
+            createWorld(world);
+            ter.renderFrame(world);
+        } else if (input.startsWith("L")){
+            // LOAD GAME HERE
+        } else if (input.startsWith("Q")) {
+            // QUIT THE GAME
+            System.exit(0);
         }
-        rand = new Random(SEED);
-        Rooms.rand = rand;
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
-        createWorld(world);
-        ter.renderFrame(world);
     }
+
     public static void createWorld(TETile[][] world) {
 
         Rooms.fillWithSeveralRooms(world);

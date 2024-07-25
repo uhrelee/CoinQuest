@@ -17,7 +17,6 @@ public class Rooms {
     public static Random rand;
 
 
-
     public Rooms(int centerX, int CenterY, int height, int width) {
         this.CenterX = centerX;
         this.CenterY = CenterY;
@@ -28,22 +27,25 @@ public class Rooms {
     public int getCenterX() {
         return this.CenterX;
     }
+
     public int getCenterY() {
         return this.CenterY;
     }
+
     public int getHeight() {
         return this.height;
     }
+
     public int getWidth() {
         return this.width;
     }
+
     public static int generateRoomNumber() {
         List<Integer> list = new ArrayList<>();
-        for (int i = 5; i <= 10; i++) {
+        for (int i = 3; i <= 10; i++) {
             list.add(i);
         }
         int randomElement = list.get(rand.nextInt(list.size()));
-        System.out.println("Number of rooms" + randomElement);
         return randomElement;
     }
 
@@ -75,14 +77,14 @@ public class Rooms {
     }
 
     private static int randomTileHeight() {
-        List<Integer> list = Arrays.asList(4, 5, 6, 7,  8, 9, 10);
+        List<Integer> list = Arrays.asList(4, 5, 6, 7, 8);
         int randomElement = list.get(rand.nextInt(list.size()));
         System.out.println(randomElement);
         return randomElement;
     }
 
     private static int randomTileWidth() {
-        List<Integer> list = Arrays.asList(4, 5, 6, 7,  8, 9, 10);
+        List<Integer> list = Arrays.asList(4, 5, 6, 7, 8);
         int randomElement = list.get(rand.nextInt(list.size()));
         System.out.println(randomElement);
         return randomElement;
@@ -92,11 +94,10 @@ public class Rooms {
         List<Integer> list = new ArrayList<>();
         int end = Main.WIDTH;
         int width = randomTileWidth();
-        for (int i = width/2 + 3; i <= end - width/2 - 3; i++) {
+        for (int i = width / 2 + 3; i <= end - width / 2 - 3; i++) {
             list.add(i);
         }
         int randomElement = list.get(rand.nextInt(list.size()));
-        System.out.println("Random X cootdinate" + randomElement);
         return randomElement;
     }
 
@@ -104,18 +105,18 @@ public class Rooms {
         List<Integer> list = new ArrayList<>();
         int end = Main.HEIGHT;
         int height = randomTileHeight();
-        for (int i = height/2 + 3; i <= end - height/2 - 3; i++) {
+        for (int i = height / 2 + 3; i <= end - height / 2 - 3; i++) {
             list.add(i);
         }
         int randomElement = list.get(rand.nextInt(list.size()));
-        System.out.println("Random Y cootdinate" + randomElement);
         return randomElement;
     }
+
     public static void connectRooms(TETile[][] tiles) {
         for (int i = 0; i < rooms.size() - 1; i++) {
             Rooms room1 = rooms.get(i);
             Rooms room2 = rooms.get(i + 1);
-            drawHallway(tiles, room1.getCenterX(), room1.getCenterY(),room2.getCenterX(), room2.getCenterY());
+            drawHallway(tiles, room1.getCenterX(), room1.getCenterY(), room2.getCenterX(), room2.getCenterY());
         }
     }
 
@@ -143,6 +144,7 @@ public class Rooms {
             }
         }
     }
+
     public static void buildWalls(TETile[][] world) {
         for (int x = 0; x < Main.WIDTH; x++) {
             for (int y = 0; y < Main.HEIGHT; y++) {
@@ -174,5 +176,28 @@ public class Rooms {
                 }
             }
         }
+        //make sure the floor cannot be on the border
+        for (int x = 0; x < Main.WIDTH; x++) {
+            //check bottom
+            if (world[x][0] == Tileset.FLOWER) {
+                world[x][0] = Tileset.WALL;
+            }
+            //check top
+            if (world[x][Main.HEIGHT - 1] == Tileset.FLOWER) {
+                world[x][Main.HEIGHT - 1] = Tileset.WALL;
+            }
+        }
+
+        for (int y = 0; y < Main.HEIGHT; y++) {
+            //check left
+            if (world[0][y] == Tileset.FLOWER) {
+                world[0][y] = Tileset.WALL;
+            }
+            //check right
+            if (world[Main.WIDTH - 1][y] == Tileset.FLOWER) {
+                world[Main.WIDTH - 1][y] = Tileset.WALL;
+            }
+        }
+
     }
 }
