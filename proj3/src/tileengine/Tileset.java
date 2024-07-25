@@ -35,8 +35,8 @@ public class Tileset {
 
     public static final TETile CELL = new TETile('█', Color.white, Color.black, "cell", 12);
     public static final TETile CustomNothing = new TETile(' ', Color.black, Color.black, "CustomNothing", "proj3/src/core/Untitled_Artwork 1.png", 15);
-    public static final TETile CustomGrass = new TETile('.', new Color(128, 192, 128), Color.black, "customGrass", "proj3/src/core/Untitled_Artwork 2.png", 13);
-    public static final TETile CustomWall = new TETile('#', new Color(216, 128, 128), Color.darkGray, "customWall", "proj3/src/core/Untitled_Artwork.png", 14);
+    public static final TETile CustomGrass = new TETile('.', new Color(128, 192, 128), Color.black, "customGrass", "proj3/src/core/grass2.png", 13);
+    public static final TETile CustomWall = new TETile('#', new Color(216, 128, 128), Color.darkGray, "customWall", "proj3/src/core/bush2.png", 14);
 }
 
 
