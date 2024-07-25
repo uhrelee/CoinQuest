@@ -7,6 +7,7 @@ import java.awt.*;
 public class MainMenu {
     private int width;
     private int height;
+    Color customPink = new Color(255, 160, 254);
 
     public MainMenu(int width, int height) {
         this.width = width;
@@ -21,7 +22,7 @@ public class MainMenu {
     }
 
     public void DisplayMenu() {
-        StdDraw.clear(Color.PINK);
+        StdDraw.clear(customPink);
         StdDraw.setPenColor(Color.WHITE);
         Font fontBig = new Font("Monaco", Font.BOLD, 30);
         StdDraw.setFont(fontBig);
@@ -67,7 +68,7 @@ public class MainMenu {
     }
 
     public void drawSeedFrame(String seed) {
-        StdDraw.clear(Color.PINK);
+        StdDraw.clear(customPink);
         StdDraw.setPenColor(Color.WHITE);
         Font fontBig = new Font("Monaco", Font.BOLD, 30);
         StdDraw.setFont(fontBig);
