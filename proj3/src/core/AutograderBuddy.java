@@ -1,7 +1,10 @@
 package core;
 
+import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
+
+import java.util.Random;
 
 public class AutograderBuddy {
 
@@ -17,10 +20,30 @@ public class AutograderBuddy {
      * @param input the input string to feed to your program
      * @return the 2D TETile[][] representing the state of the world
      */
+
+    public static final int WIDTH = 65;
+    public static final int HEIGHT = 55;
+
     public static TETile[][] getWorldFromInput(String input) {
 
-        throw new RuntimeException("Please fill out AutograderBuddy!");
+        if (input.isEmpty()) {
+            throw new RuntimeException("Please fill out AutograderBuddy!");
+        }
 
+        String seed = input.substring(1, input.length() - 1);
+        long SEED = Long.parseLong(seed);
+
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                world[x][y] = Tileset.NOTHING;
+            }
+        }
+        Random rand = new Random(SEED);
+        Rooms.rand = rand;
+
+        Main.createWorld(world);
+        return world;
     }
 
 
