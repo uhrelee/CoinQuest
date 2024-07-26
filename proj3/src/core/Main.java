@@ -11,28 +11,26 @@ public class Main {
 
     public static final int WIDTH = 60;
     public static final int HEIGHT = 40;
-    public static Random rand;
 
     public static void main(String[] args) {
         MainMenu menu = new MainMenu(WIDTH, HEIGHT);
-        menu.DisplayMenu();
+        menu.displayMenu();
         String input = menu.getInput();
         if (input.startsWith("N")) {
-            long SEED = Long.parseLong(input.substring(1, input.length() - 1));
+            long seed = Long.parseLong(input.substring(1, input.length() - 1));
             TETile[][] world = new TETile[WIDTH][HEIGHT];
             for (int x = 0; x < WIDTH; x += 1) {
                 for (int y = 0; y < HEIGHT; y += 1) {
                     world[x][y] = Tileset.CustomNothing;
                 }
             }
-            rand = new Random(SEED);
-            Rooms.rand = rand;
+            Random rand = new Random(seed);
             TERenderer ter = new TERenderer();
             ter.initialize(WIDTH, HEIGHT);
             createWorld(world);
             ter.renderFrame(world);
             System.out.println("Proportion of empty space:" + emptySpaceProportion(world));
-        } else if (input.startsWith("L")){
+        } else if (input.startsWith("L")) {
             // LOAD GAME HERE
         } else if (input.startsWith("Q")) {
             // QUIT THE GAME

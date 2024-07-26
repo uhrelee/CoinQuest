@@ -23,7 +23,7 @@ public class MainMenu {
     }
 
     //display main menu
-    public void DisplayMenu() {
+    public void displayMenu() {
         StdDraw.clear(customPink);
         StdDraw.setPenColor(Color.WHITE);
         Font fontBig = new Font("Monaco", Font.BOLD, 30);
@@ -60,10 +60,10 @@ public class MainMenu {
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char character = StdDraw.nextKeyTyped();
-                if (Character.isDigit(character)){
+                if (Character.isDigit(character)) {
                     typedString.append(character);
                     drawSeedFrame(typedString.toString());
-                } else if (character == 'S' || character == 's'){
+                } else if (character == 'S' || character == 's') {
                     break;
                 }
             }
@@ -78,7 +78,7 @@ public class MainMenu {
         Font fontBig = new Font("Monaco", Font.BOLD, 30);
         StdDraw.setFont(fontBig);
         StdDraw.text(this.width / 2, this.height / 2 + 5, "Enter Seed:");
-        StdDraw.text(this.width / 2, this.height / 2 , seed);
+        StdDraw.text(this.width / 2, this.height / 2, seed);
         StdDraw.text(this.width / 2, this.height / 2 - 5, "Press 'S' to Start");
         StdDraw.show();
     }
