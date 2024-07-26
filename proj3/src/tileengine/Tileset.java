@@ -34,9 +34,12 @@ public class Tileset {
     public static final TETile TREE = new TETile('♠', Color.green, Color.black, "tree", 11);
 
     public static final TETile CELL = new TETile('█', Color.white, Color.black, "cell", 12);
-    public static final TETile CustomNothing = new TETile(' ', Color.black, Color.black, "CustomNothing", "proj3/src/core/grass2.png", 15);
-    public static final TETile CustomGrass = new TETile('.', new Color(128, 192, 128), Color.black, "customGrass", "proj3/src/core/floor4.png", 13);
-    public static final TETile CustomWall = new TETile('#', new Color(216, 128, 128), Color.darkGray, "customWall", "proj3/src/core/wall3.png", 14);
+    public static final TETile CustomNothing = new TETile(' ', Color.black, Color.black, "CustomNothing", "proj3/src/core/game assets/grass2.png", 15);
+    public static final TETile CustomFloor = new TETile('.', new Color(128, 192, 128), Color.black, "customGrass", "proj3/src/core/game assets/coin.png", 13);
+    public static final TETile CustomWall = new TETile('#', new Color(216, 128, 128), Color.darkGray, "customWall", "proj3/src/core/game assets/wall3.png", 14);
+    public static final TETile CustomTree = new TETile(' ', Color.black, Color.black, "CustomNothing", "proj3/src/core/game assets/tree.png", 15);
+    public static final TETile CustomBorder = new TETile(' ', Color.black, Color.black, "CustomNothing", "proj3/src/core/game assets/border.png", 15);
+    public static final TETile CustomFlower = new TETile(' ', Color.black, Color.black, "CustomNothing", "proj3/src/core/game assets/flower.png", 15);
 }
 
 

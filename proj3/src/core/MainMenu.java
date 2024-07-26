@@ -9,6 +9,7 @@ public class MainMenu {
     private int height;
     Color customPink = new Color(232, 127, 231);
 
+    //constructor
     public MainMenu(int width, int height) {
         this.width = width;
         this.height = height;
@@ -21,6 +22,7 @@ public class MainMenu {
         StdDraw.enableDoubleBuffering();
     }
 
+    //display main menu
     public void DisplayMenu() {
         StdDraw.clear(customPink);
         StdDraw.setPenColor(Color.WHITE);
@@ -33,6 +35,7 @@ public class MainMenu {
         StdDraw.show();
     }
 
+    //get string input from user
     public String getInput() {
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
@@ -50,6 +53,7 @@ public class MainMenu {
         }
     }
 
+    //collect seed based on user input
     public String collectSeed() {
         StringBuilder typedString = new StringBuilder();
         drawSeedFrame(typedString.toString());
@@ -67,6 +71,7 @@ public class MainMenu {
         return typedString.toString();
     }
 
+    //make the second frame after main where user inputs the seed
     public void drawSeedFrame(String seed) {
         StdDraw.clear(customPink);
         StdDraw.setPenColor(Color.WHITE);

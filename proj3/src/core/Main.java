@@ -31,6 +31,7 @@ public class Main {
             ter.initialize(WIDTH, HEIGHT);
             createWorld(world);
             ter.renderFrame(world);
+            System.out.println("Proportion of empty space:" + emptySpaceProportion(world));
         } else if (input.startsWith("L")){
             // LOAD GAME HERE
         } else if (input.startsWith("Q")) {
