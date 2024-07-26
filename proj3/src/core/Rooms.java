@@ -42,7 +42,7 @@ public class Rooms {
 
     public static int generateRoomNumber() {
         List<Integer> list = new ArrayList<>();
-        for (int i = 3; i <= 10; i++) {
+        for (int i = 3; i <= 8; i++) {
             list.add(i);
         }
         int randomElement = list.get(rand.nextInt(list.size()));
@@ -79,14 +79,12 @@ public class Rooms {
     private static int randomTileHeight() {
         List<Integer> list = Arrays.asList(4, 5, 6, 7, 8);
         int randomElement = list.get(rand.nextInt(list.size()));
-        System.out.println(randomElement);
         return randomElement;
     }
 
     private static int randomTileWidth() {
         List<Integer> list = Arrays.asList(4, 5, 6, 7, 8);
         int randomElement = list.get(rand.nextInt(list.size()));
-        System.out.println(randomElement);
         return randomElement;
     }
 
@@ -198,6 +196,5 @@ public class Rooms {
                 world[Main.WIDTH - 1][y] = Tileset.CustomWall;
             }
         }
-
     }
 }
