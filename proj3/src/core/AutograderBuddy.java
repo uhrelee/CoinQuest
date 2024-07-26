@@ -33,6 +33,7 @@ public class AutograderBuddy {
         String seed = input.substring(1, input.length() - 1);
         long SEED = Long.parseLong(seed);
 
+        Rooms.rooms.clear();
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {

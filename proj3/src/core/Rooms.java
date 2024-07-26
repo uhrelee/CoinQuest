@@ -13,7 +13,7 @@ public class Rooms {
     int CenterY;
     int height;
     int width;
-    private static final List<Rooms> rooms = new ArrayList<>();
+    public static final List<Rooms> rooms = new ArrayList<>();
     public static Random rand;
 
 
@@ -53,27 +53,31 @@ public class Rooms {
 
     //place a room
     public static void fillWithRandomTiles(TETile[][] tiles) {
-        int height = randomRoomHeight();
-        int width = randomRoomWidth();
-        int CenterX = chooseRoomCenterX();
-        int CenterY = chooseRoomCenterY();
-        Rooms newRoom = new Rooms(CenterX, CenterY, height, width);
+        while (true) {
+            int height = randomRoomHeight();
+            int width = randomRoomWidth();
+            int CenterX = chooseRoomCenterX();
+            int CenterY = chooseRoomCenterY();
+            Rooms newRoom = new Rooms(CenterX, CenterY, height, width);
 
-        //if rooms overlap then regenerate parameters
-        for (Rooms room : rooms) {
-            if (newRoom.ifRoomsOverlap(room)) {
-                fillWithRandomTiles(tiles);
-                return;
+            boolean overlaps = false;
+            for (Rooms room : rooms) {
+                if (newRoom.ifRoomsOverlap(room)) {
+                    overlaps = true;
+                    break;
+                }
+            }
+
+            if (!overlaps) {
+                for (int x = CenterX - width / 2; x < CenterX + width / 2; x++) {
+                    for (int y = CenterY - height / 2; y < CenterY + height / 2; y++) {
+                        tiles[x][y] = Tileset.CustomFloor;
+                    }
+                }
+                rooms.add(newRoom);
+                break;
             }
         }
-        //place a room
-        for (int x = CenterX - width / 2; x < CenterX + width / 2; x ++) {
-            for (int y = CenterY - height / 2; y < CenterY + height / 2; y ++) {
-                tiles[x][y] = Tileset.CustomFloor;
-            }
-        }
-        //add room to the list
-        rooms.add(newRoom);
     }
 
     //checks whether the rooms overlap
