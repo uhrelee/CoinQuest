@@ -37,7 +37,7 @@ public class AutograderBuddy {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
-                world[x][y] = Tileset.NOTHING;
+                world[x][y] = Tileset.CustomNothing;
             }
         }
         Random rand = new Random(SEED);
