@@ -54,6 +54,7 @@ public class AutograderBuddy {
      */
     public static boolean isGroundTile(TETile t) {
         return t.character() == Tileset.FLOOR.character()
+                || t.character() == Tileset.CustomFloor.character()
                 || t.character() == Tileset.AVATAR.character()
                 || t.character() == Tileset.FLOWER.character();
     }
@@ -64,6 +65,7 @@ public class AutograderBuddy {
      */
     public static boolean isBoundaryTile(TETile t) {
         return t.character() == Tileset.WALL.character()
+                || t.character() == Tileset.CustomWall.character()
                 || t.character() == Tileset.LOCKED_DOOR.character()
                 || t.character() == Tileset.UNLOCKED_DOOR.character();
     }
