@@ -40,7 +40,7 @@ public class AutograderBuddy {
             }
         }
         Random rand = new Random(seed);
-        Main.createWorld(world);
+        Main.createWorld(world, rand);
         return world;
     }
 

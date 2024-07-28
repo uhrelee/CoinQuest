@@ -17,13 +17,13 @@ public class Rooms {
     private Random rand;
 
 
-    public Rooms(int centerX, int centerY, int height, int width) {
+    public Rooms(int centerX, int centerY, int height, int width, Random rand) {
         this.CenterX = centerX;
         this.CenterY = centerY;
         this.height = height;
         this.width = width;
         this.currRooms = new ArrayList<>();
-        this.rand = new Random();
+        this.rand = rand;
     }
 
     public int getCenterX() {
@@ -59,7 +59,7 @@ public class Rooms {
             int w = randomRoomWidth();
             int centerX = chooseRoomCenterX();
             int centerY = chooseRoomCenterY();
-            Rooms newRoom = new Rooms(centerX, centerY, h, w);
+            Rooms newRoom = new Rooms(centerX, centerY, h, w, rand);
 
             boolean overlaps = false;
             for (Rooms room : currRooms) {

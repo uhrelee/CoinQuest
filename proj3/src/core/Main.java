@@ -27,7 +27,7 @@ public class Main {
             Random rand = new Random(seed);
             TERenderer ter = new TERenderer();
             ter.initialize(WIDTH, HEIGHT);
-            createWorld(world);
+            createWorld(world, rand);
             ter.renderFrame(world);
             System.out.println("Proportion of empty space:" + emptySpaceProportion(world));
         } else if (input.startsWith("L")) {
@@ -40,8 +40,8 @@ public class Main {
         }
     }
 
-    public static void createWorld(TETile[][] world) {
-        Rooms rooms = new Rooms(0, 0, 0, 0);
+    public static void createWorld(TETile[][] world, Random rand) {
+        Rooms rooms = new Rooms(0, 0, 0, 0, rand);
         rooms.fillWithSeveralRooms(world);
         rooms.connectRooms(world);
         rooms.buildWalls(world);
