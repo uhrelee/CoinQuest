@@ -53,7 +53,8 @@ public class MainMenu {
         }
     }
 
-    //collect seed based on user input
+    // @source help from chatGPT
+    // collect seed based on user input
     public String collectSeed() {
         StringBuilder typedString = new StringBuilder();
         drawSeedFrame(typedString.toString());

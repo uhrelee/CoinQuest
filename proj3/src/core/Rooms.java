@@ -81,6 +81,7 @@ public class Rooms {
         }
     }
 
+    // @source help from chatGPT
     // checks whether the rooms overlap
     public boolean ifRoomsOverlap(Rooms other) {
         return this.CenterX + this.width / 2 + 1 >= other.CenterX - other.width / 2
@@ -141,6 +142,7 @@ public class Rooms {
         }
     }
 
+    // @source help from chatGPT
     // make hallways between rooms
     private void drawHallway(TETile[][] tiles, int x1, int y1, int x2, int y2) {
         int currentX = x1;
@@ -162,6 +164,7 @@ public class Rooms {
         tiles[x2][y2] = Tileset.CustomFloor;
     }
 
+    // @source help from chatGPT
     // build walls around rooms and hallways based on adjacent tile types
     public void buildWalls(TETile[][] world) {
         for (int x = 0; x < Main.WIDTH; x++) {
