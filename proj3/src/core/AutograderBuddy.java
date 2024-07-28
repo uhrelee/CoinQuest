@@ -30,18 +30,16 @@ public class AutograderBuddy {
             throw new RuntimeException("Please fill out AutograderBuddy!");
         }
 
-        String seed = input.substring(1, input.length() - 1);
-        long SEED = Long.parseLong(seed);
+        String inputSeed = input.substring(1, input.length() - 1);
+        long seed = Long.parseLong(inputSeed);
 
-        Rooms.ROOMS.clear();
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
                 world[x][y] = Tileset.CustomNothing;
             }
         }
-        Random rand = new Random(SEED);
-
+        Random rand = new Random(seed);
         Main.createWorld(world);
         return world;
     }

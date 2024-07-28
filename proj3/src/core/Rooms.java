@@ -13,7 +13,7 @@ public class Rooms {
     int CenterY;
     int height;
     int width;
-    private List<Rooms> ROOMS = new ArrayList<>();
+    private List<Rooms> currRooms;
     private Random rand;
 
 
@@ -22,6 +22,8 @@ public class Rooms {
         this.CenterY = centerY;
         this.height = height;
         this.width = width;
+        this.currRooms = new ArrayList<>();
+        this.rand = new Random();
     }
 
     public int getCenterX() {
@@ -40,25 +42,24 @@ public class Rooms {
         return this.width;
     }
 
-    //generate a random number of rooms
-    public static int generateRoomNumber() {
+    // generate a random number of rooms
+    public int generateRoomNumber() {
         List<Integer> list = new ArrayList<>();
         for (int i = 3; i <= 8; i++) {
             list.add(i);
         }
-        int randomElement = list.get(rand.nextInt(list.size()));
-        return randomElement;
+        return list.get(rand.nextInt(list.size()));
     }
 
 
-    //place a room
-    public static void fillWithRandomTiles(TETile[][] tiles, List<Rooms> currRooms) {
+    // place a room
+    public void fillWithRandomTiles(TETile[][] tiles) {
         while (true) {
-            int height = randomRoomHeight();
-            int width = randomRoomWidth();
+            int h = randomRoomHeight();
+            int w = randomRoomWidth();
             int centerX = chooseRoomCenterX();
             int centerY = chooseRoomCenterY();
-            Rooms newRoom = new Rooms(centerX, centerY, height, width);
+            Rooms newRoom = new Rooms(centerX, centerY, h, w);
 
             boolean overlaps = false;
             for (Rooms room : currRooms) {
@@ -69,8 +70,8 @@ public class Rooms {
             }
 
             if (!overlaps) {
-                for (int x = centerX - width / 2; x < centerX + width / 2; x++) {
-                    for (int y = centerY - height / 2; y < centerY + height / 2; y++) {
+                for (int x = centerX - w / 2; x < centerX + w / 2; x++) {
+                    for (int y = centerY - h / 2; y < centerY + h / 2; y++) {
                         tiles[x][y] = Tileset.CustomFloor;
                     }
                 }
@@ -80,64 +81,59 @@ public class Rooms {
         }
     }
 
-    //checks whether the rooms overlap
+    // checks whether the rooms overlap
     public boolean ifRoomsOverlap(Rooms other) {
-        if (this.CenterX + this.width / 2 + 1 < other.CenterX - other.width / 2
-                || this.CenterX - this.width / 2 - 1 > other.CenterX + other.width / 2
-                || this.CenterY + this.height / 2 + 1 < other.CenterY - other.height / 2
-                || this.CenterY - this.height / 2 - 1 > other.CenterY + other.height / 2) {
-            return false;
-        } else {
-            return true;
-        }
+        return this.CenterX + this.width / 2 + 1 >= other.CenterX - other.width / 2
+                && this.CenterX - this.width / 2 - 1 <= other.CenterX + other.width / 2
+                && this.CenterY + this.height / 2 + 1 >= other.CenterY - other.height / 2
+                && this.CenterY - this.height / 2 - 1 <= other.CenterY + other.height / 2;
     }
 
 
-    //place several rooms
-    public static void fillWithSeveralRooms(TETile[][] tiles) {
+    // place several rooms
+    public void fillWithSeveralRooms(TETile[][] tiles) {
         int numberOfRooms = generateRoomNumber();
         for (int i = 0; i < numberOfRooms; i++) {
             fillWithRandomTiles(tiles);
         }
     }
 
-    //generate random height of the room
-    private static int randomRoomHeight() {
+    // generate random height of the room
+    private int randomRoomHeight() {
         List<Integer> list = Arrays.asList(4, 5, 6, 7, 8);
         return list.get(rand.nextInt(list.size()));
     }
 
-    //generate random width of the room
-    private static int randomRoomWidth() {
+    // generate random width of the room
+    private int randomRoomWidth() {
         List<Integer> list = Arrays.asList(4, 5, 6, 7, 8);
         return list.get(rand.nextInt(list.size()));
     }
 
-    //generate random center X for a room
-    private static int chooseRoomCenterX() {
+    // generate random center X for a room
+    private int chooseRoomCenterX() {
         List<Integer> list = new ArrayList<>();
         int end = Main.WIDTH;
-        int width = randomRoomWidth();
-        for (int i = width / 2 + 3; i <= end - width / 2 - 3; i++) {
+        int w = randomRoomWidth();
+        for (int i = w / 2 + 3; i <= end - w / 2 - 3; i++) {
             list.add(i);
         }
         return list.get(rand.nextInt(list.size()));
     }
 
-    //generate random center Y for a room
-    private static int chooseRoomCenterY() {
+    // generate random center Y for a room
+    private int chooseRoomCenterY() {
         List<Integer> list = new ArrayList<>();
         int end = Main.HEIGHT;
-        int height = randomRoomHeight();
-        for (int i = height / 2 + 3; i <= end - height / 2 - 3; i++) {
+        int h = randomRoomHeight();
+        for (int i = h / 2 + 3; i <= end - h / 2 - 3; i++) {
             list.add(i);
         }
-        int randomElement = list.get(rand.nextInt(list.size()));
-        return randomElement;
+        return list.get(rand.nextInt(list.size()));
     }
 
     //connect room 1 with room 2, room 2 with room 3, room 3 with room 4 ...
-    public static void connectRooms(TETile[][] tiles, List<Rooms> currRooms) {
+    public void connectRooms(TETile[][] tiles) {
         for (int i = 0; i < currRooms.size() - 1; i++) {
             Rooms room1 = currRooms.get(i);
             Rooms room2 = currRooms.get(i + 1);
@@ -145,8 +141,8 @@ public class Rooms {
         }
     }
 
-    //make hallways between rooms
-    private static void drawHallway(TETile[][] tiles, int x1, int y1, int x2, int y2) {
+    // make hallways between rooms
+    private void drawHallway(TETile[][] tiles, int x1, int y1, int x2, int y2) {
         int currentX = x1;
         int currentY = y1;
 
@@ -166,8 +162,8 @@ public class Rooms {
         tiles[x2][y2] = Tileset.CustomFloor;
     }
 
-    //build walls around rooms and hallways based on adjacent tile types
-    public static void buildWalls(TETile[][] world) {
+    // build walls around rooms and hallways based on adjacent tile types
+    public void buildWalls(TETile[][] world) {
         for (int x = 0; x < Main.WIDTH; x++) {
             for (int y = 0; y < Main.HEIGHT; y++) {
                 if (world[x][y] == Tileset.CustomFloor) {

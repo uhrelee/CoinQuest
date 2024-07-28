@@ -39,15 +39,15 @@ public class Main {
     }
 
     public static void createWorld(TETile[][] world) {
-
-        Rooms.fillWithSeveralRooms(world);
-        Rooms.connectRooms(world);
-        Rooms.buildWalls(world);
+        Rooms rooms = new Rooms(0, 0, 0, 0);
+        rooms.fillWithSeveralRooms(world);
+        rooms.connectRooms(world);
+        rooms.buildWalls(world);
 
         while (emptySpaceProportion(world) > 0.5) {
-            Rooms.fillWithSeveralRooms(world);
-            Rooms.connectRooms(world);
-            Rooms.buildWalls(world);
+            rooms.fillWithSeveralRooms(world);
+            rooms.connectRooms(world);
+            rooms.buildWalls(world);
         }
     }
 
