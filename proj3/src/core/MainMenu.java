@@ -9,6 +9,10 @@ public class MainMenu {
     private int height;
     Color customPink = new Color(232, 127, 231);
 
+    // Paths to the images
+    private static final String MAIN_MENU_IMAGE = "proj3/src/core/game assets/Main Menu.png";
+    private static final String SEED_SCREEN_IMAGE = "proj3/src/core/game assets/Seen Screen.png";
+
     //constructor
     public MainMenu(int width, int height) {
         this.width = width;
@@ -24,14 +28,8 @@ public class MainMenu {
 
     //display main menu
     public void displayMenu() {
-        StdDraw.clear(customPink);
-        StdDraw.setPenColor(Color.WHITE);
-        Font fontBig = new Font("Monaco", Font.BOLD, 30);
-        StdDraw.setFont(fontBig);
-        StdDraw.text(this.width / 2, this.height - 10, "CS61B: Best Game =^.^=");
-        StdDraw.text(this.width / 2, this.height / 2, "New Game (N)");
-        StdDraw.text(this.width / 2, this.height / 2 - 5, "Load Game (L)");
-        StdDraw.text(this.width / 2, this.height / 2 - 10, "Quit (Q)");
+        StdDraw.clear();
+        StdDraw.picture(this.width / 2, this.height / 2, MAIN_MENU_IMAGE);
         StdDraw.show();
     }
 
@@ -53,8 +51,7 @@ public class MainMenu {
         }
     }
 
-    // @source help from chatGPT
-    // collect seed based on user input
+    //collect seed based on user input
     public String collectSeed() {
         StringBuilder typedString = new StringBuilder();
         drawSeedFrame(typedString.toString());
@@ -74,16 +71,14 @@ public class MainMenu {
 
     //make the second frame after main where user inputs the seed
     public void drawSeedFrame(String seed) {
-        StdDraw.clear(customPink);
-        StdDraw.setPenColor(Color.WHITE);
-        Font fontBig = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.clear();
+        StdDraw.picture(this.width / 2, this.height / 2, SEED_SCREEN_IMAGE);
+        StdDraw.setPenColor(Color.BLACK);
+        Font fontBig = new Font("Monaco", Font.BOLD, 45);
         StdDraw.setFont(fontBig);
-        StdDraw.text(this.width / 2, this.height / 2 + 5, "Enter Seed:");
-        StdDraw.text(this.width / 2, this.height / 2, seed);
-        StdDraw.text(this.width / 2, this.height / 2 - 5, "Press 'S' to Start");
+        StdDraw.text(this.width / 2, this.height / 2 - 1.5, seed);
         StdDraw.show();
     }
 }
-
 
 

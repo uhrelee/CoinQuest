@@ -54,7 +54,8 @@ public class AutograderBuddy {
         return t.character() == Tileset.FLOOR.character()
                 || t.character() == Tileset.CustomFloor.character()
                 || t.character() == Tileset.AVATAR.character()
-                || t.character() == Tileset.FLOWER.character();
+                || t.character() == Tileset.FLOWER.character()
+                || t.character() == Tileset.Floor.character();
     }
 
     /**
@@ -65,6 +66,31 @@ public class AutograderBuddy {
         return t.character() == Tileset.WALL.character()
                 || t.character() == Tileset.CustomWall.character()
                 || t.character() == Tileset.LOCKED_DOOR.character()
-                || t.character() == Tileset.UNLOCKED_DOOR.character();
+                || t.character() == Tileset.UNLOCKED_DOOR.character()
+                || t.character() == Tileset.LeftWall.character()
+                || t.character() == Tileset.RightWall.character()
+                || t.character() == Tileset.TopWall.character()
+                || t.character() == Tileset.BottomWall.character()
+                || t.character() == Tileset.TopLeftCorner.character()
+                || t.character() == Tileset.TopRightCorner.character()
+                || t.character() == Tileset.BottomLeftCorner.character()
+                || t.character() == Tileset.BottomRightCorner.character()
+                || t.character() == Tileset.LeftInnerCorner.character()
+                || t.character() == Tileset.LeftTopInnerCorner.character()
+                || t.character() == Tileset.RightInnerCorner.character()
+                || t.character() == Tileset.RightTopInnerCorner.character()
+                || t.character() == Tileset.SingleWall.character()
+                || t.character() == Tileset.SingleWallLeft.character()
+                || t.character() == Tileset.SingleWallMiddle.character()
+                || t.character() == Tileset.SingleWallRight.character()
+                || t.character() == Tileset.SingleWallVertical.character()
+                || t.character() == Tileset.DoubleWallTop.character()
+                || t.character() == Tileset.DoubleWallBottom.character()
+                || t.character() == Tileset.WallAndTopLeftCorner.character()
+                || t.character() == Tileset.WallAndTopRightCorner.character()
+                || t.character() == Tileset.BottomWallAndLeftCorner.character()
+                || t.character() == Tileset.BottomWallAndRightCorner.character()
+                || t.character() == Tileset.WallAndLeftBottomCorner.character()
+                || t.character() == Tileset.WallAndRightBottomCorner.character();
     }
 }

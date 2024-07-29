@@ -4,9 +4,8 @@ import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
 
-import java.util.*;
+import java.util.Random;
 
-//
 public class Main {
 
     public static final int WIDTH = 60;
@@ -21,7 +20,7 @@ public class Main {
             TETile[][] world = new TETile[WIDTH][HEIGHT];
             for (int x = 0; x < WIDTH; x += 1) {
                 for (int y = 0; y < HEIGHT; y += 1) {
-                    world[x][y] = Tileset.CustomNothing;
+                    world[x][y] = Tileset.Grass;
                 }
             }
             Random rand = new Random(seed);
@@ -45,11 +44,13 @@ public class Main {
         rooms.fillWithSeveralRooms(world);
         rooms.connectRooms(world);
         rooms.buildWalls(world);
+        rooms.handleEdgeCases(world);
 
         while (emptySpaceProportion(world) > 0.5) {
             rooms.fillWithSeveralRooms(world);
             rooms.connectRooms(world);
             rooms.buildWalls(world);
+            rooms.handleEdgeCases(world);
         }
     }
 
@@ -57,7 +58,7 @@ public class Main {
         int count = 0;
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.CustomNothing) {
+                if (world[x][y] == Tileset.Grass) {
                     count++;
                 }
             }

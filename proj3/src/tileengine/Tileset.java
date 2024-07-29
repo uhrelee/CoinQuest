@@ -40,6 +40,33 @@ public class Tileset {
     public static final TETile CustomTree = new TETile(' ', Color.black, Color.black, "CustomNothing", "proj3/src/core/game assets/tree.png", 15);
     public static final TETile CustomBorder = new TETile(' ', Color.black, Color.black, "CustomNothing", "proj3/src/core/game assets/border.png", 15);
     public static final TETile CustomFlower = new TETile(' ', Color.black, Color.black, "CustomNothing", "proj3/src/core/game assets/flower.png", 15);
+    public static final TETile Grass = new TETile(' ', Color.black, Color.black, "Grass", "proj3/src/core/game assets/grass.PNG", 15);
+    public static final TETile Floor = new TETile('.', new Color(128, 192, 128), Color.black, "Floor", "proj3/src/core/game assets/floor.PNG", 13);
+    public static final TETile LeftWall = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Left Wall", "proj3/src/core/game assets/left wall.PNG", 14);
+    public static final TETile RightWall = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Right Wall", "proj3/src/core/game assets/right wall.PNG", 14);
+    public static final TETile TopRightCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Top Right Corner", "proj3/src/core/game assets/top right outside corner.PNG", 14);
+    public static final TETile TopLeftCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Top Left Corner", "proj3/src/core/game assets/top left outside corner.PNG", 14);
+    public static final TETile BottomLeftCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Bottom Left Corner", "proj3/src/core/game assets/left bottom outside corner.PNG", 14);
+    public static final TETile BottomRightCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Bottom Right Corner", "proj3/src/core/game assets/right bottom corner.PNG", 14);
+    public static final TETile TopWall = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Top Wall", "proj3/src/core/game assets/top wall.PNG", 14);
+    public static final TETile BottomWall = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Bottom Wall", "proj3/src/core/game assets/bottom wall.PNG", 14);
+    public static final TETile LeftInnerCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Left Inner Corner", "proj3/src/core/game assets/left inner corner.PNG", 14);
+    public static final TETile LeftTopInnerCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Left Top Inner Corner", "proj3/src/core/game assets/left top inner corner.PNG", 14);
+    public static final TETile RightInnerCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Right Inner Corner", "proj3/src/core/game assets/right inner corner.PNG", 14);
+    public static final TETile RightTopInnerCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Right Top Inner Corner", "proj3/src/core/game assets/right top inner corner.PNG", 14);
+    public static final TETile SingleWall = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall", "proj3/src/core/game assets/single wall.PNG", 14);
+    public static final TETile SingleWallLeft = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Left", "proj3/src/core/game assets/single wall left.PNG", 14);
+    public static final TETile SingleWallMiddle = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Middle", "proj3/src/core/game assets/single wall middle.PNG", 14);
+    public static final TETile SingleWallRight = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Right", "proj3/src/core/game assets/single wall right.PNG", 14);
+    public static final TETile SingleWallVertical= new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Right", "proj3/src/core/game assets/single wall vertical.PNG", 14);
+    public static final TETile DoubleWallTop = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Right Top Inner Corner", "proj3/src/core/game assets/double wall top.PNG", 14);
+    public static final TETile DoubleWallBottom = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall", "proj3/src/core/game assets/double wall bottom.PNG", 14);
+    public static final TETile WallAndTopLeftCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Left", "proj3/src/core/game assets/wall and top left corner.PNG", 14);
+    public static final TETile WallAndTopRightCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Middle", "proj3/src/core/game assets/wall and top right corner.PNG", 14);
+    public static final TETile BottomWallAndLeftCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Right", "proj3/src/core/game assets/bottom wall and left corner.PNG", 14);
+    public static final TETile BottomWallAndRightCorner= new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Right", "proj3/src/core/game assets/bottom wall and right corner.PNG", 14);
+    public static final TETile WallAndLeftBottomCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Left", "proj3/src/core/game assets/wall and left corner.PNG", 14);
+    public static final TETile WallAndRightBottomCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Middle", "proj3/src/core/game assets/wall and right corner.PNG", 14);
 }
 
 
