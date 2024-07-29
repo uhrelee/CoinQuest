@@ -2,6 +2,6 @@ package core;
 
 public class World {
 
-    // build your own world!
+    // build your own world
 
 }
