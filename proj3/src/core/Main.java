@@ -3,6 +3,7 @@ package core;
 import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
+import edu.princeton.cs.algs4.StdDraw;
 
 import java.util.Random;
 
@@ -24,11 +25,13 @@ public class Main {
                 }
             }
             Random rand = new Random(seed);
-            TERenderer ter = new TERenderer();
-            ter.initialize(WIDTH, HEIGHT);
             createWorld(world, rand);
-            ter.renderFrame(world);
-            System.out.println("Proportion of empty space:" + emptySpaceProportion(world));
+
+            // Initialize the game with the generated world
+            Game game = new Game(world);
+
+            // Start the game loop
+            game.gameLoop();
         } else if (input.startsWith("L")) {
             // temporary
             System.exit(0);
