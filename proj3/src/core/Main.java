@@ -3,7 +3,6 @@ package core;
 import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
-import edu.princeton.cs.algs4.StdDraw;
 
 import java.util.Random;
 
@@ -25,12 +24,10 @@ public class Main {
                 }
             }
             Random rand = new Random(seed);
+            TERenderer ter = new TERenderer();
+            ter.initialize(WIDTH, HEIGHT);
             createWorld(world, rand);
-
-            // Initialize the game with the generated world
             Game game = new Game(world);
-
-            // Start the game loop
             game.gameLoop();
         } else if (input.startsWith("L")) {
             // temporary
@@ -49,11 +46,21 @@ public class Main {
         rooms.buildWalls(world);
         rooms.handleEdgeCases(world);
 
+        // Ensure the empty space proportion is less than 50%
         while (emptySpaceProportion(world) > 0.5) {
             rooms.fillWithSeveralRooms(world);
             rooms.connectRooms(world);
             rooms.buildWalls(world);
             rooms.handleEdgeCases(world);
+        }
+
+        // Replace all Floor tiles with FloorWithCoin tiles
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                if (world[x][y] == Tileset.Floor) {
+                    world[x][y] = Tileset.FloorWithCoin;
+                }
+            }
         }
     }
 

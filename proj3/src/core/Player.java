@@ -25,13 +25,13 @@ public class Player {
         this.y = startY;
         this.world = world;
 
-        // Load single frame for each direction
         spriteDown = Sprite.getSprite(0, 0);
         spriteUp = Sprite.getSprite(1, 0);
         spriteRight = Sprite.getSprite(2, 0);
         spriteLeft = Sprite.getSprite(3, 0);
 
         currentSprite = spriteDown;
+        world[x][y] = Tileset.Floor;
     }
 
     public void render() {
@@ -71,6 +71,10 @@ public class Player {
         if (canMoveTo(newX, newY)) {
             x = newX;
             y = newY;
+
+            if (world[x][y] == Tileset.FloorWithCoin) {
+                world[x][y] = Tileset.Floor;
+            }
             facing = dir;
         }
     }
@@ -78,7 +82,7 @@ public class Player {
     private boolean canMoveTo(int newX, int newY) {
         return newX >= 0 && newX < world.length &&
                 newY >= 0 && newY < world[0].length &&
-                world[newX][newY] == Tileset.Floor;
+                (world[newX][newY] == Tileset.Floor || world[newX][newY] == Tileset.FloorWithCoin);
     }
 
     public void interact() {
@@ -105,3 +109,4 @@ public class Player {
         }
     }
 }
+

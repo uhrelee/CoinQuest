@@ -17,11 +17,11 @@ public class Game {
     public Game(TETile[][] generatedWorld) {
         this.world = generatedWorld;
 
-        // Find a floor tile to place the player
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.Floor) {
+                if (world[x][y] == Tileset.FloorWithCoin) {
                     player = new Player(x, y, world);
+                    world[x][y] = Tileset.Floor;
                     break;
                 }
             }
@@ -29,7 +29,7 @@ public class Game {
         }
 
         if (player == null) {
-            throw new RuntimeException("No floor tiles found for player placement");
+            throw new RuntimeException("No FloorWithCoin tiles found for player placement");
         }
 
         StdDraw.setCanvasSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
@@ -78,7 +78,7 @@ public class Game {
         while (true) {
             handleInput();
             render();
-            StdDraw.pause(50);  // Adjust this value to control game speed
+            StdDraw.pause(40);
         }
     }
 }
