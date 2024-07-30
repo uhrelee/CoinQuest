@@ -3,6 +3,8 @@ package core;
 import edu.princeton.cs.algs4.StdDraw;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class MainMenu {
     private int width;
@@ -12,6 +14,7 @@ public class MainMenu {
     // Paths to the images
     private static final String MAIN_MENU_IMAGE = "proj3/src/core/game assets/Main Menu.png";
     private static final String SEED_SCREEN_IMAGE = "proj3/src/core/game assets/Seen Screen.png";
+    private Font brickSansFont;
 
     //constructor
     public MainMenu(int width, int height) {
@@ -24,6 +27,14 @@ public class MainMenu {
         StdDraw.setYscale(0, this.height);
         StdDraw.clear(Color.BLACK);
         StdDraw.enableDoubleBuffering();
+
+        try {
+            brickSansFont = Font.createFont(Font.TRUETYPE_FONT, new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(12f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(brickSansFont);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     //display main menu
@@ -74,11 +85,11 @@ public class MainMenu {
         StdDraw.clear();
         StdDraw.picture(this.width / 2, this.height / 2, SEED_SCREEN_IMAGE);
         StdDraw.setPenColor(Color.BLACK);
-        Font fontBig = new Font("Monaco", Font.BOLD, 45);
-        StdDraw.setFont(fontBig);
+        StdDraw.setFont(brickSansFont.deriveFont(35f));
         StdDraw.text(this.width / 2, this.height / 2 - 1.5, seed);
         StdDraw.show();
     }
 }
+
 
 

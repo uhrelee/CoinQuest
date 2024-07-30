@@ -3,6 +3,8 @@ package core;
 import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TETile;
 import tileengine.Tileset;
+import java.io.File;
+import java.io.IOException;
 
 import java.awt.*;
 
@@ -16,9 +18,18 @@ public class Game {
     private int collectedCoins = 0;
     private int totalCoins = 0;
     private int level = 1;
+    private Font brickSansFont;
 
     public Game(TETile[][] generatedWorld) {
         this.world = generatedWorld;
+
+        try {
+            brickSansFont = Font.createFont(Font.TRUETYPE_FONT, new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(13f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(brickSansFont);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
 
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
@@ -89,6 +100,7 @@ public class Game {
         double coinIconHeight = 2.0;
         StdDraw.picture(WIDTH - 5.6, HEIGHT - 1, "proj3/src/core/game assets/Coin.PNG", coinIconWidth, coinIconHeight);
 
+        StdDraw.setFont(brickSansFont);
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(WIDTH - 3, HEIGHT - 1, collectedCoins + "/" + totalCoins);
         StdDraw.text(WIDTH / 2, HEIGHT - 1, "Level " + level);
