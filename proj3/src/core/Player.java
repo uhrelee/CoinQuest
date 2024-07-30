@@ -31,12 +31,10 @@ public class Player {
         currentSprite = Sprite.loadSprite(spritePrefix + "Front.PNG");
     }
 
-    public void render() {
-        if (currentSprite == null) {
-            System.err.println("Current sprite is null!");
-            return;
-        }
-        StdDraw.picture(x + 0.5, y + 0.5, Sprite.getSpriteFilePath(spritePrefix, facing), 1, 1);
+    public void setPosition(int newX, int newY, TETile[][] newWorld) {
+        this.x = newX;
+        this.y = newY;
+        this.world = newWorld;  // Update the world reference
     }
 
     public void move(Direction dir) {
@@ -73,16 +71,25 @@ public class Player {
         }
     }
 
-    private void collectCoin(int newX, int newY) {
-        world[newX][newY] = Tileset.Floor;
-        game.incrementCollectedCoins();
-    }
-
     private boolean canMoveTo(int newX, int newY) {
         return newX >= 0 && newX < world.length &&
                 newY >= 0 && newY < world[0].length &&
                 (world[newX][newY] == Tileset.Floor || world[newX][newY] == Tileset.FloorWithCoin);
     }
+
+    public void render() {
+        if (currentSprite == null) {
+            System.err.println("Current sprite is null!");
+            return;
+        }
+        StdDraw.picture(x + 0.5, y + 0.5, Sprite.getSpriteFilePath(spritePrefix, facing), 1, 1);
+    }
+
+    private void collectCoin(int newX, int newY) {
+        world[newX][newY] = Tileset.Floor;
+        game.incrementCollectedCoins();
+    }
+
 
     public void interact() {
         int interactX = x;

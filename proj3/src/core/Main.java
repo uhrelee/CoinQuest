@@ -26,8 +26,6 @@ public class Main {
                 }
             }
             Random rand = new Random(seed);
-            TERenderer ter = new TERenderer();
-            ter.initialize(WIDTH, HEIGHT);
             createWorld(world, rand);
             Game game = new Game(world, characterChoice);
             game.gameLoop();
@@ -40,6 +38,7 @@ public class Main {
         }
     }
 
+    // Make createWorld method public static so it can be called from Game class
     public static void createWorld(TETile[][] world, Random rand) {
         Rooms rooms = new Rooms(0, 0, 0, 0, rand);
         rooms.fillWithSeveralRooms(world);

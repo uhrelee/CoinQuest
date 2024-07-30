@@ -6,6 +6,7 @@ import tileengine.Tileset;
 import java.io.File;
 import java.io.IOException;
 import java.awt.*;
+import java.util.Random;
 
 public class Game {
     public static final int WIDTH = 60;
@@ -18,6 +19,8 @@ public class Game {
     private int totalCoins = 0;
     private int level = 1;
     private Font brickSansFont;
+    private static final int MAX_LEVEL = 3;
+    private boolean gameCompleted = false;
 
     public Game(TETile[][] generatedWorld, int characterChoice) {
         this.world = generatedWorld;
@@ -60,6 +63,74 @@ public class Game {
         StdDraw.setYscale(0, HEIGHT);
         StdDraw.enableDoubleBuffering();
     }
+
+    public void gameLoop() {
+        while (!gameCompleted) {
+            handleInput();
+            render();
+            checkLevelCompletion();
+            StdDraw.pause(50);
+        }
+        displayGameCompletionScreen();
+    }
+
+
+    private void checkLevelCompletion() {
+        if (collectedCoins == totalCoins) {
+            if (level < MAX_LEVEL) {
+                level++;
+                generateNewLevel();
+            } else {
+                gameCompleted = true;
+            }
+        }
+    }
+
+    private void generateNewLevel() {
+        TETile[][] newWorld = new TETile[WIDTH][HEIGHT];
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                newWorld[x][y] = Tileset.Grass;
+            }
+        }
+        Random rand = new Random();
+        Main.createWorld(newWorld, rand);
+
+        this.world = newWorld;
+        this.collectedCoins = 0;
+        this.totalCoins = 0;
+
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                if (world[x][y] == Tileset.Floor) {
+                    world[x][y] = Tileset.FloorWithCoin;
+                    totalCoins++;
+                }
+            }
+        }
+
+        // Place player on a new floor tile
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                if (world[x][y] == Tileset.FloorWithCoin) {
+                    player.setPosition(x, y, world);  // Pass the new world to the player
+                    world[x][y] = Tileset.Floor;
+                    totalCoins--;
+                    return;
+                }
+            }
+        }
+    }
+
+    private void displayGameCompletionScreen() {
+        StdDraw.clear(Color.BLACK);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.setFont(new Font("Monaco", Font.BOLD, 30));
+        StdDraw.text(WIDTH / 2, HEIGHT / 2, "Congratulations! You've completed all levels!");
+        StdDraw.show();
+        StdDraw.pause(5000);
+    }
+
 
     public void handleInput() {
         if (StdDraw.hasNextKeyTyped()) {
@@ -109,13 +180,6 @@ public class Game {
         StdDraw.show();
     }
 
-    public void gameLoop() {
-        while (true) {
-            handleInput();
-            render();
-            StdDraw.pause(50);
-        }
-    }
 
     public void incrementCollectedCoins() {
         collectedCoins++;
