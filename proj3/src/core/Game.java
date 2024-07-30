@@ -93,6 +93,9 @@ public class Game {
         StdDraw.text(WIDTH - 3, HEIGHT - 1, collectedCoins + "/" + totalCoins);
         StdDraw.text(WIDTH / 2, HEIGHT - 1, "Level " + level);
 
+        StdDraw.picture(2, HEIGHT - 1, "proj3/src/core/game assets/HeartRed.PNG");
+
+
         StdDraw.show();
     }
 
