@@ -15,23 +15,25 @@ public class Player {
     private int x, y;
     private Direction facing = Direction.DOWN;
     private TETile[][] world;
+    private Game game;
 
     enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
 
-    public Player(int startX, int startY, TETile[][] world) {
+    public Player(int startX, int startY, TETile[][] world, Game game) {
         this.x = startX;
         this.y = startY;
         this.world = world;
+        this.game = game;
 
+        // Load single frame for each direction
         spriteDown = Sprite.getSprite(0, 0);
         spriteUp = Sprite.getSprite(1, 0);
         spriteRight = Sprite.getSprite(2, 0);
         spriteLeft = Sprite.getSprite(3, 0);
 
         currentSprite = spriteDown;
-        world[x][y] = Tileset.Floor;
     }
 
     public void render() {
@@ -69,14 +71,18 @@ public class Player {
         }
 
         if (canMoveTo(newX, newY)) {
+            if (world[newX][newY] == Tileset.FloorWithCoin) {
+                collectCoin(newX, newY);
+            }
             x = newX;
             y = newY;
-
-            if (world[x][y] == Tileset.FloorWithCoin) {
-                world[x][y] = Tileset.Floor;
-            }
             facing = dir;
         }
+    }
+
+    private void collectCoin(int newX, int newY) {
+        world[newX][newY] = Tileset.Floor;
+        game.incrementCollectedCoins();
     }
 
     private boolean canMoveTo(int newX, int newY) {
@@ -109,4 +115,3 @@ public class Player {
         }
     }
 }
-

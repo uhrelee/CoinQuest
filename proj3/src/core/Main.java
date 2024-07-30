@@ -30,7 +30,6 @@ public class Main {
             Game game = new Game(world);
             game.gameLoop();
         } else if (input.startsWith("L")) {
-            // temporary
             System.exit(0);
             // LOAD GAME HERE
         } else if (input.startsWith("Q")) {
@@ -46,21 +45,11 @@ public class Main {
         rooms.buildWalls(world);
         rooms.handleEdgeCases(world);
 
-        // Ensure the empty space proportion is less than 50%
         while (emptySpaceProportion(world) > 0.5) {
             rooms.fillWithSeveralRooms(world);
             rooms.connectRooms(world);
             rooms.buildWalls(world);
             rooms.handleEdgeCases(world);
-        }
-
-        // Replace all Floor tiles with FloorWithCoin tiles
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.Floor) {
-                    world[x][y] = Tileset.FloorWithCoin;
-                }
-            }
         }
     }
 
@@ -77,3 +66,4 @@ public class Main {
         return (double) count / area;
     }
 }
+

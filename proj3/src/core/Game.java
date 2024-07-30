@@ -13,15 +13,28 @@ public class Game {
 
     private Player player;
     private TETile[][] world;
+    private int collectedCoins = 0;
+    private int totalCoins = 0;
+    private int level = 1;
 
     public Game(TETile[][] generatedWorld) {
         this.world = generatedWorld;
 
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
+                if (world[x][y] == Tileset.Floor) {
+                    world[x][y] = Tileset.FloorWithCoin;
+                    totalCoins++;
+                }
+            }
+        }
+
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
                 if (world[x][y] == Tileset.FloorWithCoin) {
-                    player = new Player(x, y, world);
+                    player = new Player(x, y, world, this);
                     world[x][y] = Tileset.Floor;
+                    totalCoins--;
                     break;
                 }
             }
@@ -29,7 +42,7 @@ public class Game {
         }
 
         if (player == null) {
-            throw new RuntimeException("No FloorWithCoin tiles found for player placement");
+            throw new RuntimeException("No floor tiles found for player placement");
         }
 
         StdDraw.setCanvasSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
@@ -71,14 +84,28 @@ public class Game {
             }
         }
         player.render();
+
+        double coinIconWidth = 2.0;
+        double coinIconHeight = 2.0;
+        StdDraw.picture(WIDTH - 5.6, HEIGHT - 1, "proj3/src/core/game assets/Coin.PNG", coinIconWidth, coinIconHeight);
+
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.text(WIDTH - 3, HEIGHT - 1, collectedCoins + "/" + totalCoins);
+        StdDraw.text(WIDTH / 2, HEIGHT - 1, "Level " + level);
+
         StdDraw.show();
     }
+
 
     public void gameLoop() {
         while (true) {
             handleInput();
             render();
-            StdDraw.pause(40);
+            StdDraw.pause(50);
         }
+    }
+
+    public void incrementCollectedCoins() {
+        collectedCoins++;
     }
 }
