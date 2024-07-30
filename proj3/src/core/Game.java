@@ -124,11 +124,9 @@ public class Game {
 
     private void displayGameCompletionScreen() {
         StdDraw.clear(Color.BLACK);
-        StdDraw.setPenColor(Color.WHITE);
-        StdDraw.setFont(new Font("Monaco", Font.BOLD, 30));
-        StdDraw.text(WIDTH / 2, HEIGHT / 2, "Congratulations! You've completed all levels!");
+        String winScreenPath = "proj3/src/core/game assets/Win Screen.png";
+        StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, winScreenPath, WIDTH, HEIGHT);
         StdDraw.show();
-        StdDraw.pause(5000);
     }
 
 
