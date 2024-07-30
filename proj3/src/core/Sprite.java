@@ -54,6 +54,7 @@ public class Sprite {
         return spriteRight;
     }
 
+
     public static String getSpriteFilePath(Player.Direction direction) {
         switch (direction) {
             case UP:
