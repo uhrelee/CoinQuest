@@ -6,25 +6,66 @@ import java.io.File;
 import java.io.IOException;
 
 public class Sprite {
-    private static BufferedImage spriteSheet;
-    private static final int TILE_SIZE = 16;
-    private static final int SHEET_WIDTH = 3;
-    private static final int SHEET_HEIGHT = 4;
+    private static BufferedImage spriteFront, spriteBack, spriteLeft, spriteRight;
+    private static final String SPRITE_PATH = "proj3/src/core/game assets/";
 
-    public static BufferedImage loadSprite(String file) {
+    public static BufferedImage loadSprite(String filename) {
         BufferedImage sprite = null;
         try {
-            sprite = ImageIO.read(new File("proj3/src/core/game assets/Sprite Sheet.PNG"));
+            File file = new File(SPRITE_PATH + filename);
+            if (!file.exists()) {
+                System.err.println("File not found: " + file.getAbsolutePath());
+                return null;
+            }
+            sprite = ImageIO.read(file);
+            System.out.println("Loaded sprite: " + filename);
         } catch (IOException e) {
+            System.err.println("Error loading sprite: " + filename);
             e.printStackTrace();
         }
         return sprite;
     }
 
-    public static BufferedImage getSprite(int row, int col) {
-        if (spriteSheet == null) {
-            spriteSheet = loadSprite("Sprite Sheet");
+    public static BufferedImage getFrontSprite() {
+        if (spriteFront == null) {
+            spriteFront = loadSprite("SpriteFront.PNG");
         }
-        return spriteSheet.getSubimage(col * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+        return spriteFront;
+    }
+
+    public static BufferedImage getBackSprite() {
+        if (spriteBack == null) {
+            spriteBack = loadSprite("SpriteBack.PNG");
+        }
+        return spriteBack;
+    }
+
+    public static BufferedImage getLeftSprite() {
+        if (spriteLeft == null) {
+            spriteLeft = loadSprite("SpriteLeft.PNG");
+        }
+        return spriteLeft;
+    }
+
+    public static BufferedImage getRightSprite() {
+        if (spriteRight == null) {
+            spriteRight = loadSprite("SpriteRight.PNG");
+        }
+        return spriteRight;
+    }
+
+    public static String getSpriteFilePath(Player.Direction direction) {
+        switch (direction) {
+            case UP:
+                return SPRITE_PATH + "SpriteBack.PNG";
+            case DOWN:
+                return SPRITE_PATH + "SpriteFront.PNG";
+            case LEFT:
+                return SPRITE_PATH + "SpriteLeft.PNG";
+            case RIGHT:
+                return SPRITE_PATH + "SpriteRight.PNG";
+            default:
+                return SPRITE_PATH + "SpriteFront.PNG";
+        }
     }
 }

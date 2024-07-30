@@ -149,6 +149,7 @@ public class Rooms {
         tiles[x2][y2] = Tileset.Floor;
     }
 
+
     private void refineWallType(TETile[][] world, int x, int y) {
         boolean floorLeft = x > 0 && world[x - 1][y] == Tileset.Floor;
         boolean floorRight = x < Main.WIDTH - 1 && world[x + 1][y] == Tileset.Floor;
@@ -337,7 +338,6 @@ public class Rooms {
             }
         }
     }
-
 
     private void placeBasicWalls(TETile[][] world, int x, int y) {
         if (x > 0 && world[x - 1][y] == Tileset.Grass) world[x - 1][y] = Tileset.LeftWall;

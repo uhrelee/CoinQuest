@@ -66,4 +66,3 @@ public class Main {
         return (double) count / area;
     }
 }
-
