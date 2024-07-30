@@ -5,7 +5,6 @@ import tileengine.TETile;
 import tileengine.Tileset;
 import java.io.File;
 import java.io.IOException;
-
 import java.awt.*;
 
 public class Game {
@@ -20,7 +19,7 @@ public class Game {
     private int level = 1;
     private Font brickSansFont;
 
-    public Game(TETile[][] generatedWorld) {
+    public Game(TETile[][] generatedWorld, int characterChoice) {
         this.world = generatedWorld;
 
         try {
@@ -43,7 +42,7 @@ public class Game {
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 if (world[x][y] == Tileset.FloorWithCoin) {
-                    player = new Player(x, y, world, this);
+                    player = new Player(x, y, world, this, characterChoice);
                     world[x][y] = Tileset.Floor;
                     totalCoins--;
                     break;
@@ -107,10 +106,8 @@ public class Game {
 
         StdDraw.picture(2, HEIGHT - 1, "proj3/src/core/game assets/HeartRed.PNG");
 
-
         StdDraw.show();
     }
-
 
     public void gameLoop() {
         while (true) {

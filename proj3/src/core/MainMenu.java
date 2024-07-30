@@ -14,6 +14,7 @@ public class MainMenu {
     // Paths to the images
     private static final String MAIN_MENU_IMAGE = "proj3/src/core/game assets/Main Menu.png";
     private static final String SEED_SCREEN_IMAGE = "proj3/src/core/game assets/Seen Screen.png";
+    private static final String CHARACTER_SELECTION_IMAGE = "proj3/src/core/game assets/CharacterSelection.png";
     private Font brickSansFont;
 
     //constructor
@@ -50,7 +51,9 @@ public class MainMenu {
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();
                 if (key == 'N' || key == 'n') {
-                    return "N" + collectSeed();
+                    String seed = "N" + collectSeed();
+                    int characterChoice = selectCharacter();
+                    return seed + ":" + characterChoice;
                 }
                 if (key == 'L' || key == 'l') {
                     return "L";
@@ -89,7 +92,23 @@ public class MainMenu {
         StdDraw.text(this.width / 2, this.height / 2 - 1.5, seed);
         StdDraw.show();
     }
+
+    // Character selection screen
+    public int selectCharacter() {
+        StdDraw.clear();
+        StdDraw.picture(this.width / 2, this.height / 2, CHARACTER_SELECTION_IMAGE);
+        StdDraw.show();
+
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = StdDraw.nextKeyTyped();
+                if (key == '1') {
+                    return 1;
+                }
+                if (key == '2') {
+                    return 2;
+                }
+            }
+        }
+    }
 }
-
-
-

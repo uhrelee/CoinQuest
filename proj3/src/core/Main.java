@@ -7,7 +7,6 @@ import tileengine.Tileset;
 import java.util.Random;
 
 public class Main {
-
     public static final int WIDTH = 60;
     public static final int HEIGHT = 40;
 
@@ -16,7 +15,10 @@ public class Main {
         menu.displayMenu();
         String input = menu.getInput();
         if (input.startsWith("N")) {
-            long seed = Long.parseLong(input.substring(1, input.length() - 1));
+            String[] parts = input.split(":");
+            long seed = Long.parseLong(parts[0].substring(1));
+            int characterChoice = Integer.parseInt(parts[1]);
+
             TETile[][] world = new TETile[WIDTH][HEIGHT];
             for (int x = 0; x < WIDTH; x += 1) {
                 for (int y = 0; y < HEIGHT; y += 1) {
@@ -27,7 +29,7 @@ public class Main {
             TERenderer ter = new TERenderer();
             ter.initialize(WIDTH, HEIGHT);
             createWorld(world, rand);
-            Game game = new Game(world);
+            Game game = new Game(world, characterChoice);
             game.gameLoop();
         } else if (input.startsWith("L")) {
             System.exit(0);

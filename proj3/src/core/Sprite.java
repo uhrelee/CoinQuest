@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class Sprite {
-    private static BufferedImage spriteFront, spriteBack, spriteLeft, spriteRight;
     private static final String SPRITE_PATH = "proj3/src/core/game assets/";
 
     public static BufferedImage loadSprite(String filename) {
@@ -26,47 +25,18 @@ public class Sprite {
         return sprite;
     }
 
-    public static BufferedImage getFrontSprite() {
-        if (spriteFront == null) {
-            spriteFront = loadSprite("SpriteFront.PNG");
-        }
-        return spriteFront;
-    }
-
-    public static BufferedImage getBackSprite() {
-        if (spriteBack == null) {
-            spriteBack = loadSprite("SpriteBack.PNG");
-        }
-        return spriteBack;
-    }
-
-    public static BufferedImage getLeftSprite() {
-        if (spriteLeft == null) {
-            spriteLeft = loadSprite("SpriteLeft.PNG");
-        }
-        return spriteLeft;
-    }
-
-    public static BufferedImage getRightSprite() {
-        if (spriteRight == null) {
-            spriteRight = loadSprite("SpriteRight.PNG");
-        }
-        return spriteRight;
-    }
-
-
-    public static String getSpriteFilePath(Player.Direction direction) {
+    public static String getSpriteFilePath(String prefix, Player.Direction direction) {
         switch (direction) {
             case UP:
-                return SPRITE_PATH + "SpriteBack.PNG";
+                return SPRITE_PATH + prefix + "Back.PNG";
             case DOWN:
-                return SPRITE_PATH + "SpriteFront.PNG";
+                return SPRITE_PATH + prefix + "Front.PNG";
             case LEFT:
-                return SPRITE_PATH + "SpriteLeft.PNG";
+                return SPRITE_PATH + prefix + "Left.PNG";
             case RIGHT:
-                return SPRITE_PATH + "SpriteRight.PNG";
+                return SPRITE_PATH + prefix + "Right.PNG";
             default:
-                return SPRITE_PATH + "SpriteFront.PNG";
+                return SPRITE_PATH + prefix + "Front.PNG";
         }
     }
 }

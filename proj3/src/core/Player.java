@@ -10,6 +10,7 @@ public class Player {
     private static final int TILE_SIZE = 16;
 
     private BufferedImage currentSprite;
+    private String spritePrefix;
 
     private int x, y;
     private Direction facing = Direction.DOWN;
@@ -20,13 +21,14 @@ public class Player {
         UP, DOWN, LEFT, RIGHT
     }
 
-    public Player(int startX, int startY, TETile[][] world, Game game) {
+    public Player(int startX, int startY, TETile[][] world, Game game, int characterChoice) {
         this.x = startX;
         this.y = startY;
         this.world = world;
         this.game = game;
 
-        currentSprite = Sprite.getFrontSprite();
+        spritePrefix = (characterChoice == 1) ? "Sprite" : "Guy";
+        currentSprite = Sprite.loadSprite(spritePrefix + "Front.PNG");
     }
 
     public void render() {
@@ -34,7 +36,7 @@ public class Player {
             System.err.println("Current sprite is null!");
             return;
         }
-        StdDraw.picture(x + 0.5, y + 0.5, Sprite.getSpriteFilePath(facing), 1, 1);
+        StdDraw.picture(x + 0.5, y + 0.5, Sprite.getSpriteFilePath(spritePrefix, facing), 1, 1);
     }
 
     public void move(Direction dir) {
@@ -46,23 +48,19 @@ public class Player {
         switch (dir) {
             case UP:
                 newY += 1;
-                currentSprite = Sprite.getBackSprite();
-                System.out.println("Moving UP");
+                currentSprite = Sprite.loadSprite(spritePrefix + "Back.PNG");
                 break;
             case DOWN:
                 newY -= 1;
-                currentSprite = Sprite.getFrontSprite();
-                System.out.println("Moving DOWN");
+                currentSprite = Sprite.loadSprite(spritePrefix + "Front.PNG");
                 break;
             case LEFT:
                 newX -= 1;
-                currentSprite = Sprite.getLeftSprite();
-                System.out.println("Moving LEFT");
+                currentSprite = Sprite.loadSprite(spritePrefix + "Left.PNG");
                 break;
             case RIGHT:
                 newX += 1;
-                currentSprite = Sprite.getRightSprite();
-                System.out.println("Moving RIGHT");
+                currentSprite = Sprite.loadSprite(spritePrefix + "Right.PNG");
                 break;
         }
 
@@ -72,12 +70,8 @@ public class Player {
             }
             x = newX;
             y = newY;
-            System.out.println("Moved to: " + x + ", " + y);
-        } else {
-            System.out.println("Cannot move to: " + newX + ", " + newY);
         }
     }
-
 
     private void collectCoin(int newX, int newY) {
         world[newX][newY] = Tileset.Floor;
