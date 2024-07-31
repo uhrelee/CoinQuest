@@ -6,6 +6,7 @@ import tileengine.Tileset;
 import java.io.File;
 import java.io.IOException;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Game {
@@ -14,6 +15,7 @@ public class Game {
     private static final int TILE_SIZE = 16;
 
     private Player player;
+    private ArrayList<Enemy> enemies;
     private TETile[][] world;
     private int collectedCoins = 0;
     private int totalCoins = 0;
@@ -58,6 +60,15 @@ public class Game {
             throw new RuntimeException("No floor tiles found for player placement");
         }
 
+        enemies = new ArrayList<>();
+        for (int i = 0; i < 5; i++) { // Add 5 enemies for example
+            int enemyX = (int) (Math.random() * WIDTH);
+            int enemyY = (int) (Math.random() * HEIGHT);
+            if (world[enemyX][enemyY] == Tileset.FloorWithCoin) {
+                enemies.add(new Enemy(enemyX, enemyY, world, player));
+            }
+        }
+
         StdDraw.setCanvasSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         StdDraw.setXscale(0, WIDTH);
         StdDraw.setYscale(0, HEIGHT);
@@ -67,6 +78,10 @@ public class Game {
     public void gameLoop() {
         while (!gameCompleted) {
             handleInput();
+            for (Enemy enemy : enemies) {
+                enemy.move();
+            }
+
             render();
             checkLevelCompletion();
             StdDraw.pause(50);
@@ -120,6 +135,14 @@ public class Game {
                 }
             }
         }
+        enemies.clear();
+        for (int i = 0; i < 5; i++) {
+            int enemyX = (int) (Math.random() * WIDTH);
+            int enemyY = (int) (Math.random() * HEIGHT);
+            if (world[enemyX][enemyY] == Tileset.FloorWithCoin) {
+                enemies.add(new Enemy(enemyX, enemyY, world, player));
+            }
+        }
     }
 
     private void displayGameCompletionScreen() {
@@ -163,6 +186,10 @@ public class Game {
             }
         }
         player.render();
+
+        for (Enemy enemy : enemies) {
+            enemy.render();
+        }
 
         double coinIconWidth = 2.0;
         double coinIconHeight = 2.0;

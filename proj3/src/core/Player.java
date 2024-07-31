@@ -114,4 +114,13 @@ public class Player {
             System.out.println("Interacting with tile: " + world[interactX][interactY]);
         }
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
 }
