@@ -61,7 +61,7 @@ public class Game {
         }
 
         enemies = new ArrayList<>();
-        for (int i = 0; i < 5; i++) { // Add 5 enemies for example
+        for (int i = 2; i < 5; i++) {
             int enemyX = (int) (Math.random() * WIDTH);
             int enemyY = (int) (Math.random() * HEIGHT);
             if (world[enemyX][enemyY] == Tileset.FloorWithCoin) {
