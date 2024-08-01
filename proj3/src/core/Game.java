@@ -8,10 +8,20 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class Game {
+    private static final File CWD = new File(".");
+    private static final File SAVE_DIR = new File(CWD, "saves");
     public static final int WIDTH = 60;
     public static final int HEIGHT = 40;
     private static final int TILE_SIZE = 16;
+    private boolean isColonPressed = false;
+
 
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -149,33 +159,44 @@ public class Game {
     public void handleInput() {
         if (StdDraw.hasNextKeyTyped()) {
             char key = StdDraw.nextKeyTyped();
-            switch (key) {
-                case 'w':
-                    player.move(Player.Direction.UP);
-                    break;
-                case 's':
-                    player.move(Player.Direction.DOWN);
-                    break;
-                case 'a':
-                    player.move(Player.Direction.LEFT);
-                    break;
-                case 'd':
-                    player.move(Player.Direction.RIGHT);
-                    break;
-                case 'e':
-                    player.interact();
-                    break;
-                case ':':
-                    if (StdDraw.hasNextKeyTyped()) {
-                        char nextKey = StdDraw.nextKeyTyped();
-                        if (nextKey == 'Q' || nextKey == 'q') {
-                            saveGameState("gameState.ser");
-                            System.exit(0);
-                        }
-                    }
-                    break;
+
+            if (isColonPressed) {
+                if (key == 'Q' || key == 'q') {
+                    quitAndSave();  // Call the function to quit and save
+                }
+                // Reset colon state if any other key is pressed
+                isColonPressed = false;
+            } else {
+                switch (key) {
+                    case 'w':
+                        player.move(Player.Direction.UP);
+                        break;
+                    case 's':
+                        player.move(Player.Direction.DOWN);
+                        break;
+                    case 'a':
+                        player.move(Player.Direction.LEFT);
+                        break;
+                    case 'd':
+                        player.move(Player.Direction.RIGHT);
+                        break;
+                    case 'e':
+                        player.interact();
+                        break;
+                    case ':':
+                        isColonPressed = true;
+                        break;
+                    default:
+                        System.out.println("Unhandled Key: " + key);
+                        break;
+                }
             }
         }
+    }
+
+    private void quitAndSave() {
+        saveGameState("gameState.txt");  // Save the game state with a default filename
+        System.exit(0);  // Exit the program
     }
 
     public void render() {
@@ -205,12 +226,31 @@ public class Game {
     }
 
     public void saveGameState(String fileName) {
+        if (!fileName.toLowerCase().endsWith(".txt")) {
+            fileName += ".txt";
+        }
+
+        try {
+            if (!SAVE_DIR.exists()) {
+                SAVE_DIR.mkdirs();
+            }
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Path filePath = SAVE_DIR.toPath().resolve(fileName);
         GameState gameState = new GameState(world, player.getCharacterChoice(), randomSeed, collectedCoins, totalCoins, level, gameCompleted);
-        gameState.save(fileName);
+        gameState.save(filePath.toString());
     }
 
     public void loadGameState(String fileName) {
-        GameState gameState = GameState.load(fileName);
+        if (!fileName.toLowerCase().endsWith(".txt")) {
+            fileName += ".txt";
+        }
+
+        Path filePath = SAVE_DIR.toPath().resolve(fileName);
+        GameState gameState = GameState.load(filePath.toString());
         if (gameState != null) {
             this.world = gameState.getWorld();
             this.collectedCoins = gameState.getCollectedCoins();

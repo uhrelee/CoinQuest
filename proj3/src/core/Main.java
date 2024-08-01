@@ -24,7 +24,7 @@ public class Main {
             game.gameLoop();
         } else if (input.startsWith("L")) {
             Game game = new Game(null, 0, 0);
-            game.loadGameState("gameState.ser");
+            game.loadGameState("gameState.txt");
             game.gameLoop();
         } else if (input.startsWith("Q")) {
             System.exit(0);
