@@ -14,9 +14,9 @@ public class MainMenu {
     Color customPink = new Color(232, 127, 231);
 
     // Paths to the images
-    private static final String MAIN_MENU_IMAGE = "src/core/game assets/Main Menu.png";
-    private static final String SEED_SCREEN_IMAGE = "src/core/game assets/Seen Screen.png";
-    private static final String CHARACTER_SELECTION_IMAGE = "src/core/game assets/CharacterSelection.png";
+    private static final String MAIN_MENU_IMAGE = "proj3/src/core/game assets/Main Menu.png";
+    private static final String SEED_SCREEN_IMAGE = "proj3/src/core/game assets/Seen Screen.png";
+    private static final String CHARACTER_SELECTION_IMAGE = "proj3/src/core/game assets/CharacterSelection.png";
 
     //constructor
     public MainMenu(int width, int height) {

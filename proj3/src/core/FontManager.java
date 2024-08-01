@@ -12,7 +12,7 @@ public class FontManager {
     public static Font getBrickSansFont(float size) {
         if (brickSansFont == null) {
             try {
-                File fontFile = new File("src/core/game assets/NTBrickSans.ttf");
+                File fontFile = new File("proj3/src/core/game assets/NTBrickSans.ttf");
                 if (!fontFile.exists()) {
                     throw new IOException("Font file not found: " + fontFile.getAbsolutePath());
                 }
