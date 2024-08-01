@@ -11,11 +11,11 @@ public class Player {
 
     private BufferedImage currentSprite;
     private String spritePrefix;
-
     private int x, y;
     private Direction facing = Direction.DOWN;
     private TETile[][] world;
     private Game game;
+    private int characterChoice;
 
     enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -26,6 +26,7 @@ public class Player {
         this.y = startY;
         this.world = world;
         this.game = game;
+        this.characterChoice = characterChoice;
 
         spritePrefix = (characterChoice == 1) ? "Sprite" : "Guy";
         currentSprite = Sprite.loadSprite(spritePrefix + "Front.PNG");
@@ -90,7 +91,6 @@ public class Player {
         game.incrementCollectedCoins();
     }
 
-
     public void interact() {
         int interactX = x;
         int interactY = y;
@@ -123,4 +123,7 @@ public class Player {
         return y;
     }
 
+    public int getCharacterChoice() {
+        return characterChoice;
+    }
 }

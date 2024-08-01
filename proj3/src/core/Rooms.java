@@ -68,7 +68,7 @@ public class Rooms {
             if (!overlaps) {
                 for (int x = centerX - w / 2; x < centerX + w / 2; x++) {
                     for (int y = centerY - h / 2; y < centerY + h / 2; y++) {
-                        tiles[x][y] = Tileset.Floor;
+                        tiles[x][y] = Tileset.FloorWithCoin;
                     }
                 }
                 currRooms.add(newRoom);

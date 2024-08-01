@@ -1,6 +1,5 @@
 package core;
 
-import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
 
@@ -20,25 +19,28 @@ public class Main {
             int characterChoice = Integer.parseInt(parts[1]);
 
             TETile[][] world = new TETile[WIDTH][HEIGHT];
-            for (int x = 0; x < WIDTH; x += 1) {
-                for (int y = 0; y < HEIGHT; y += 1) {
-                    world[x][y] = Tileset.Grass;
-                }
-            }
-            Random rand = new Random(seed);
-            createWorld(world, rand);
-            Game game = new Game(world, characterChoice);
+            initializeWorld(world, seed);
+            Game game = new Game(world, characterChoice, seed);
             game.gameLoop();
         } else if (input.startsWith("L")) {
-            System.exit(0);
-            // LOAD GAME HERE
+            Game game = new Game(null, 0, 0);
+            game.loadGameState("gameState.ser");
+            game.gameLoop();
         } else if (input.startsWith("Q")) {
-            // QUIT THE GAME
             System.exit(0);
         }
     }
 
-    // Make createWorld method public static so it can be called from Game class
+    private static void initializeWorld(TETile[][] world, long seed) {
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                world[x][y] = Tileset.Grass;
+            }
+        }
+        Random rand = new Random(seed);
+        createWorld(world, rand);
+    }
+
     public static void createWorld(TETile[][] world, Random rand) {
         Rooms rooms = new Rooms(0, 0, 0, 0, rand);
         rooms.fillWithSeveralRooms(world);
