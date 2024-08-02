@@ -3,9 +3,11 @@ package core;
 import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TETile;
 import tileengine.Tileset;
+import utils.FileUtils;
+
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,11 +17,11 @@ public class Game {
     private static final int TILE_SIZE = 16;
     private static final int MAX_LEVEL = 2;
     private static final int[] COINS_PER_LEVEL = {101, 201};
+    private static final String SAVE_FILE = "proj3/save_game.txt";
+
     private static final String HEART_RED = "proj3/src/core/game assets/HeartRed.PNG";
     private static final String HEART_GRAY = "proj3/src/core/game assets/HeartGray.PNG";
     private static final String LOSE_SCREEN = "proj3/src/core/game assets/You Lost Screen.png";
-
-    private boolean gameOver = false;
 
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -29,14 +31,35 @@ public class Game {
     private int level = 1;
     private Font brickSansFont;
     private boolean gameCompleted = false;
+    private boolean gameOver = false;
     private Random rand;
+    private long randomSeed;
+    private boolean quitRequested = false;
 
     public Game(TETile[][] generatedWorld, int characterChoice, long seed) {
         this.world = generatedWorld;
+        this.randomSeed = seed;
         this.rand = new Random(seed);
         initializeFont();
         initializeWorld(characterChoice);
         initializeEnemies();
+        setupGraphics();
+    }
+
+    private Game(GameState state) {
+        this.world = state.getWorld();
+        this.randomSeed = state.getRandomSeed();
+        this.rand = new Random(randomSeed);
+        this.collectedCoins = state.getCollectedCoins();
+        this.totalCoins = state.getTotalCoins();
+        this.level = state.getLevel();
+        this.quitRequested = false;
+        this.gameCompleted = false;
+        this.gameOver = false;
+        initializeFont();
+        this.player = new Player(state.getPlayerX(), state.getPlayerY(), world, this, state.getCharacterChoice());
+        player.setLives(state.getLives());
+        initializeEnemies(state.getEnemyPositions());
         setupGraphics();
     }
 
@@ -79,7 +102,7 @@ public class Game {
     private void placePlayer(int characterChoice) {
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.FloorWithCoin) {
+                if (world[x][y].equals(Tileset.FloorWithCoin)) {
                     player = new Player(x, y, world, this, characterChoice);
                     world[x][y] = Tileset.Floor;
                     totalCoins--;
@@ -97,27 +120,25 @@ public class Game {
         }
     }
 
+    private void initializeEnemies(ArrayList<int[]> enemyPositions) {
+        enemies = new ArrayList<>();
+        for (int[] pos : enemyPositions) {
+            enemies.add(new Enemy(pos[0], pos[1], world, player, this));
+        }
+    }
+
     private void placeEnemy() {
         int attempts = 0;
         while (attempts < 100) {
             int x = rand.nextInt(WIDTH);
             int y = rand.nextInt(HEIGHT);
-            if (world[x][y] == Tileset.Floor && !isEnemyAt(x, y)) {
+            if (world[x][y].equals(Tileset.Floor) && !isEnemyAt(x, y)) {
                 enemies.add(new Enemy(x, y, world, player, this));
                 return;
             }
             attempts++;
         }
         System.out.println("Warning: Could not place an enemy after 100 attempts");
-    }
-
-    public boolean isEnemyAt(int x, int y) {
-        for (Enemy enemy : enemies) {
-            if (enemy.getX() == x && enemy.getY() == y) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private void setupGraphics() {
@@ -128,8 +149,12 @@ public class Game {
     }
 
     public void gameLoop() {
-        while (!gameCompleted && !gameOver) {
+        while (!gameCompleted && !gameOver && !quitRequested) {
             handleInput();
+            if (quitRequested) {
+                saveGame();
+                System.exit(0);;
+            }
             moveEnemies();
             checkCollisions();
             render();
@@ -156,7 +181,6 @@ public class Game {
                 if (player.getLives() == 0) {
                     gameOver = true;
                 }
-                // Respawn player at a random floor tile
                 respawnPlayer();
                 break;
             }
@@ -167,22 +191,15 @@ public class Game {
         ArrayList<Point> floorTiles = new ArrayList<>();
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.Floor && !isEnemyAt(x, y)) {
+                if (world[x][y].equals(Tileset.Floor) && !isEnemyAt(x, y)) {
                     floorTiles.add(new Point(x, y));
                 }
             }
         }
         if (!floorTiles.isEmpty()) {
             Point respawnPoint = floorTiles.get(rand.nextInt(floorTiles.size()));
-            player.setPosition(respawnPoint.x, respawnPoint.y, world);
+            player.setPosition(respawnPoint.x, respawnPoint.y);
         }
-    }
-
-    private void displayGameOverScreen() {
-        StdDraw.clear(Color.BLACK);
-        StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, LOSE_SCREEN, WIDTH, HEIGHT);
-        StdDraw.show();
-        StdDraw.pause(5000);
     }
 
     private void checkLevelCompletion() {
@@ -215,27 +232,51 @@ public class Game {
         String winScreenPath = "proj3/src/core/game assets/Win Screen.png";
         StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, winScreenPath, WIDTH, HEIGHT);
         StdDraw.show();
+        StdDraw.pause(5000);
+    }
+
+    private void displayGameOverScreen() {
+        StdDraw.clear(Color.BLACK);
+        StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, LOSE_SCREEN, WIDTH, HEIGHT);
+        StdDraw.show();
+        StdDraw.pause(5000);
     }
 
     public void handleInput() {
         if (StdDraw.hasNextKeyTyped()) {
             char key = StdDraw.nextKeyTyped();
-            switch (key) {
-                case 'w':
-                    player.move(Player.Direction.UP);
-                    break;
-                case 's':
-                    player.move(Player.Direction.DOWN);
-                    break;
-                case 'a':
-                    player.move(Player.Direction.LEFT);
-                    break;
-                case 'd':
-                    player.move(Player.Direction.RIGHT);
-                    break;
-                case 'e':
-                    player.interact();
-                    break;
+            if (key == ':') {
+                waitForQuitCommand();
+            } else {
+                switch (key) {
+                    case 'w':
+                        player.move(Player.Direction.UP);
+                        break;
+                    case 's':
+                        player.move(Player.Direction.DOWN);
+                        break;
+                    case 'a':
+                        player.move(Player.Direction.LEFT);
+                        break;
+                    case 'd':
+                        player.move(Player.Direction.RIGHT);
+                        break;
+                    case 'e':
+                        player.interact();
+                        break;
+                }
+            }
+        }
+    }
+
+    private void waitForQuitCommand() {
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = Character.toLowerCase(StdDraw.nextKeyTyped());
+                if (key == 'q') {
+                    quitRequested = true;
+                }
+                break;
             }
         }
     }
@@ -263,6 +304,7 @@ public class Game {
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(WIDTH - 3, HEIGHT - 1, collectedCoins + "/" + totalCoins);
         StdDraw.text(WIDTH / 2, HEIGHT - 1, "Level " + level);
+
         if (player.getLives() == 2) {
             StdDraw.picture(2, HEIGHT - 1, HEART_RED);
             StdDraw.picture(3, HEIGHT - 1, HEART_RED);
@@ -277,5 +319,46 @@ public class Game {
 
     public void incrementCollectedCoins() {
         collectedCoins++;
+    }
+
+    public boolean isEnemyAt(int x, int y) {
+        for (Enemy enemy : enemies) {
+            if (enemy.getX() == x && enemy.getY() == y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public int getCollectedCoins() {
+        return collectedCoins;
+    }
+
+    public int getTotalCoins() {
+        return totalCoins;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public long getRandomSeed() {
+        return randomSeed;
+    }
+
+    private void saveGame() {
+        GameState state = new GameState(world, player, enemies, this);
+        String serializedState = state.serialize();
+        FileUtils.writeFile(SAVE_FILE, serializedState);
+    }
+
+    public static Game loadGame() {
+        if (FileUtils.fileExists(SAVE_FILE)) {
+            String serializedState = FileUtils.readFile(SAVE_FILE);
+            GameState state = GameState.deserialize(serializedState);
+            return new Game(state);
+        }
+        return null;
     }
 }

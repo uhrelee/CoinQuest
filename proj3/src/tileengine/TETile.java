@@ -110,6 +110,8 @@ public class TETile {
         StdDraw.text(x + 0.5, y + 0.5, Character.toString(character()));
     }
 
+
+
     /** Character representation of the tile. Used for drawing in text mode.
      * @return character representation
      */
@@ -133,6 +135,20 @@ public class TETile {
     public int id() {
         return id;
     }
+
+    public Color getTextColor() {
+        return textColor;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public String getFilePath() {
+        return filepath;
+    }
+
+
 
     /**
      * Creates a copy of the given tile with a slightly different text color. The new
@@ -222,4 +238,8 @@ public class TETile {
         }
         return (o instanceof TETile otherTile && otherTile.id == this.id);
     }
+
+
+
+
 }

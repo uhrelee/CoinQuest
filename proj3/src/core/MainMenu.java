@@ -2,9 +2,7 @@ package core;
 
 import edu.princeton.cs.algs4.StdDraw;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,17 +15,27 @@ public class MainMenu {
     private static final String MAIN_MENU_IMAGE = "proj3/src/core/game assets/Main Menu.png";
     private static final String SEED_SCREEN_IMAGE = "proj3/src/core/game assets/Seen Screen.png";
     private static final String CHARACTER_SELECTION_IMAGE = "proj3/src/core/game assets/CharacterSelection.png";
+    private Font brickSansFont;
 
     //constructor
     public MainMenu(int width, int height) {
         this.width = width;
         this.height = height;
         StdDraw.setCanvasSize(this.width * 16, this.height * 16);
-        StdDraw.setFont(FontManager.getBrickSansFont(12f));
+        Font font = new Font("Monaco", Font.BOLD, 30);
+        StdDraw.setFont(font);
         StdDraw.setXscale(0, this.width);
         StdDraw.setYscale(0, this.height);
         StdDraw.clear(Color.BLACK);
         StdDraw.enableDoubleBuffering();
+
+        try {
+            brickSansFont = Font.createFont(Font.TRUETYPE_FONT, new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(12f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(brickSansFont);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     //display main menu
@@ -78,10 +86,10 @@ public class MainMenu {
     //make the second frame after main where user inputs the seed
     public void drawSeedFrame(String seed) {
         StdDraw.clear();
-        StdDraw.picture(this.width / 2.0, this.height / 2.0, SEED_SCREEN_IMAGE);
+        StdDraw.picture(this.width / 2, this.height / 2, SEED_SCREEN_IMAGE);
         StdDraw.setPenColor(Color.BLACK);
-        StdDraw.setFont(FontManager.getBrickSansFont(35f));
-        StdDraw.text(this.width / 2.0, this.height / 2.0 - 1.5, seed);
+        StdDraw.setFont(brickSansFont.deriveFont(35f));
+        StdDraw.text(this.width / 2, this.height / 2 - 1.5, seed);
         StdDraw.show();
     }
 

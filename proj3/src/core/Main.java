@@ -29,10 +29,14 @@ public class Main {
             Game game = new Game(world, characterChoice, seed);
             game.gameLoop();
         } else if (input.startsWith("L")) {
-            System.exit(0);
-            // LOAD GAME HERE
+            Game loadedGame = Game.loadGame();
+            if (loadedGame != null) {
+                loadedGame.gameLoop();
+            } else {
+                System.out.println("No saved game found. Exiting.");
+                System.exit(0);
+            }
         } else if (input.startsWith("Q")) {
-            // QUIT THE GAME
             System.exit(0);
         }
     }

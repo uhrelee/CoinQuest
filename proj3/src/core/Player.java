@@ -4,15 +4,13 @@ import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TETile;
 import tileengine.Tileset;
 
-import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public class Player {
+public class Player implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final int TILE_SIZE = 16;
 
-    private BufferedImage currentSprite;
     private String spritePrefix;
-
-
     private int x, y;
     private Direction facing = Direction.DOWN;
     private TETile[][] world;
@@ -30,23 +28,12 @@ public class Player {
         this.world = world;
         this.game = game;
         this.characterChoice = characterChoice;
-
         spritePrefix = (characterChoice == 1) ? "Sprite" : "Guy";
-        currentSprite = Sprite.loadSprite(spritePrefix + "Front.PNG");
     }
 
-    public void setPosition(int newX, int newY, TETile[][] newWorld) {
+    public void setPosition(int newX, int newY) {
         this.x = newX;
         this.y = newY;
-        this.world = newWorld;
-    }
-
-    public void loseLife() {
-        lives--;
-    }
-
-    public int getLives() {
-        return lives;
     }
 
     public void move(Direction dir) {
@@ -58,42 +45,40 @@ public class Player {
         switch (dir) {
             case UP:
                 newY += 1;
-                currentSprite = Sprite.loadSprite(spritePrefix + "Back.PNG");
                 break;
             case DOWN:
                 newY -= 1;
-                currentSprite = Sprite.loadSprite(spritePrefix + "Front.PNG");
                 break;
             case LEFT:
                 newX -= 1;
-                currentSprite = Sprite.loadSprite(spritePrefix + "Left.PNG");
                 break;
             case RIGHT:
                 newX += 1;
-                currentSprite = Sprite.loadSprite(spritePrefix + "Right.PNG");
                 break;
         }
 
+
         if (canMoveTo(newX, newY)) {
-            if (world[newX][newY] == Tileset.FloorWithCoin) {
+            if (world[newX][newY].equals(Tileset.FloorWithCoin)) {
                 collectCoin(newX, newY);
             }
             x = newX;
             y = newY;
+        } else {
+            System.out.println("Move blocked by tile: " + world[newX][newY].description());
         }
     }
 
     private boolean canMoveTo(int newX, int newY) {
+        TETile tile = world[newX][newY];
         return newX >= 0 && newX < world.length &&
                 newY >= 0 && newY < world[0].length &&
-                (world[newX][newY] == Tileset.Floor || world[newX][newY] == Tileset.FloorWithCoin);
+                (tile.id() == Tileset.Floor.id() || tile.id() == Tileset.FloorWithCoin.id());
     }
 
+
+
     public void render() {
-        if (currentSprite == null) {
-            System.err.println("Current sprite is null!");
-            return;
-        }
         StdDraw.picture(x + 0.5, y + 0.5, Sprite.getSpriteFilePath(spritePrefix, facing), 1, 1);
     }
 
@@ -124,6 +109,18 @@ public class Player {
         if (interactX >= 0 && interactX < world.length && interactY >= 0 && interactY < world[0].length) {
             System.out.println("Interacting with tile: " + world[interactX][interactY]);
         }
+    }
+
+    public void loseLife() {
+        lives--;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     public int getX() {

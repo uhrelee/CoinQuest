@@ -5,16 +5,14 @@ import tileengine.TETile;
 import tileengine.Tileset;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
-public class Enemy {
+public class Enemy implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final int TILE_SIZE = 16;
     private static final int MOVE_DELAY = 5;
-
-    private BufferedImage spriteDown, spriteUp, spriteRight, spriteLeft;
-    private BufferedImage currentSprite;
 
     private int x, y;
     private int moveCounter = 0;
@@ -32,24 +30,10 @@ public class Enemy {
         this.world = world;
         this.player = player;
         this.game = game;
-
-        spriteDown = Sprite.loadSprite("EnemyFront.PNG");
-        spriteUp = Sprite.loadSprite("EnemyBack.PNG");
-        spriteRight = Sprite.loadSprite("EnemyRight.PNG");
-        spriteLeft = Sprite.loadSprite("EnemyLeft.PNG");
-
-        currentSprite = spriteDown;
     }
 
     public void render() {
-        String tempFilePath = "temp_enemy_sprite.png";
-        try {
-            javax.imageio.ImageIO.write(currentSprite, "png", new java.io.File(tempFilePath));
-            StdDraw.picture(x + 0.5, y + 0.5, tempFilePath, 1, 1);
-            new java.io.File(tempFilePath).delete();
-        } catch (java.io.IOException e) {
-            e.printStackTrace();
-        }
+        StdDraw.picture(x + 0.5, y + 0.5, "proj3/src/core/game assets/EnemyFront.PNG", 1, 1);
     }
 
     public void move() {
@@ -64,19 +48,15 @@ public class Enemy {
                 switch (dir) {
                     case UP:
                         newY += 1;
-                        currentSprite = spriteUp;
                         break;
                     case DOWN:
                         newY -= 1;
-                        currentSprite = spriteDown;
                         break;
                     case LEFT:
                         newX -= 1;
-                        currentSprite = spriteLeft;
                         break;
                     case RIGHT:
                         newX += 1;
-                        currentSprite = spriteRight;
                         break;
                 }
 
@@ -160,7 +140,7 @@ public class Enemy {
     private boolean canMoveTo(int newX, int newY) {
         return newX >= 0 && newX < world.length &&
                 newY >= 0 && newY < world[0].length &&
-                (world[newX][newY] == Tileset.Floor || world[newX][newY] == Tileset.FloorWithCoin) &&
+                (world[newX][newY].equals(Tileset.Floor) || world[newX][newY].equals(Tileset.FloorWithCoin)) &&
                 !game.isEnemyAt(newX, newY);
     }
 
@@ -171,14 +151,4 @@ public class Enemy {
     public int getY() {
         return y;
     }
-
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
 }
