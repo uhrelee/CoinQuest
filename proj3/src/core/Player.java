@@ -11,11 +11,13 @@ public class Player {
 
     private BufferedImage currentSprite;
     private String spritePrefix;
+
     private int x, y;
     private Direction facing = Direction.DOWN;
     private TETile[][] world;
     private Game game;
     private int characterChoice;
+    private int lives = 2;
 
     enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -36,6 +38,14 @@ public class Player {
         this.x = newX;
         this.y = newY;
         this.world = newWorld;
+    }
+
+    public void loseLife() {
+        lives--;
+    }
+
+    public int getLives() {
+        return lives;
     }
 
     public void move(Direction dir) {
