@@ -3,6 +3,7 @@ package core;
 import tileengine.TETile;
 import tileengine.Tileset;
 import java.io.*;
+import java.util.List;
 
 public class GameState implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -15,8 +16,10 @@ public class GameState implements Serializable {
     private int totalCoins;
     private int level;
     private boolean gameCompleted;
+    private List<int[]> enemyPositions;
 
-    public GameState(TETile[][] world, int characterChoice, long randomSeed, int collectedCoins, int totalCoins, int level, boolean gameCompleted) {
+
+    public GameState(TETile[][] world, int characterChoice, long randomSeed, int collectedCoins, int totalCoins, int level, boolean gameCompleted, List<int[]> enemyPositions) {
         this.world = world;
         this.characterChoice = characterChoice;
         this.randomSeed = randomSeed;
@@ -25,6 +28,7 @@ public class GameState implements Serializable {
         this.level = level;
         this.gameCompleted = gameCompleted;
         this.worldTileIds = convertWorldToTileIds(world);
+        this.enemyPositions = enemyPositions;
     }
 
     private int[][] convertWorldToTileIds(TETile[][] world) {
@@ -37,6 +41,10 @@ public class GameState implements Serializable {
             }
         }
         return tileIds;
+    }
+
+    public List<int[]> getEnemyPositions() {
+        return enemyPositions;
     }
 
     private TETile[][] convertTileIdsToWorld(int[][] tileIds) {

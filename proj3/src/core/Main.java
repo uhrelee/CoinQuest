@@ -25,14 +25,14 @@ public class Main {
             game.gameLoop();
 
         } else if (input.startsWith("L")) {
-            GameState gameState = GameState.load("saves/gameState.txt"); // Adjust path if necessary
+            GameState gameState = GameState.load("saves/gameState.txt");
             if (gameState != null) {
                 TETile[][] loadedWorld = gameState.getWorld();
                 // Debug: Print world tiles to verify
                 System.out.println("Loaded World:");
                 for (int y = 0; y < HEIGHT; y++) {
                     for (int x = 0; x < WIDTH; x++) {
-                        System.out.print(loadedWorld[x][y] + " "); // Adjust based on your tile's `toString()` implementation
+                        System.out.print(loadedWorld[x][y] + " ");
                     }
                     System.out.println();
                 }

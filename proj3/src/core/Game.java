@@ -6,13 +6,10 @@ import tileengine.Tileset;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Game {
     private static final File CWD = new File(".");
@@ -20,23 +17,23 @@ public class Game {
     public static final int WIDTH = 60;
     public static final int HEIGHT = 40;
     private static final int TILE_SIZE = 16;
+    private static final int MAX_LEVEL = 3;
     private boolean isColonPressed = false;
 
-
     private Player player;
-    private ArrayList<Enemy> enemies;
+    private List<Enemy> enemies;
     private TETile[][] world;
     private int collectedCoins = 0;
     private int totalCoins = 0;
     private int level = 1;
     private Font brickSansFont;
-    private static final int MAX_LEVEL = 3;
     private boolean gameCompleted = false;
     private long randomSeed;
 
     public Game(TETile[][] generatedWorld, int characterChoice, long seed) {
         this.world = generatedWorld;
         this.randomSeed = seed;
+        this.enemies = new ArrayList<>();
         initializeFont();
         initializeWorld(characterChoice);
         initializeEnemies();
@@ -50,9 +47,10 @@ public class Game {
         this.totalCoins = gameState.getTotalCoins();
         this.level = gameState.getLevel();
         this.gameCompleted = gameState.isGameCompleted();
+        this.enemies = new ArrayList<>();
         initializeFont();
         initializeWorld(gameState.getCharacterChoice());
-        initializeEnemies();
+        initializeEnemies(gameState.getEnemyPositions());
         setupGraphics();
     }
 
@@ -65,18 +63,15 @@ public class Game {
             world = new TETile[WIDTH][HEIGHT];
         }
 
-        boolean floorWithCoinFound = false;
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.FloorWithCoin) {
-                    floorWithCoinFound = true;
+                if (world[x][y] == Tileset.Floor) {
+                    world[x][y] = Tileset.FloorWithCoin;
                     totalCoins++;
                 }
             }
         }
-        if (!floorWithCoinFound) {
-            throw new RuntimeException("No floor tiles found for player placement");
-        }
+
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 if (world[x][y] == Tileset.FloorWithCoin) {
@@ -97,16 +92,22 @@ public class Game {
     }
 
     private void initializeEnemies() {
-        if (enemies == null) {
-            enemies = new ArrayList<>();
-        } else {
-            enemies.clear();
-        }
+        initializeEnemies(null);
+    }
 
-        for (int i = 2; i < 5; i++) {
-            int enemyX = (int) (Math.random() * WIDTH);
-            int enemyY = (int) (Math.random() * HEIGHT);
-            if (world[enemyX][enemyY] == Tileset.FloorWithCoin) {
+    private void initializeEnemies(List<int[]> enemyPositions) {
+        enemies.clear();
+        if (enemyPositions != null && !enemyPositions.isEmpty()) {
+            for (int[] pos : enemyPositions) {
+                enemies.add(new Enemy(pos[0], pos[1], world, player));
+            }
+        } else {
+            for (int i = 0; i < 3; i++) {
+                int enemyX, enemyY;
+                do {
+                    enemyX = (int) (Math.random() * WIDTH);
+                    enemyY = (int) (Math.random() * HEIGHT);
+                } while (world[enemyX][enemyY] != Tileset.Floor && world[enemyX][enemyY] != Tileset.FloorWithCoin);
                 enemies.add(new Enemy(enemyX, enemyY, world, player));
             }
         }
@@ -125,7 +126,6 @@ public class Game {
             for (Enemy enemy : enemies) {
                 enemy.move();
             }
-
             render();
             checkLevelCompletion();
             StdDraw.pause(50);
@@ -151,14 +151,39 @@ public class Game {
                 newWorld[x][y] = Tileset.Grass;
             }
         }
-        Random rand = new Random(randomSeed);
+        Random rand = new Random(randomSeed + level);
         Main.createWorld(newWorld, rand);
 
         this.world = newWorld;
         this.collectedCoins = 0;
         this.totalCoins = 0;
 
-        initializeWorld(player.getCharacterChoice());
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                if (world[x][y] == Tileset.Floor) {
+                    world[x][y] = Tileset.FloorWithCoin;
+                    totalCoins++;
+                }
+            }
+        }
+
+        placePlayerAndEnemies();
+    }
+
+    private void placePlayerAndEnemies() {
+        boolean playerPlaced = false;
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                if (world[x][y] == Tileset.FloorWithCoin && !playerPlaced) {
+                    player.setPosition(x, y, world);
+                    world[x][y] = Tileset.Floor;
+                    totalCoins--;
+                    playerPlaced = true;
+                    break;
+                }
+            }
+            if (playerPlaced) break;
+        }
 
         initializeEnemies();
     }
@@ -168,6 +193,7 @@ public class Game {
         String winScreenPath = "proj3/src/core/game assets/Win Screen.png";
         StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, winScreenPath, WIDTH, HEIGHT);
         StdDraw.show();
+        StdDraw.pause(5000);
     }
 
     public void handleInput() {
@@ -176,9 +202,8 @@ public class Game {
 
             if (isColonPressed) {
                 if (key == 'Q' || key == 'q') {
-                    quitAndSave();  // Call the function to quit and save
+                    quitAndSave();
                 }
-                // Reset colon state if any other key is pressed
                 isColonPressed = false;
             } else {
                 switch (key) {
@@ -200,17 +225,14 @@ public class Game {
                     case ':':
                         isColonPressed = true;
                         break;
-                    default:
-                        System.out.println("Unhandled Key: " + key);
-                        break;
                 }
             }
         }
     }
 
     private void quitAndSave() {
-        saveGameState("gameState.txt");  // Save the game state with a default filename
-        System.exit(0);  // Exit the program
+        saveGameState("gameState.txt");
+        System.exit(0);
     }
 
     public void render() {
@@ -228,9 +250,7 @@ public class Game {
             enemy.render();
         }
 
-        double coinIconWidth = 2.0;
-        double coinIconHeight = 2.0;
-        StdDraw.picture(WIDTH - 5.6, HEIGHT - 1, "proj3/src/core/game assets/Coin.PNG", coinIconWidth, coinIconHeight);
+        StdDraw.picture(WIDTH - 5.6, HEIGHT - 1, "proj3/src/core/game assets/Coin.PNG", 2.0, 2.0);
 
         StdDraw.setFont(brickSansFont);
         StdDraw.setPenColor(Color.WHITE);
@@ -245,7 +265,11 @@ public class Game {
         }
 
         Path filePath = SAVE_DIR.toPath().resolve(fileName);
-        GameState gameState = new GameState(world, player.getCharacterChoice(), randomSeed, collectedCoins, totalCoins, level, gameCompleted);
+        List<int[]> enemyPositions = new ArrayList<>();
+        for (Enemy enemy : enemies) {
+            enemyPositions.add(new int[]{enemy.getX(), enemy.getY()});
+        }
+        GameState gameState = new GameState(world, player.getCharacterChoice(), randomSeed, collectedCoins, totalCoins, level, gameCompleted, enemyPositions);
         gameState.save(filePath.toString());
     }
 
@@ -258,7 +282,6 @@ public class Game {
         GameState gameState = GameState.load(filePath.toString());
 
         if (gameState != null) {
-            // Use the new constructor to initialize the game with the loaded state
             this.world = gameState.getWorld();
             this.randomSeed = gameState.getRandomSeed();
             this.collectedCoins = gameState.getCollectedCoins();
@@ -267,7 +290,7 @@ public class Game {
             this.gameCompleted = gameState.isGameCompleted();
             initializeFont();
             initializeWorld(gameState.getCharacterChoice());
-            initializeEnemies();
+            initializeEnemies(gameState.getEnemyPositions());
             setupGraphics();
         }
     }

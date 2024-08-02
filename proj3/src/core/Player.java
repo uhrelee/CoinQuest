@@ -35,7 +35,7 @@ public class Player {
     public void setPosition(int newX, int newY, TETile[][] newWorld) {
         this.x = newX;
         this.y = newY;
-        this.world = newWorld;  // Update the world reference
+        this.world = newWorld;
     }
 
     public void move(Direction dir) {

@@ -160,4 +160,14 @@ public class Enemy {
                 newY >= 0 && newY < world[0].length &&
                 (world[newX][newY] == Tileset.Floor || world[newX][newY] == Tileset.FloorWithCoin);
     }
+
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
 }
