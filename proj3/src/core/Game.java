@@ -62,6 +62,21 @@ public class Game {
         initializeEnemies(state.getEnemyPositions());
         setupGraphics();
         System.out.println("Game loaded from saved state");
+        initializeGameLoop();
+        resetInputHandling();
+    }
+
+    private void initializeGameLoop() {
+        this.gameCompleted = false;
+        this.gameOver = false;
+        this.quitRequested = false;
+    }
+
+    private void resetInputHandling() {
+        // Clear any pending input
+        while (StdDraw.hasNextKeyTyped()) {
+            StdDraw.nextKeyTyped();
+        }
     }
 
     private void initializeFont() {
@@ -150,9 +165,7 @@ public class Game {
     }
 
     public void gameLoop() {
-        System.out.println("Starting game loop");
         while (!gameCompleted && !gameOver && !quitRequested) {
-            System.out.println("Game loop iteration");
             handleInput();
             if (quitRequested) {
                 saveGame();
@@ -169,7 +182,11 @@ public class Game {
         } else if (gameOver) {
             displayGameOverScreen();
         }
-        System.out.println("Exiting game loop");
+    }
+
+
+    public void continueGameLoop() {
+        gameLoop();
     }
 
     public void handleInput() {

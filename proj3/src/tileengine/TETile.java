@@ -148,9 +148,7 @@ public class TETile {
         return filepath;
     }
 
-    public int getId() {
-        return id;
-    }
+
 
     /**
      * Creates a copy of the given tile with a slightly different text color. The new
