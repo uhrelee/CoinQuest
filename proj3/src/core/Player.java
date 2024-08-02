@@ -58,28 +58,24 @@ public class Player implements Serializable {
         }
 
 
-        System.out.println("Attempting to move to: " + newX + ", " + newY); // Debug print
-
-
         if (canMoveTo(newX, newY)) {
-            if (world[newX][newY] == Tileset.FloorWithCoin) {
+            if (world[newX][newY].equals(Tileset.FloorWithCoin)) {
                 collectCoin(newX, newY);
             }
             x = newX;
             y = newY;
-            System.out.println("Moved to: " + x + ", " + y); // Debug print
         } else {
-            System.out.println("Move blocked by tile: " + world[newX][newY].description()); // Detailed debug print
+            System.out.println("Move blocked by tile: " + world[newX][newY].description());
         }
     }
 
     private boolean canMoveTo(int newX, int newY) {
         TETile tile = world[newX][newY];
-        System.out.println("Tile at (" + newX + ", " + newY + "): " + tile.description() + ", ID: " + tile.id());
         return newX >= 0 && newX < world.length &&
                 newY >= 0 && newY < world[0].length &&
-                (tile.equals(Tileset.Floor) || tile.equals(Tileset.FloorWithCoin));
+                (tile.id() == Tileset.Floor.id() || tile.id() == Tileset.FloorWithCoin.id());
     }
+
 
 
     public void render() {

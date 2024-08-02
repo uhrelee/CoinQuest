@@ -5,8 +5,9 @@ import tileengine.TETile;
 import tileengine.Tileset;
 import utils.FileUtils;
 
-import java.io.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -43,7 +44,6 @@ public class Game {
         initializeWorld(characterChoice);
         initializeEnemies();
         setupGraphics();
-        System.out.println("Game initialized with new world");
     }
 
     private Game(GameState state) {
@@ -61,22 +61,6 @@ public class Game {
         player.setLives(state.getLives());
         initializeEnemies(state.getEnemyPositions());
         setupGraphics();
-        System.out.println("Game loaded from saved state");
-        initializeGameLoop();
-        resetInputHandling();
-    }
-
-    private void initializeGameLoop() {
-        this.gameCompleted = false;
-        this.gameOver = false;
-        this.quitRequested = false;
-    }
-
-    private void resetInputHandling() {
-        // Clear any pending input
-        while (StdDraw.hasNextKeyTyped()) {
-            StdDraw.nextKeyTyped();
-        }
     }
 
     private void initializeFont() {
@@ -118,7 +102,7 @@ public class Game {
     private void placePlayer(int characterChoice) {
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.FloorWithCoin) {
+                if (world[x][y].equals(Tileset.FloorWithCoin)) {
                     player = new Player(x, y, world, this, characterChoice);
                     world[x][y] = Tileset.Floor;
                     totalCoins--;
@@ -148,7 +132,7 @@ public class Game {
         while (attempts < 100) {
             int x = rand.nextInt(WIDTH);
             int y = rand.nextInt(HEIGHT);
-            if (world[x][y] == Tileset.Floor && !isEnemyAt(x, y)) {
+            if (world[x][y].equals(Tileset.Floor) && !isEnemyAt(x, y)) {
                 enemies.add(new Enemy(x, y, world, player, this));
                 return;
             }
@@ -169,7 +153,7 @@ public class Game {
             handleInput();
             if (quitRequested) {
                 saveGame();
-                System.exit(0);
+                System.exit(0);;
             }
             moveEnemies();
             checkCollisions();
@@ -183,52 +167,6 @@ public class Game {
             displayGameOverScreen();
         }
     }
-
-
-    public void continueGameLoop() {
-        gameLoop();
-    }
-
-    public void handleInput() {
-        if (StdDraw.hasNextKeyTyped()) {
-            char key = StdDraw.nextKeyTyped();
-            if (key == ':') {
-                waitForQuitCommand();
-            } else {
-                switch (key) {
-                    case 'w':
-                        player.move(Player.Direction.UP);
-                        break;
-                    case 's':
-                        player.move(Player.Direction.DOWN);
-                        break;
-                    case 'a':
-                        player.move(Player.Direction.LEFT);
-                        break;
-                    case 'd':
-                        player.move(Player.Direction.RIGHT);
-                        break;
-                    case 'e':
-                        player.interact();
-                        break;
-                }
-            }
-        }
-    }
-
-    private void waitForQuitCommand() {
-        while (true) {
-            if (StdDraw.hasNextKeyTyped()) {
-                char key = Character.toLowerCase(StdDraw.nextKeyTyped());
-                System.out.println("Quit key pressed: " + key); // Debug print
-                if (key == 'q') {
-                    quitRequested = true;
-                }
-                break;
-            }
-        }
-    }
-
 
     private void moveEnemies() {
         for (Enemy enemy : enemies) {
@@ -253,7 +191,7 @@ public class Game {
         ArrayList<Point> floorTiles = new ArrayList<>();
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.Floor && !isEnemyAt(x, y)) {
+                if (world[x][y].equals(Tileset.Floor) && !isEnemyAt(x, y)) {
                     floorTiles.add(new Point(x, y));
                 }
             }
@@ -304,6 +242,44 @@ public class Game {
         StdDraw.pause(5000);
     }
 
+    public void handleInput() {
+        if (StdDraw.hasNextKeyTyped()) {
+            char key = StdDraw.nextKeyTyped();
+            if (key == ':') {
+                waitForQuitCommand();
+            } else {
+                switch (key) {
+                    case 'w':
+                        player.move(Player.Direction.UP);
+                        break;
+                    case 's':
+                        player.move(Player.Direction.DOWN);
+                        break;
+                    case 'a':
+                        player.move(Player.Direction.LEFT);
+                        break;
+                    case 'd':
+                        player.move(Player.Direction.RIGHT);
+                        break;
+                    case 'e':
+                        player.interact();
+                        break;
+                }
+            }
+        }
+    }
+
+    private void waitForQuitCommand() {
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = Character.toLowerCase(StdDraw.nextKeyTyped());
+                if (key == 'q') {
+                    quitRequested = true;
+                }
+                break;
+            }
+        }
+    }
 
     public void render() {
         StdDraw.clear(Color.BLACK);
@@ -354,7 +330,7 @@ public class Game {
         return false;
     }
 
-    // Getters for GameState
+
     public int getCollectedCoins() {
         return collectedCoins;
     }

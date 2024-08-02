@@ -41,15 +41,14 @@ public class GameState implements Serializable {
         }
     }
 
-
     public TETile[][] getWorld() {
-        TETile[][] result = new TETile[world.length][world[0].length];
+        TETile[][] worldCopy = new TETile[world.length][world[0].length];
         for (int x = 0; x < world.length; x++) {
             for (int y = 0; y < world[0].length; y++) {
-                result[x][y] = world[x][y].toTETile();
+                worldCopy[x][y] = world[x][y].toTETile();
             }
         }
-        return result;
+        return worldCopy;
     }
 
     public int getPlayerX() {

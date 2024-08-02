@@ -67,7 +67,7 @@ public class Tileset {
     public static final TETile BottomWallAndRightCorner= new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Right", "proj3/src/core/game assets/bottom wall and right corner.PNG", 14);
     public static final TETile WallAndLeftBottomCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Left", "proj3/src/core/game assets/wall and left corner.PNG", 14);
     public static final TETile WallAndRightBottomCorner = new TETile('#', new Color(216, 128, 128), Color.darkGray, "Single Wall Middle", "proj3/src/core/game assets/wall and right corner.PNG", 14);
-    public static final TETile FloorWithCoin = new TETile('.', new Color(128, 192, 128), Color.black, "Floor", "proj3/src/core/game assets/FloorCoin.PNG", 13);
+    public static final TETile FloorWithCoin = new TETile('.', new Color(128, 192, 128), Color.black, "FloorWithCoin", "proj3/src/core/game assets/FloorCoin.PNG", 20);
 }
 
 

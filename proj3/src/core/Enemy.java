@@ -140,7 +140,7 @@ public class Enemy implements Serializable {
     private boolean canMoveTo(int newX, int newY) {
         return newX >= 0 && newX < world.length &&
                 newY >= 0 && newY < world[0].length &&
-                (world[newX][newY] == Tileset.Floor || world[newX][newY] == Tileset.FloorWithCoin) &&
+                (world[newX][newY].equals(Tileset.Floor) || world[newX][newY].equals(Tileset.FloorWithCoin)) &&
                 !game.isEnemyAt(newX, newY);
     }
 
