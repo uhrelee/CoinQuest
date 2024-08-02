@@ -64,8 +64,6 @@ public class Player implements Serializable {
             }
             x = newX;
             y = newY;
-        } else {
-            System.out.println("Move blocked by tile: " + world[newX][newY].description());
         }
     }
 
