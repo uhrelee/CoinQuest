@@ -46,7 +46,7 @@ public class Game {
         initializeFont();
         initializeWorld(characterChoice);
         initializeEnemies();
-        setupGraphics(true);
+        setupGraphics();
     }
 
     private Game(GameState state) {
@@ -63,7 +63,7 @@ public class Game {
         this.player = new Player(state.getPlayerX(), state.getPlayerY(), world, this, state.getCharacterChoice());
         player.setLives(state.getLives());
         initializeEnemies(state.getEnemyPositions());
-        setupGraphics(true);
+        setupGraphics();
     }
 
     private void initializeFont() {
@@ -144,16 +144,10 @@ public class Game {
         System.out.println("Warning: Could not place an enemy after 100 attempts");
     }
 
-    private void setupGraphics(boolean includeHUD) {
-        if (includeHUD) {
-            StdDraw.setCanvasSize(WIDTH * TILE_SIZE, (HEIGHT + HUD_HEIGHT) * TILE_SIZE);
-            StdDraw.setXscale(0, WIDTH);
-            StdDraw.setYscale(0, HEIGHT + HUD_HEIGHT);
-        } else {
-            StdDraw.setCanvasSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
-            StdDraw.setXscale(0, WIDTH);
-            StdDraw.setYscale(0, HEIGHT);
-        }
+    private void setupGraphics() {
+        StdDraw.setCanvasSize(WIDTH * TILE_SIZE, (HEIGHT + HUD_HEIGHT) * TILE_SIZE);
+        StdDraw.setXscale(0, WIDTH);
+        StdDraw.setYscale(0, HEIGHT + HUD_HEIGHT);
         StdDraw.enableDoubleBuffering();
     }
 
@@ -238,18 +232,17 @@ public class Game {
     }
 
     private void displayGameCompletionScreen() {
-        setupGraphics(false);
         StdDraw.clear(Color.BLACK);
-        String winScreenPath = "proj3/src/core/game assets/Win Screen.png";
-        StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, winScreenPath, WIDTH, HEIGHT);
+        String winScreenPath = "proj3/src/core/game assets/Win Screen Resized.png"; // Use resized image
+        StdDraw.picture(WIDTH / 2.0, (HEIGHT + HUD_HEIGHT) / 2.0, winScreenPath, WIDTH, HEIGHT + HUD_HEIGHT);
         StdDraw.show();
         StdDraw.pause(5000);
     }
 
     private void displayGameOverScreen() {
-        setupGraphics(false);
         StdDraw.clear(Color.BLACK);
-        StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, LOSE_SCREEN, WIDTH, HEIGHT);
+        String loseScreenPath = "proj3/src/core/game assets/You Lost Screen Resized.png"; // Use resized image
+        StdDraw.picture(WIDTH / 2.0, (HEIGHT + HUD_HEIGHT) / 2.0, loseScreenPath, WIDTH, HEIGHT + HUD_HEIGHT);
         StdDraw.show();
         StdDraw.pause(5000);
     }
