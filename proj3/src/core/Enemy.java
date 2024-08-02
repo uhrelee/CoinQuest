@@ -20,16 +20,18 @@ public class Enemy {
     private int moveCounter = 0;
     private Player player;
     private TETile[][] world;
+    private Game game;
 
     enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
 
-    public Enemy(int startX, int startY, TETile[][] world, Player player) {
+    public Enemy(int startX, int startY, TETile[][] world, Player player, Game game) {
         this.x = startX;
         this.y = startY;
         this.world = world;
         this.player = player;
+        this.game = game;
 
         spriteDown = Sprite.loadSprite("EnemyFront.PNG");
         spriteUp = Sprite.loadSprite("EnemyBack.PNG");
@@ -158,7 +160,16 @@ public class Enemy {
     private boolean canMoveTo(int newX, int newY) {
         return newX >= 0 && newX < world.length &&
                 newY >= 0 && newY < world[0].length &&
-                (world[newX][newY] == Tileset.Floor || world[newX][newY] == Tileset.FloorWithCoin);
+                (world[newX][newY] == Tileset.Floor || world[newX][newY] == Tileset.FloorWithCoin) &&
+                !game.isEnemyAt(newX, newY);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
 

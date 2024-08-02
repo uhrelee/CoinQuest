@@ -3,114 +3,121 @@ package core;
 import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TETile;
 import tileengine.Tileset;
-
+import java.io.File;
+import java.io.IOException;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.io.File;
-import java.nio.file.Path;
 
 public class Game {
-    private static final File CWD = new File(".");
-    private static final File SAVE_DIR = new File(CWD, "saves");
     public static final int WIDTH = 60;
     public static final int HEIGHT = 40;
     private static final int TILE_SIZE = 16;
-    private static final int MAX_LEVEL = 3;
-    private boolean isColonPressed = false;
+    private static final int MAX_LEVEL = 2;
+    private static final int[] COINS_PER_LEVEL = {101, 201};
+    private static final String HEART_RED = "proj3/src/core/game assets/HeartRed.PNG";
+    private static final String HEART_GRAY = "proj3/src/core/game assets/HeartGray.PNG";
+    private static final String LOSE_SCREEN = "proj3/src/core/game assets/You Lost Screen.png";
+
+    private boolean gameOver = false;
 
     private Player player;
-    private List<Enemy> enemies;
+    private ArrayList<Enemy> enemies;
     private TETile[][] world;
     private int collectedCoins = 0;
     private int totalCoins = 0;
     private int level = 1;
     private Font brickSansFont;
     private boolean gameCompleted = false;
-    private long randomSeed;
+    private Random rand;
 
     public Game(TETile[][] generatedWorld, int characterChoice, long seed) {
         this.world = generatedWorld;
-        this.randomSeed = seed;
-        this.enemies = new ArrayList<>();
+        this.rand = new Random(seed);
         initializeFont();
         initializeWorld(characterChoice);
         initializeEnemies();
         setupGraphics();
     }
 
-    public Game(GameState gameState) {
-        this.world = gameState.getWorld();
-        this.randomSeed = gameState.getRandomSeed();
-        this.collectedCoins = gameState.getCollectedCoins();
-        this.totalCoins = gameState.getTotalCoins();
-        this.level = gameState.getLevel();
-        this.gameCompleted = gameState.isGameCompleted();
-        this.enemies = new ArrayList<>();
-        initializeFont();
-        initializeWorld(gameState.getCharacterChoice());
-        initializeEnemies(gameState.getEnemyPositions());
-        setupGraphics();
-    }
-
     private void initializeFont() {
-        brickSansFont = FontManager.getBrickSansFont(13f);
+        try {
+            brickSansFont = Font.createFont(Font.TRUETYPE_FONT, new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(13f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(brickSansFont);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initializeWorld(int characterChoice) {
-        if (world == null) {
-            world = new TETile[WIDTH][HEIGHT];
-        }
+        placeCoins();
+        placePlayer(characterChoice);
+    }
+
+    private void placeCoins() {
+        int coinsToPlace = COINS_PER_LEVEL[level - 1];
+        totalCoins = coinsToPlace;
+        ArrayList<Point> floorTiles = new ArrayList<>();
 
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 if (world[x][y] == Tileset.Floor) {
-                    world[x][y] = Tileset.FloorWithCoin;
-                    totalCoins++;
+                    floorTiles.add(new Point(x, y));
                 }
             }
         }
 
+        while (coinsToPlace > 0 && !floorTiles.isEmpty()) {
+            int index = rand.nextInt(floorTiles.size());
+            Point p = floorTiles.remove(index);
+            world[p.x][p.y] = Tileset.FloorWithCoin;
+            coinsToPlace--;
+        }
+    }
+
+    private void placePlayer(int characterChoice) {
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 if (world[x][y] == Tileset.FloorWithCoin) {
-                    if (player == null) {
-                        player = new Player(x, y, world, this, characterChoice);
-                        world[x][y] = Tileset.Floor;
-                        totalCoins--;
-                        break;
-                    }
+                    player = new Player(x, y, world, this, characterChoice);
+                    world[x][y] = Tileset.Floor;
+                    totalCoins--;
+                    return;
                 }
             }
-            if (player != null) break;
         }
-
-        if (player == null) {
-            throw new RuntimeException("No floor tiles found for player placement");
-        }
+        throw new RuntimeException("No floor tiles found for player placement");
     }
 
     private void initializeEnemies() {
-        initializeEnemies(null);
+        enemies = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            placeEnemy();
+        }
     }
 
-    private void initializeEnemies(List<int[]> enemyPositions) {
-        enemies.clear();
-        if (enemyPositions != null && !enemyPositions.isEmpty()) {
-            for (int[] pos : enemyPositions) {
-                enemies.add(new Enemy(pos[0], pos[1], world, player));
+    private void placeEnemy() {
+        int attempts = 0;
+        while (attempts < 100) {
+            int x = rand.nextInt(WIDTH);
+            int y = rand.nextInt(HEIGHT);
+            if (world[x][y] == Tileset.Floor && !isEnemyAt(x, y)) {
+                enemies.add(new Enemy(x, y, world, player, this));
+                return;
             }
-        } else {
-            for (int i = 0; i < 3; i++) {
-                int enemyX, enemyY;
-                do {
-                    enemyX = (int) (Math.random() * WIDTH);
-                    enemyY = (int) (Math.random() * HEIGHT);
-                } while (world[enemyX][enemyY] != Tileset.Floor && world[enemyX][enemyY] != Tileset.FloorWithCoin);
-                enemies.add(new Enemy(enemyX, enemyY, world, player));
+            attempts++;
+        }
+        System.out.println("Warning: Could not place an enemy after 100 attempts");
+    }
+
+    public boolean isEnemyAt(int x, int y) {
+        for (Enemy enemy : enemies) {
+            if (enemy.getX() == x && enemy.getY() == y) {
+                return true;
             }
         }
+        return false;
     }
 
     private void setupGraphics() {
@@ -121,16 +128,61 @@ public class Game {
     }
 
     public void gameLoop() {
-        while (!gameCompleted) {
+        while (!gameCompleted && !gameOver) {
             handleInput();
-            for (Enemy enemy : enemies) {
-                enemy.move();
-            }
+            moveEnemies();
+            checkCollisions();
             render();
             checkLevelCompletion();
             StdDraw.pause(50);
         }
-        displayGameCompletionScreen();
+        if (gameCompleted) {
+            displayGameCompletionScreen();
+        } else if (gameOver) {
+            displayGameOverScreen();
+        }
+    }
+
+    private void moveEnemies() {
+        for (Enemy enemy : enemies) {
+            enemy.move();
+        }
+    }
+
+    private void checkCollisions() {
+        for (Enemy enemy : enemies) {
+            if (enemy.getX() == player.getX() && enemy.getY() == player.getY()) {
+                player.loseLife();
+                if (player.getLives() == 0) {
+                    gameOver = true;
+                }
+                // Respawn player at a random floor tile
+                respawnPlayer();
+                break;
+            }
+        }
+    }
+
+    private void respawnPlayer() {
+        ArrayList<Point> floorTiles = new ArrayList<>();
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                if (world[x][y] == Tileset.Floor && !isEnemyAt(x, y)) {
+                    floorTiles.add(new Point(x, y));
+                }
+            }
+        }
+        if (!floorTiles.isEmpty()) {
+            Point respawnPoint = floorTiles.get(rand.nextInt(floorTiles.size()));
+            player.setPosition(respawnPoint.x, respawnPoint.y, world);
+        }
+    }
+
+    private void displayGameOverScreen() {
+        StdDraw.clear(Color.BLACK);
+        StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, LOSE_SCREEN, WIDTH, HEIGHT);
+        StdDraw.show();
+        StdDraw.pause(5000);
     }
 
     private void checkLevelCompletion() {
@@ -151,40 +203,10 @@ public class Game {
                 newWorld[x][y] = Tileset.Grass;
             }
         }
-        Random rand = new Random(randomSeed + level);
         Main.createWorld(newWorld, rand);
-
         this.world = newWorld;
         this.collectedCoins = 0;
-        this.totalCoins = 0;
-
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.Floor) {
-                    world[x][y] = Tileset.FloorWithCoin;
-                    totalCoins++;
-                }
-            }
-        }
-
-        placePlayerAndEnemies();
-    }
-
-    private void placePlayerAndEnemies() {
-        boolean playerPlaced = false;
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.FloorWithCoin && !playerPlaced) {
-                    player.setPosition(x, y, world);
-                    world[x][y] = Tileset.Floor;
-                    totalCoins--;
-                    playerPlaced = true;
-                    break;
-                }
-            }
-            if (playerPlaced) break;
-        }
-
+        initializeWorld(player.getCharacterChoice());
         initializeEnemies();
     }
 
@@ -193,46 +215,29 @@ public class Game {
         String winScreenPath = "proj3/src/core/game assets/Win Screen.png";
         StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, winScreenPath, WIDTH, HEIGHT);
         StdDraw.show();
-        StdDraw.pause(5000);
     }
 
     public void handleInput() {
         if (StdDraw.hasNextKeyTyped()) {
             char key = StdDraw.nextKeyTyped();
-
-            if (isColonPressed) {
-                if (key == 'Q' || key == 'q') {
-                    quitAndSave();
-                }
-                isColonPressed = false;
-            } else {
-                switch (key) {
-                    case 'w':
-                        player.move(Player.Direction.UP);
-                        break;
-                    case 's':
-                        player.move(Player.Direction.DOWN);
-                        break;
-                    case 'a':
-                        player.move(Player.Direction.LEFT);
-                        break;
-                    case 'd':
-                        player.move(Player.Direction.RIGHT);
-                        break;
-                    case 'e':
-                        player.interact();
-                        break;
-                    case ':':
-                        isColonPressed = true;
-                        break;
-                }
+            switch (key) {
+                case 'w':
+                    player.move(Player.Direction.UP);
+                    break;
+                case 's':
+                    player.move(Player.Direction.DOWN);
+                    break;
+                case 'a':
+                    player.move(Player.Direction.LEFT);
+                    break;
+                case 'd':
+                    player.move(Player.Direction.RIGHT);
+                    break;
+                case 'e':
+                    player.interact();
+                    break;
             }
         }
-    }
-
-    private void quitAndSave() {
-        saveGameState("gameState.txt");
-        System.exit(0);
     }
 
     public void render() {
@@ -245,58 +250,29 @@ public class Game {
             }
         }
         player.render();
-
         for (Enemy enemy : enemies) {
             enemy.render();
         }
-
-        StdDraw.picture(WIDTH - 5.6, HEIGHT - 1, "proj3/src/core/game assets/Coin.PNG", 2.0, 2.0);
-
-        StdDraw.setFont(brickSansFont);
-        StdDraw.setPenColor(Color.WHITE);
-        StdDraw.text(2, HEIGHT - 1, "Coins: " + collectedCoins + "/" + totalCoins);
-        StdDraw.text(2, HEIGHT - 2, "Level: " + level);
+        renderUI();
         StdDraw.show();
     }
 
-    public void saveGameState(String fileName) {
-        if (!fileName.toLowerCase().endsWith(".txt")) {
-            fileName += ".txt";
+    private void renderUI() {
+        StdDraw.picture(WIDTH - 5.6, HEIGHT - 1, "proj3/src/core/game assets/Coin.PNG", 2.0, 2.0);
+        StdDraw.setFont(brickSansFont);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.text(WIDTH - 3, HEIGHT - 1, collectedCoins + "/" + totalCoins);
+        StdDraw.text(WIDTH / 2, HEIGHT - 1, "Level " + level);
+        if (player.getLives() == 2) {
+            StdDraw.picture(2, HEIGHT - 1, HEART_RED);
+            StdDraw.picture(3, HEIGHT - 1, HEART_RED);
+        } else if (player.getLives() == 1) {
+            StdDraw.picture(2, HEIGHT - 1, HEART_RED);
+            StdDraw.picture(3, HEIGHT - 1, HEART_GRAY);
+        } else {
+            StdDraw.picture(2, HEIGHT - 1, HEART_GRAY);
+            StdDraw.picture(3, HEIGHT - 1, HEART_GRAY);
         }
-
-        Path filePath = SAVE_DIR.toPath().resolve(fileName);
-        List<int[]> enemyPositions = new ArrayList<>();
-        for (Enemy enemy : enemies) {
-            enemyPositions.add(new int[]{enemy.getX(), enemy.getY()});
-        }
-        GameState gameState = new GameState(world, player.getCharacterChoice(), randomSeed, collectedCoins, totalCoins, level, gameCompleted, enemyPositions);
-        gameState.save(filePath.toString());
-    }
-
-    public void loadGameState(String fileName) {
-        if (!fileName.toLowerCase().endsWith(".txt")) {
-            fileName += ".txt";
-        }
-
-        Path filePath = SAVE_DIR.toPath().resolve(fileName);
-        GameState gameState = GameState.load(filePath.toString());
-
-        if (gameState != null) {
-            this.world = gameState.getWorld();
-            this.randomSeed = gameState.getRandomSeed();
-            this.collectedCoins = gameState.getCollectedCoins();
-            this.totalCoins = gameState.getTotalCoins();
-            this.level = gameState.getLevel();
-            this.gameCompleted = gameState.isGameCompleted();
-            initializeFont();
-            initializeWorld(gameState.getCharacterChoice());
-            initializeEnemies(gameState.getEnemyPositions());
-            setupGraphics();
-        }
-    }
-
-    public TETile[][] getWorld() {
-        return world;
     }
 
     public void incrementCollectedCoins() {

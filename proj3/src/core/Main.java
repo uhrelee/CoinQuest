@@ -13,49 +13,28 @@ public class Main {
         MainMenu menu = new MainMenu(WIDTH, HEIGHT);
         menu.displayMenu();
         String input = menu.getInput();
-
         if (input.startsWith("N")) {
             String[] parts = input.split(":");
             long seed = Long.parseLong(parts[0].substring(1));
             int characterChoice = Integer.parseInt(parts[1]);
 
             TETile[][] world = new TETile[WIDTH][HEIGHT];
-            initializeWorld(world, seed);
+            for (int x = 0; x < WIDTH; x += 1) {
+                for (int y = 0; y < HEIGHT; y += 1) {
+                    world[x][y] = Tileset.Grass;
+                }
+            }
+            Random rand = new Random(seed);
+            createWorld(world, rand);
             Game game = new Game(world, characterChoice, seed);
             game.gameLoop();
-
         } else if (input.startsWith("L")) {
-            GameState gameState = GameState.load("saves/gameState.txt");
-            if (gameState != null) {
-                TETile[][] loadedWorld = gameState.getWorld();
-                // Debug: Print world tiles to verify
-                System.out.println("Loaded World:");
-                for (int y = 0; y < HEIGHT; y++) {
-                    for (int x = 0; x < WIDTH; x++) {
-                        System.out.print(loadedWorld[x][y] + " ");
-                    }
-                    System.out.println();
-                }
-                Game game = new Game(gameState);
-                game.gameLoop();
-            } else {
-                System.out.println("Failed to load game state.");
-                System.exit(1); // Exit with error code
-            }
-
+            System.exit(0);
+            // LOAD GAME HERE
         } else if (input.startsWith("Q")) {
+            // QUIT THE GAME
             System.exit(0);
         }
-    }
-
-    private static void initializeWorld(TETile[][] world, long seed) {
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-                world[x][y] = Tileset.Grass;
-            }
-        }
-        Random rand = new Random(seed);
-        createWorld(world, rand);
     }
 
     public static void createWorld(TETile[][] world, Random rand) {
