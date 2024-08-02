@@ -12,6 +12,7 @@ public class Player {
     private BufferedImage currentSprite;
     private String spritePrefix;
 
+
     private int x, y;
     private Direction facing = Direction.DOWN;
     private TETile[][] world;
