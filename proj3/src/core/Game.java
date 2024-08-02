@@ -5,9 +5,8 @@ import tileengine.TETile;
 import tileengine.Tileset;
 import utils.FileUtils;
 
+import java.io.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -44,6 +43,7 @@ public class Game {
         initializeWorld(characterChoice);
         initializeEnemies();
         setupGraphics();
+        System.out.println("Game initialized with new world");
     }
 
     private Game(GameState state) {
@@ -53,11 +53,15 @@ public class Game {
         this.collectedCoins = state.getCollectedCoins();
         this.totalCoins = state.getTotalCoins();
         this.level = state.getLevel();
+        this.quitRequested = false;
+        this.gameCompleted = false;
+        this.gameOver = false;
         initializeFont();
         this.player = new Player(state.getPlayerX(), state.getPlayerY(), world, this, state.getCharacterChoice());
         player.setLives(state.getLives());
         initializeEnemies(state.getEnemyPositions());
         setupGraphics();
+        System.out.println("Game loaded from saved state");
     }
 
     private void initializeFont() {
@@ -146,11 +150,13 @@ public class Game {
     }
 
     public void gameLoop() {
+        System.out.println("Starting game loop");
         while (!gameCompleted && !gameOver && !quitRequested) {
+            System.out.println("Game loop iteration");
             handleInput();
             if (quitRequested) {
                 saveGame();
-                break;
+                System.exit(0);
             }
             moveEnemies();
             checkCollisions();
@@ -163,7 +169,49 @@ public class Game {
         } else if (gameOver) {
             displayGameOverScreen();
         }
+        System.out.println("Exiting game loop");
     }
+
+    public void handleInput() {
+        if (StdDraw.hasNextKeyTyped()) {
+            char key = StdDraw.nextKeyTyped();
+            if (key == ':') {
+                waitForQuitCommand();
+            } else {
+                switch (key) {
+                    case 'w':
+                        player.move(Player.Direction.UP);
+                        break;
+                    case 's':
+                        player.move(Player.Direction.DOWN);
+                        break;
+                    case 'a':
+                        player.move(Player.Direction.LEFT);
+                        break;
+                    case 'd':
+                        player.move(Player.Direction.RIGHT);
+                        break;
+                    case 'e':
+                        player.interact();
+                        break;
+                }
+            }
+        }
+    }
+
+    private void waitForQuitCommand() {
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = Character.toLowerCase(StdDraw.nextKeyTyped());
+                System.out.println("Quit key pressed: " + key); // Debug print
+                if (key == 'q') {
+                    quitRequested = true;
+                }
+                break;
+            }
+        }
+    }
+
 
     private void moveEnemies() {
         for (Enemy enemy : enemies) {
@@ -239,44 +287,6 @@ public class Game {
         StdDraw.pause(5000);
     }
 
-    public void handleInput() {
-        if (StdDraw.hasNextKeyTyped()) {
-            char key = StdDraw.nextKeyTyped();
-            if (key == ':') {
-                waitForQuitCommand();
-            } else {
-                switch (key) {
-                    case 'w':
-                        player.move(Player.Direction.UP);
-                        break;
-                    case 's':
-                        player.move(Player.Direction.DOWN);
-                        break;
-                    case 'a':
-                        player.move(Player.Direction.LEFT);
-                        break;
-                    case 'd':
-                        player.move(Player.Direction.RIGHT);
-                        break;
-                    case 'e':
-                        player.interact();
-                        break;
-                }
-            }
-        }
-    }
-
-    private void waitForQuitCommand() {
-        while (true) {
-            if (StdDraw.hasNextKeyTyped()) {
-                char key = Character.toLowerCase(StdDraw.nextKeyTyped());
-                if (key == 'q') {
-                    quitRequested = true;
-                }
-                break;
-            }
-        }
-    }
 
     public void render() {
         StdDraw.clear(Color.BLACK);
@@ -304,13 +314,13 @@ public class Game {
 
         if (player.getLives() == 2) {
             StdDraw.picture(2, HEIGHT - 1, HEART_RED);
-            StdDraw.picture(4, HEIGHT - 1, HEART_RED);
+            StdDraw.picture(3, HEIGHT - 1, HEART_RED);
         } else if (player.getLives() == 1) {
             StdDraw.picture(2, HEIGHT - 1, HEART_RED);
-            StdDraw.picture(4, HEIGHT - 1, HEART_GRAY);
+            StdDraw.picture(3, HEIGHT - 1, HEART_GRAY);
         } else {
             StdDraw.picture(2, HEIGHT - 1, HEART_GRAY);
-            StdDraw.picture(4, HEIGHT - 1, HEART_GRAY);
+            StdDraw.picture(3, HEIGHT - 1, HEART_GRAY);
         }
     }
 
