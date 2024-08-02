@@ -2,9 +2,7 @@ package core;
 
 import tileengine.TETile;
 import tileengine.Tileset;
-
 import java.io.*;
-import java.awt.*;
 
 public class GameState implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -29,7 +27,6 @@ public class GameState implements Serializable {
         this.worldTileIds = convertWorldToTileIds(world);
     }
 
-    // Convert the world to a 2D array of tile IDs
     private int[][] convertWorldToTileIds(TETile[][] world) {
         int width = world.length;
         int height = world[0].length;
@@ -42,7 +39,6 @@ public class GameState implements Serializable {
         return tileIds;
     }
 
-    // Convert tile IDs back to TETile objects
     private TETile[][] convertTileIdsToWorld(int[][] tileIds) {
         int width = tileIds.length;
         int height = tileIds[0].length;
@@ -55,23 +51,107 @@ public class GameState implements Serializable {
         return world;
     }
 
-    // Get the ID for a given tile
     private int getTileId(TETile tile) {
         if (tile.equals(Tileset.AVATAR)) return 0;
         if (tile.equals(Tileset.WALL)) return 1;
         if (tile.equals(Tileset.FLOOR)) return 2;
-        // Add more mappings as needed
-        return -1; // Default to -1 if no match
+        if (tile.equals(Tileset.NOTHING)) return 3;
+        if (tile.equals(Tileset.GRASS)) return 4;
+        if (tile.equals(Tileset.WATER)) return 5;
+        if (tile.equals(Tileset.FLOWER)) return 6;
+        if (tile.equals(Tileset.LOCKED_DOOR)) return 7;
+        if (tile.equals(Tileset.UNLOCKED_DOOR)) return 8;
+        if (tile.equals(Tileset.SAND)) return 9;
+        if (tile.equals(Tileset.MOUNTAIN)) return 10;
+        if (tile.equals(Tileset.TREE)) return 11;
+        if (tile.equals(Tileset.CELL)) return 12;
+        if (tile.equals(Tileset.CustomNothing)) return 15;
+        if (tile.equals(Tileset.CustomFloor)) return 13;
+        if (tile.equals(Tileset.CustomWall)) return 14;
+        if (tile.equals(Tileset.CustomTree)) return 15;
+        if (tile.equals(Tileset.CustomBorder)) return 15;
+        if (tile.equals(Tileset.CustomFlower)) return 15;
+        if (tile.equals(Tileset.Grass)) return 15;
+        if (tile.equals(Tileset.Floor)) return 13;
+        if (tile.equals(Tileset.LeftWall)) return 14;
+        if (tile.equals(Tileset.RightWall)) return 14;
+        if (tile.equals(Tileset.TopRightCorner)) return 14;
+        if (tile.equals(Tileset.TopLeftCorner)) return 14;
+        if (tile.equals(Tileset.BottomLeftCorner)) return 14;
+        if (tile.equals(Tileset.BottomRightCorner)) return 14;
+        if (tile.equals(Tileset.TopWall)) return 14;
+        if (tile.equals(Tileset.BottomWall)) return 14;
+        if (tile.equals(Tileset.LeftInnerCorner)) return 14;
+        if (tile.equals(Tileset.LeftTopInnerCorner)) return 14;
+        if (tile.equals(Tileset.RightInnerCorner)) return 14;
+        if (tile.equals(Tileset.RightTopInnerCorner)) return 14;
+        if (tile.equals(Tileset.SingleWall)) return 14;
+        if (tile.equals(Tileset.SingleWallLeft)) return 14;
+        if (tile.equals(Tileset.SingleWallMiddle)) return 14;
+        if (tile.equals(Tileset.SingleWallRight)) return 14;
+        if (tile.equals(Tileset.SingleWallVertical)) return 14;
+        if (tile.equals(Tileset.DoubleWallTop)) return 14;
+        if (tile.equals(Tileset.DoubleWallBottom)) return 14;
+        if (tile.equals(Tileset.WallAndTopLeftCorner)) return 14;
+        if (tile.equals(Tileset.WallAndTopRightCorner)) return 14;
+        if (tile.equals(Tileset.BottomWallAndLeftCorner)) return 14;
+        if (tile.equals(Tileset.BottomWallAndRightCorner)) return 14;
+        if (tile.equals(Tileset.WallAndLeftBottomCorner)) return 14;
+        if (tile.equals(Tileset.WallAndRightBottomCorner)) return 14;
+        if (tile.equals(Tileset.FloorWithCoin)) return 13;
+        return -1;
     }
 
-    // Get the TETile for a given ID
     private TETile getTileFromId(int id) {
         switch (id) {
             case 0: return Tileset.AVATAR;
             case 1: return Tileset.WALL;
             case 2: return Tileset.FLOOR;
-            // Add more mappings as needed
-            default: return Tileset.NOTHING; // Default to NOTHING if ID is invalid
+            case 3: return Tileset.NOTHING;
+            case 4: return Tileset.GRASS;
+            case 5: return Tileset.WATER;
+            case 6: return Tileset.FLOWER;
+            case 7: return Tileset.LOCKED_DOOR;
+            case 8: return Tileset.UNLOCKED_DOOR;
+            case 9: return Tileset.SAND;
+            case 10: return Tileset.MOUNTAIN;
+            case 11: return Tileset.TREE;
+            case 12: return Tileset.CELL;
+            case 13: return Tileset.CustomFloor;
+            case 14: return Tileset.CustomWall;
+            case 15: return Tileset.CustomNothing;
+            case 16: return Tileset.CustomTree;
+            case 17: return Tileset.CustomBorder;
+            case 18: return Tileset.CustomFlower;
+            case 19: return Tileset.Grass;
+            case 20: return Tileset.Floor;
+            case 21: return Tileset.LeftWall;
+            case 22: return Tileset.RightWall;
+            case 23: return Tileset.TopRightCorner;
+            case 24: return Tileset.TopLeftCorner;
+            case 25: return Tileset.BottomLeftCorner;
+            case 26: return Tileset.BottomRightCorner;
+            case 27: return Tileset.TopWall;
+            case 28: return Tileset.BottomWall;
+            case 29: return Tileset.LeftInnerCorner;
+            case 30: return Tileset.LeftTopInnerCorner;
+            case 31: return Tileset.RightInnerCorner;
+            case 32: return Tileset.RightTopInnerCorner;
+            case 33: return Tileset.SingleWall;
+            case 34: return Tileset.SingleWallLeft;
+            case 35: return Tileset.SingleWallMiddle;
+            case 36: return Tileset.SingleWallRight;
+            case 37: return Tileset.SingleWallVertical;
+            case 38: return Tileset.DoubleWallTop;
+            case 39: return Tileset.DoubleWallBottom;
+            case 40: return Tileset.WallAndTopLeftCorner;
+            case 41: return Tileset.WallAndTopRightCorner;
+            case 42: return Tileset.BottomWallAndLeftCorner;
+            case 43: return Tileset.BottomWallAndRightCorner;
+            case 44: return Tileset.WallAndLeftBottomCorner;
+            case 45: return Tileset.WallAndRightBottomCorner;
+            case 46: return Tileset.FloorWithCoin;
+            default: return Tileset.NOTHING;
         }
     }
 
@@ -105,13 +185,13 @@ public class GameState implements Serializable {
 
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
-        out.writeObject(worldTileIds); // Serialize the tile IDs
+        out.writeObject(convertWorldToTileIds(world));
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
-        worldTileIds = (int[][]) in.readObject(); // Deserialize the tile IDs
-        world = convertTileIdsToWorld(worldTileIds); // Rebuild the world from IDs
+        this.worldTileIds = (int[][]) in.readObject();
+        this.world = convertTileIdsToWorld(this.worldTileIds);
     }
 
     public void save(String fileName) {
@@ -129,11 +209,12 @@ public class GameState implements Serializable {
         if (!fileName.endsWith(".txt")) {
             fileName += ".txt";
         }
+        GameState gameState = null;
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
-            return (GameState) in.readObject();
+            gameState = (GameState) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            return null;
         }
+        return gameState;
     }
 }

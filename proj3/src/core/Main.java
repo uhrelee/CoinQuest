@@ -13,6 +13,7 @@ public class Main {
         MainMenu menu = new MainMenu(WIDTH, HEIGHT);
         menu.displayMenu();
         String input = menu.getInput();
+
         if (input.startsWith("N")) {
             String[] parts = input.split(":");
             long seed = Long.parseLong(parts[0].substring(1));
@@ -22,10 +23,26 @@ public class Main {
             initializeWorld(world, seed);
             Game game = new Game(world, characterChoice, seed);
             game.gameLoop();
+
         } else if (input.startsWith("L")) {
-            Game game = new Game(null, 0, 0);
-            game.loadGameState("gameState.txt");
-            game.gameLoop();
+            GameState gameState = GameState.load("saves/gameState.txt"); // Adjust path if necessary
+            if (gameState != null) {
+                TETile[][] loadedWorld = gameState.getWorld();
+                // Debug: Print world tiles to verify
+                System.out.println("Loaded World:");
+                for (int y = 0; y < HEIGHT; y++) {
+                    for (int x = 0; x < WIDTH; x++) {
+                        System.out.print(loadedWorld[x][y] + " "); // Adjust based on your tile's `toString()` implementation
+                    }
+                    System.out.println();
+                }
+                Game game = new Game(gameState);
+                game.gameLoop();
+            } else {
+                System.out.println("Failed to load game state.");
+                System.exit(1); // Exit with error code
+            }
+
         } else if (input.startsWith("Q")) {
             System.exit(0);
         }

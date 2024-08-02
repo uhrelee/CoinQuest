@@ -43,6 +43,19 @@ public class Game {
         setupGraphics();
     }
 
+    public Game(GameState gameState) {
+        this.world = gameState.getWorld();
+        this.randomSeed = gameState.getRandomSeed();
+        this.collectedCoins = gameState.getCollectedCoins();
+        this.totalCoins = gameState.getTotalCoins();
+        this.level = gameState.getLevel();
+        this.gameCompleted = gameState.isGameCompleted();
+        initializeFont();
+        initializeWorld(gameState.getCharacterChoice());
+        initializeEnemies();
+        setupGraphics();
+    }
+
     private void initializeFont() {
         brickSansFont = FontManager.getBrickSansFont(13f);
     }
@@ -51,6 +64,7 @@ public class Game {
         if (world == null) {
             world = new TETile[WIDTH][HEIGHT];
         }
+
         boolean floorWithCoinFound = false;
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
@@ -230,15 +244,6 @@ public class Game {
             fileName += ".txt";
         }
 
-        try {
-            if (!SAVE_DIR.exists()) {
-                SAVE_DIR.mkdirs();
-            }
-        } catch (SecurityException e) {
-            e.printStackTrace();
-            return;
-        }
-
         Path filePath = SAVE_DIR.toPath().resolve(fileName);
         GameState gameState = new GameState(world, player.getCharacterChoice(), randomSeed, collectedCoins, totalCoins, level, gameCompleted);
         gameState.save(filePath.toString());
@@ -251,14 +256,19 @@ public class Game {
 
         Path filePath = SAVE_DIR.toPath().resolve(fileName);
         GameState gameState = GameState.load(filePath.toString());
+
         if (gameState != null) {
+            // Use the new constructor to initialize the game with the loaded state
             this.world = gameState.getWorld();
+            this.randomSeed = gameState.getRandomSeed();
             this.collectedCoins = gameState.getCollectedCoins();
             this.totalCoins = gameState.getTotalCoins();
             this.level = gameState.getLevel();
             this.gameCompleted = gameState.isGameCompleted();
-            initializeWorld(player.getCharacterChoice());
+            initializeFont();
+            initializeWorld(gameState.getCharacterChoice());
             initializeEnemies();
+            setupGraphics();
         }
     }
 
