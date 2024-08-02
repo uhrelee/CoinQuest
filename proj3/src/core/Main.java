@@ -1,6 +1,5 @@
 package core;
 
-import tileengine.TERenderer;
 import tileengine.TETile;
 import tileengine.Tileset;
 
@@ -27,7 +26,7 @@ public class Main {
             }
             Random rand = new Random(seed);
             createWorld(world, rand);
-            Game game = new Game(world, characterChoice);
+            Game game = new Game(world, characterChoice, seed);
             game.gameLoop();
         } else if (input.startsWith("L")) {
             System.exit(0);
@@ -38,7 +37,6 @@ public class Main {
         }
     }
 
-    // Make createWorld method public static so it can be called from Game class
     public static void createWorld(TETile[][] world, Random rand) {
         Rooms rooms = new Rooms(0, 0, 0, 0, rand);
         rooms.fillWithSeveralRooms(world);

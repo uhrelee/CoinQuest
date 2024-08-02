@@ -16,6 +16,8 @@ public class Player {
     private Direction facing = Direction.DOWN;
     private TETile[][] world;
     private Game game;
+    private int characterChoice;
+    private int lives = 2;
 
     enum Direction {
         UP, DOWN, LEFT, RIGHT
@@ -26,6 +28,7 @@ public class Player {
         this.y = startY;
         this.world = world;
         this.game = game;
+        this.characterChoice = characterChoice;
 
         spritePrefix = (characterChoice == 1) ? "Sprite" : "Guy";
         currentSprite = Sprite.loadSprite(spritePrefix + "Front.PNG");
@@ -34,7 +37,15 @@ public class Player {
     public void setPosition(int newX, int newY, TETile[][] newWorld) {
         this.x = newX;
         this.y = newY;
-        this.world = newWorld;  // Update the world reference
+        this.world = newWorld;
+    }
+
+    public void loseLife() {
+        lives--;
+    }
+
+    public int getLives() {
+        return lives;
     }
 
     public void move(Direction dir) {
@@ -90,7 +101,6 @@ public class Player {
         game.incrementCollectedCoins();
     }
 
-
     public void interact() {
         int interactX = x;
         int interactY = y;
@@ -123,4 +133,7 @@ public class Player {
         return y;
     }
 
+    public int getCharacterChoice() {
+        return characterChoice;
+    }
 }
