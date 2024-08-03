@@ -326,13 +326,20 @@ public class Game {
         StdDraw.textRight(9, HEIGHT + 1, collectedCoins + "/" + totalCoins);
         StdDraw.text(WIDTH / 2, HEIGHT + 1, "Level " + level);
 
-        if (player.getLives() == 2) {
-            StdDraw.picture(2, HEIGHT  + HUD_HEIGHT - 1, HEART_RED);
+        if (player.getLives() == 3) {
+            StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
             StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
-        } else if (player.getLives() == 1) {
+        } else if (player.getLives() == 2) {
+            StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
             StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
             StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
+        } else if (player.getLives() == 1) {
+            StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
+            StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
         } else {
+            StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
             StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
             StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
         }
