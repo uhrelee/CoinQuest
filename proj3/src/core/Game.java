@@ -15,6 +15,7 @@ public class Game {
     public static final int WIDTH = 60;
     public static final int HEIGHT = 40;
     private static final int TILE_SIZE = 16;
+    public static final int HUD_HEIGHT = 2;
     private static final int MAX_LEVEL = 2;
     private static final int[] COINS_PER_LEVEL = {101, 201};
     private static final String SAVE_FILE = "proj3/save_game.txt";
@@ -22,6 +23,8 @@ public class Game {
     private static final String HEART_RED = "proj3/src/core/game assets/HeartRed.PNG";
     private static final String HEART_GRAY = "proj3/src/core/game assets/HeartGray.PNG";
     private static final String LOSE_SCREEN = "proj3/src/core/game assets/You Lost Screen.png";
+    private static final String COIN_IMAGE = "proj3/src/core/game assets/Coin.PNG";
+
 
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -142,11 +145,12 @@ public class Game {
     }
 
     private void setupGraphics() {
-        StdDraw.setCanvasSize(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        StdDraw.setCanvasSize(WIDTH * TILE_SIZE, (HEIGHT + HUD_HEIGHT) * TILE_SIZE);
         StdDraw.setXscale(0, WIDTH);
-        StdDraw.setYscale(0, HEIGHT);
+        StdDraw.setYscale(0, HEIGHT + HUD_HEIGHT);
         StdDraw.enableDoubleBuffering();
     }
+
 
     public void gameLoop() {
         while (!gameCompleted && !gameOver && !quitRequested) {
@@ -229,18 +233,20 @@ public class Game {
 
     private void displayGameCompletionScreen() {
         StdDraw.clear(Color.BLACK);
-        String winScreenPath = "proj3/src/core/game assets/Win Screen.png";
-        StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, winScreenPath, WIDTH, HEIGHT);
+        String winScreenPath = "proj3/src/core/game assets/Win Screen Resized.png"; // Use resized image
+        StdDraw.picture(WIDTH / 2.0, (HEIGHT + HUD_HEIGHT) / 2.0, winScreenPath, WIDTH, HEIGHT + HUD_HEIGHT);
         StdDraw.show();
         StdDraw.pause(5000);
     }
 
     private void displayGameOverScreen() {
         StdDraw.clear(Color.BLACK);
-        StdDraw.picture(WIDTH / 2.0, HEIGHT / 2.0, LOSE_SCREEN, WIDTH, HEIGHT);
+        String loseScreenPath = "proj3/src/core/game assets/You Lost Screen Resized.png"; // Use resized image
+        StdDraw.picture(WIDTH / 2.0, (HEIGHT + HUD_HEIGHT) / 2.0, loseScreenPath, WIDTH, HEIGHT + HUD_HEIGHT);
         StdDraw.show();
         StdDraw.pause(5000);
     }
+
 
     public void handleInput() {
         if (StdDraw.hasNextKeyTyped()) {
@@ -280,9 +286,17 @@ public class Game {
             }
         }
     }
-
     public void render() {
         StdDraw.clear(Color.BLACK);
+        renderWorld();
+        renderPlayerAndEnemies();
+        if (!gameCompleted && !gameOver) {
+            renderHUD();
+        }
+        StdDraw.show();
+    }
+
+    private void renderWorld() {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 if (world[x][y] != null) {
@@ -290,30 +304,53 @@ public class Game {
                 }
             }
         }
+    }
+
+    private void renderPlayerAndEnemies() {
         player.render();
         for (Enemy enemy : enemies) {
             enemy.render();
         }
-        renderUI();
-        StdDraw.show();
     }
 
-    private void renderUI() {
-        StdDraw.picture(WIDTH - 5.6, HEIGHT - 1, "proj3/src/core/game assets/Coin.PNG", 2.0, 2.0);
+
+
+    private void renderHUD() {
+        Color hudColor = Color.decode("#92D34E");
+        StdDraw.setPenColor(hudColor);
+        StdDraw.filledRectangle(WIDTH / 2.0, HEIGHT + HUD_HEIGHT / 2.0, WIDTH / 2.0, HUD_HEIGHT / 2.0);
         StdDraw.setFont(brickSansFont);
         StdDraw.setPenColor(Color.WHITE);
-        StdDraw.text(WIDTH - 3, HEIGHT - 1, collectedCoins + "/" + totalCoins);
-        StdDraw.text(WIDTH / 2, HEIGHT - 1, "Level " + level);
 
-        if (player.getLives() == 2) {
-            StdDraw.picture(2, HEIGHT - 1, HEART_RED);
-            StdDraw.picture(3, HEIGHT - 1, HEART_RED);
+        StdDraw.picture(5, HEIGHT + 1, COIN_IMAGE, 2.0, 2.0);
+        StdDraw.textRight(9, HEIGHT + 1, collectedCoins + "/" + totalCoins);
+        StdDraw.text(WIDTH / 2, HEIGHT + 1, "Level " + level);
+
+        if (player.getLives() == 3) {
+            StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+        } else if (player.getLives() == 2) {
+            StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
         } else if (player.getLives() == 1) {
-            StdDraw.picture(2, HEIGHT - 1, HEART_RED);
-            StdDraw.picture(3, HEIGHT - 1, HEART_GRAY);
+            StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
+            StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
         } else {
-            StdDraw.picture(2, HEIGHT - 1, HEART_GRAY);
-            StdDraw.picture(3, HEIGHT - 1, HEART_GRAY);
+            StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
+            StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
+            StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
+        }
+
+        double mouseX = StdDraw.mouseX();
+        double mouseY = StdDraw.mouseY();
+        if (mouseX >= 0 && mouseX < WIDTH && mouseY >= 0 && mouseY < HEIGHT) {
+            int x = (int) mouseX;
+            int y = (int) mouseY;
+            TETile tile = world[x][y];
+            StdDraw.textRight(WIDTH - 1, HEIGHT + 1, "Tile: " + tile.description());
         }
     }
 

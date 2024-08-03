@@ -16,7 +16,7 @@ public class Player implements Serializable {
     private TETile[][] world;
     private Game game;
     private int characterChoice;
-    private int lives = 2;
+    private int lives = 3;
 
     enum Direction {
         UP, DOWN, LEFT, RIGHT
