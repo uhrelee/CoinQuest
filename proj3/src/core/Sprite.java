@@ -39,4 +39,21 @@ public class Sprite {
                 return SPRITE_PATH + prefix + "Front.PNG";
         }
     }
+
+    public static String getEnemyFilePath(String prefix, Enemy.Direction direction) {
+        switch (direction) {
+            case UP:
+                return SPRITE_PATH + prefix + "Back.PNG";
+            case DOWN:
+                return SPRITE_PATH + prefix + "Front.PNG";
+            case LEFT:
+                return SPRITE_PATH + prefix + "Left.PNG";
+            case RIGHT:
+                return SPRITE_PATH + prefix + "Right.PNG";
+            default:
+                return SPRITE_PATH + prefix + "Front.PNG";
+        }
+    }
+
+
 }

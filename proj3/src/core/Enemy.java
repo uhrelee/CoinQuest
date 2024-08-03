@@ -14,8 +14,10 @@ public class Enemy implements Serializable {
     private static final int TILE_SIZE = 16;
     private static final int MOVE_DELAY = 5;
 
+    private String spritePrefix = "Enemy"; // Default prefix for enemy sprites
     private int x, y;
     private int moveCounter = 0;
+    private Direction facing = Direction.DOWN;
     private Player player;
     private TETile[][] world;
     private Game game;
@@ -33,7 +35,7 @@ public class Enemy implements Serializable {
     }
 
     public void render() {
-        StdDraw.picture(x + 0.5, y + 0.5, "proj3/src/core/game assets/EnemyFront.PNG", 1, 1);
+        StdDraw.picture(x + 0.5, y + 0.5, Sprite.getEnemyFilePath(spritePrefix, facing), 1, 1);
     }
 
     public void move() {
@@ -44,6 +46,8 @@ public class Enemy implements Serializable {
                 Direction dir = path.get(0);
                 int newX = x;
                 int newY = y;
+
+                facing = dir; // Update facing direction
 
                 switch (dir) {
                     case UP:

@@ -344,7 +344,6 @@ public class Game {
             StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
         }
 
-        // Display tile description
         double mouseX = StdDraw.mouseX();
         double mouseY = StdDraw.mouseY();
         if (mouseX >= 0 && mouseX < WIDTH && mouseY >= 0 && mouseY < HEIGHT) {
