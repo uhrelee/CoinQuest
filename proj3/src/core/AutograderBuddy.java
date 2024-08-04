@@ -25,14 +25,16 @@ public class AutograderBuddy {
     public static final int HEIGHT = 55;
 
     public static TETile[][] getWorldFromInput(String input) {
-
         if (input.isEmpty()) {
-            throw new RuntimeException("Please fill out AutograderBuddy!");
+            throw new RuntimeException("Input cannot be empty!");
         }
-
         String inputSeed = input.substring(1, input.length() - 1);
-        long seed = Long.parseLong(inputSeed);
-
+        long seed;
+        try {
+            seed = Long.parseLong(inputSeed);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Invalid seed format.");
+        }
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
