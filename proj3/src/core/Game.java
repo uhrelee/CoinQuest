@@ -280,31 +280,44 @@ public class Game {
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();
                 if (key == 'r' || key == 'R') {
-                    replayLastSave();
+                    restartGame();
                     return;
                 } else if (key == 'q' || key == 'Q') {
-                    System.exit(0); //should quit game
+                    System.exit(0);
                 }
             }
         }
     }
 
-    private void replayLastSave() {
-        Game savedGame = Game.loadGame();
-        if (savedGame != null) {
-            this.world = savedGame.world;
-            this.player = savedGame.player;
-            this.enemies = savedGame.enemies;
-            this.collectedCoins = savedGame.collectedCoins;
-            this.totalCoins = savedGame.totalCoins;
-            this.level = savedGame.level;
-            this.quitRequested = false;
-            this.gameCompleted = false;
-            this.gameOver = false;
-            setupGraphics();
-            gameLoop();
-        } else {
-            System.out.println("No saved game found!");
+    private void restartGame() {
+        MainMenu menu = new MainMenu(WIDTH, HEIGHT);
+        menu.displayMenu();
+        String input = menu.getInput();
+
+        if (input.startsWith("N")) {
+            String[] parts = input.split(":");
+            long seed = Long.parseLong(parts[0].substring(1));
+            int characterChoice = Integer.parseInt(parts[1]);
+
+            TETile[][] world = new TETile[WIDTH][HEIGHT];
+            for (int x = 0; x < WIDTH; x++) {
+                for (int y = 0; y < HEIGHT; y++) {
+                    world[x][y] = Tileset.Grass;
+                }
+            }
+            Random rand = new Random(seed);
+            Main.createWorld(world, rand);
+            Game game = new Game(world, characterChoice, seed);
+            game.gameLoop();
+        } else if (input.startsWith("L")) {
+            Game loadedGame = Game.loadGame();
+            if (loadedGame != null) {
+                loadedGame.gameLoop();
+            } else {
+                System.out.println("No saved game found. Exiting.");
+                System.exit(0);
+            }
+        } else if (input.startsWith("Q")) {
             System.exit(0);
         }
     }
