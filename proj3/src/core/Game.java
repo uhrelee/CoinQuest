@@ -22,7 +22,7 @@ public class Game {
 
     private static final String HEART_RED = "proj3/src/core/game assets/HeartRed.PNG";
     private static final String HEART_GRAY = "proj3/src/core/game assets/HeartGray.PNG";
-    private static final String LOSE_SCREEN = "proj3/src/core/game assets/You Lost Screen.png";
+    private static final String LOSE_SCREEN = "proj3/src/core/game assets/You Lost Screen Resized.png";
     private static final String COIN_IMAGE = "proj3/src/core/game assets/Coin.PNG";
     private static final String HEALTH_POTION = "proj3/src/core/game assets/Health Potion.PNG";
 
@@ -273,8 +273,7 @@ public class Game {
 
     private void displayGameOverScreen() {
         StdDraw.clear(Color.BLACK);
-        String loseScreenPath = "proj3/src/core/game assets/You Lost Screen Resized.png"; // Use resized image
-        StdDraw.picture(WIDTH / 2.0, (HEIGHT + HUD_HEIGHT) / 2.0, loseScreenPath, WIDTH, HEIGHT + HUD_HEIGHT);
+        StdDraw.picture(WIDTH / 2.0, (HEIGHT + HUD_HEIGHT) / 2.0, LOSE_SCREEN, WIDTH, HEIGHT + HUD_HEIGHT);
         StdDraw.show();
 
         while (true) {
