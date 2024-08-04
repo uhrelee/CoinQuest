@@ -403,7 +403,14 @@ public class Game {
             StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
             StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
             StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
-        } else if (player.getLives() == 1) {
+        } else if (player.getLives() == 4) {
+        StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+        StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+        StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+        StdDraw.picture(4, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+
+        }
+        else if (player.getLives() == 1) {
             StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
             StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
             StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
