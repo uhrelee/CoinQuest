@@ -113,6 +113,8 @@ public class Player implements Serializable {
         lives--;
     }
 
+    public void gainLife() {lives++;}
+
     public int getLives() {
         return lives;
     }

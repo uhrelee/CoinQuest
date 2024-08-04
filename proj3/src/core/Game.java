@@ -24,7 +24,7 @@ public class Game {
     private static final String HEART_GRAY = "proj3/src/core/game assets/HeartGray.PNG";
     private static final String LOSE_SCREEN = "proj3/src/core/game assets/You Lost Screen.png";
     private static final String COIN_IMAGE = "proj3/src/core/game assets/Coin.PNG";
-
+    private static final String HEALTH_POTION = "proj3/src/core/game assets/Health Potion.PNG";
 
     private Player player;
     private ArrayList<Enemy> enemies;
@@ -38,6 +38,9 @@ public class Game {
     private Random rand;
     private long randomSeed;
     private boolean quitRequested = false;
+    private int potionX;
+    private int potionY;
+
 
     public Game(TETile[][] generatedWorld, int characterChoice, long seed) {
         this.world = generatedWorld;
@@ -79,6 +82,26 @@ public class Game {
     private void initializeWorld(int characterChoice) {
         placeCoins();
         placePlayer(characterChoice);
+        placePotion();
+    }
+
+    private void placePotion() {
+        while (true) {
+            int x = rand.nextInt(WIDTH);
+            int y = rand.nextInt(HEIGHT);
+            if (world[x][y] == Tileset.Floor) {
+                potionX = x;
+                potionY = y;
+                break;
+            }
+        }
+    }
+    public void collectPotion(int x, int y) {
+        if (x == potionX && y == potionY) {
+            potionX = -1;
+            potionY = -1;
+            player.gainLife();
+        }
     }
 
     private void placeCoins() {
@@ -161,6 +184,7 @@ public class Game {
             }
             moveEnemies();
             checkCollisions();
+            checkPotionCollection();
             render();
             checkLevelCompletion();
             StdDraw.pause(50);
@@ -169,6 +193,14 @@ public class Game {
             displayGameCompletionScreen();
         } else if (gameOver) {
             displayGameOverScreen();
+        }
+    }
+
+    private void checkPotionCollection() {
+        int playerX = player.getX();
+        int playerY = player.getY();
+        if (playerX == potionX && playerY == potionY) {
+            collectPotion(playerX, playerY);
         }
     }
 
@@ -244,7 +276,38 @@ public class Game {
         String loseScreenPath = "proj3/src/core/game assets/You Lost Screen Resized.png"; // Use resized image
         StdDraw.picture(WIDTH / 2.0, (HEIGHT + HUD_HEIGHT) / 2.0, loseScreenPath, WIDTH, HEIGHT + HUD_HEIGHT);
         StdDraw.show();
-        StdDraw.pause(5000);
+
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = StdDraw.nextKeyTyped();
+                if (key == 'r' || key == 'R') {
+                    replayLastSave();
+                    return;
+                } else if (key == 'q' || key == 'Q') {
+                    System.exit(0); //should quit game
+                }
+            }
+        }
+    }
+
+    private void replayLastSave() {
+        Game savedGame = Game.loadGame();
+        if (savedGame != null) {
+            this.world = savedGame.world;
+            this.player = savedGame.player;
+            this.enemies = savedGame.enemies;
+            this.collectedCoins = savedGame.collectedCoins;
+            this.totalCoins = savedGame.totalCoins;
+            this.level = savedGame.level;
+            this.quitRequested = false;
+            this.gameCompleted = false;
+            this.gameOver = false;
+            setupGraphics();
+            gameLoop();
+        } else {
+            System.out.println("No saved game found!");
+            System.exit(0);
+        }
     }
 
 
@@ -290,6 +353,7 @@ public class Game {
         StdDraw.clear(Color.BLACK);
         renderWorld();
         renderPlayerAndEnemies();
+        renderPotion();
         if (!gameCompleted && !gameOver) {
             renderHUD();
         }
@@ -313,6 +377,11 @@ public class Game {
         }
     }
 
+    private void renderPotion() {
+        if (potionX >= 0 && potionY >= 0) {
+            StdDraw.picture(potionX + 0.5, potionY + 0.5, HEALTH_POTION, 1, 1);
+        }
+    }
 
 
     private void renderHUD() {
