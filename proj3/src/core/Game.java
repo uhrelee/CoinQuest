@@ -486,7 +486,27 @@ public class Game {
         return randomSeed;
     }
 
-    private void saveGame() {
+    public void simulateMovements(String movements) {
+        for (char move : movements.toCharArray()) {
+            if (move == 'Q') {
+                quitRequested = true;
+                break;
+            }
+            switch (move) {
+                case 'W': player.move(Player.Direction.UP); break;
+                case 'S': player.move(Player.Direction.DOWN); break;
+                case 'A': player.move(Player.Direction.LEFT); break;
+                case 'D': player.move(Player.Direction.RIGHT); break;
+                default: break;
+            }
+        }
+    }
+
+    public TETile[][] getWorld() {
+        return world;
+    }
+
+    public void saveGame() {
         GameState state = new GameState(world, player, enemies, this);
         String serializedState = state.serialize();
         FileUtils.writeFile(SAVE_FILE, serializedState);

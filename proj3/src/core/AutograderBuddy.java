@@ -28,21 +28,49 @@ public class AutograderBuddy {
         if (input.isEmpty()) {
             throw new RuntimeException("Input cannot be empty!");
         }
-        String inputSeed = input.substring(1, input.length() - 1);
-        long seed;
-        try {
-            seed = Long.parseLong(inputSeed);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Invalid seed format.");
-        }
+
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
                 world[x][y] = Tileset.CustomNothing;
             }
         }
-        Random rand = new Random(seed);
-        Main.createWorld(world, rand);
+
+        char firstChar = input.charAt(0);
+        if (firstChar == 'N') {
+            String[] parts = input.split(":");
+            long seed = Long.parseLong(parts[0].substring(1));
+
+            String movements;
+            if (parts.length > 1) {
+                movements = parts[1];
+            } else {
+                movements = "";
+            }
+
+            Random rand = new Random(seed);
+            Main.createWorld(world, rand);
+
+            Game game = new Game(world, 1, seed);
+            game.simulateMovements(movements);
+            if (movements.endsWith("Q")) {
+                game.saveGame();
+            }
+        } else if (firstChar == 'L') {
+            Game loadedGame = Game.loadGame();
+            if (loadedGame == null) {
+                throw new RuntimeException("No saved game found.");
+            }
+            String movements = input.substring(1);
+            loadedGame.simulateMovements(movements);
+            if (movements.endsWith("Q")) {
+                loadedGame.saveGame();
+            }
+            world = loadedGame.getWorld();
+        } else {
+            throw new RuntimeException("Invalid input format.");
+        }
+
         return world;
     }
 
