@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Game {
@@ -127,17 +128,28 @@ public class Game {
     }
 
     private void placePlayer(int characterChoice) {
+        List<int[]> floorTiles = new ArrayList<>();
+        Random random = new Random();
+
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 if (world[x][y].equals(Tileset.FloorWithCoin)) {
-                    player = new Player(x, y, world, this, characterChoice);
-                    world[x][y] = Tileset.Floor;
-                    totalCoins--;
-                    return;
+                    floorTiles.add(new int[]{x, y});
                 }
             }
         }
-        throw new RuntimeException("No floor tiles found for player placement");
+
+        if (floorTiles.isEmpty()) {
+            throw new RuntimeException("No floor tiles found for player placement");
+        }
+
+        int[] selectedTile = floorTiles.get(random.nextInt(floorTiles.size()));
+        int x = selectedTile[0];
+        int y = selectedTile[1];
+
+        player = new Player(x, y, world, this, characterChoice);
+        world[x][y] = Tileset.Floor;
+        totalCoins--;
     }
 
     private void initializeEnemies() {
