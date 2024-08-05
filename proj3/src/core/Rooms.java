@@ -166,8 +166,10 @@ public class Rooms {
         boolean wallUp = y < Main.HEIGHT - 1 && isWall(world[x][y + 1]);
         boolean wallDown = y > 0 && isWall(world[x][y - 1]);
 
-        boolean cornerUp = y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.TopLeftCorner || world[x][y + 1] == Tileset.TopRightCorner);
-        boolean cornerDown = y > 0 && (world[x][y - 1] == Tileset.BottomLeftCorner || world[x][y - 1] == Tileset.BottomRightCorner);
+        boolean cornerUp = y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.TopLeftCorner
+                || world[x][y + 1] == Tileset.TopRightCorner);
+        boolean cornerDown = y > 0 && (world[x][y - 1] == Tileset.BottomLeftCorner
+                || world[x][y - 1] == Tileset.BottomRightCorner);
 
         if (floorLeft && floorRight) {
             if (grassDown && (floorUp || y == Main.HEIGHT - 1)) {
@@ -180,43 +182,53 @@ public class Rooms {
         }
         if (floorLeft && floorRight && (grassUp || wallUp) && (grassDown || wallDown)) {
             world[x][y] = Tileset.SingleWallVertical;
-        }
-        else if (floorUp && floorLeft && floorRight && y > 0 && (world[x][y - 1] == Tileset.SingleWallVertical || world[x][y - 1] == Tileset.DoubleWallBottom)) {
+        } else if (floorUp && floorLeft && floorRight
+                && y > 0 && (world[x][y - 1] == Tileset.SingleWallVertical
+                || world[x][y - 1] == Tileset.DoubleWallBottom)) {
             world[x][y] = Tileset.DoubleWallTop;
-        } else if (floorDown && floorLeft && floorRight && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.SingleWallVertical) {
+        } else if (floorDown && floorLeft && floorRight
+                && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.SingleWallVertical) {
             world[x][y] = Tileset.DoubleWallBottom;
         } else if (floorLeft && wallRight && wallDown && y > 0 && world[x][y - 1] == Tileset.SingleWallVertical) {
             world[x][y] = Tileset.WallAndTopLeftCorner;
-        } else if (floorRight && wallLeft && wallDown && y > 0 && world[x][y - 1] == Tileset.SingleWallVertical) {
+        } else if (floorRight && wallLeft && wallDown && y > 0
+                && world[x][y - 1] == Tileset.SingleWallVertical) {
             world[x][y] = Tileset.WallAndTopRightCorner;
-        } else if (floorDown && wallLeft && wallRight && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.SingleWallVertical) {
+        } else if (floorDown && wallLeft && wallRight && y < Main.HEIGHT - 1
+                && world[x][y + 1] == Tileset.SingleWallVertical) {
             world[x][y] = Tileset.BottomWallAndLeftCorner;
-        } else if (floorDown && wallRight && wallLeft && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.SingleWallVertical) {
+        } else if (floorDown && wallRight && wallLeft
+                && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.SingleWallVertical) {
             world[x][y] = Tileset.BottomWallAndRightCorner;
         } else if (floorRight && wallLeft && wallDown && y > 0 && world[x][y - 1] == Tileset.SingleWallVertical) {
             world[x][y] = Tileset.WallAndRightBottomCorner;
         } else if (floorLeft && wallRight && wallDown && y > 0 && world[x][y - 1] == Tileset.SingleWallVertical) {
             world[x][y] = Tileset.WallAndLeftBottomCorner;
-        }
-        else if (floorDown && ((wallUp || grassUp) || y == Main.HEIGHT - 1) && (wallLeft || grassLeft) && (wallRight || grassRight)) {
+        } else if (floorDown && ((wallUp || grassUp) || y == Main.HEIGHT - 1)
+                && (wallLeft || grassLeft) && (wallRight || grassRight)) {
             world[x][y] = Tileset.TopWall;
-        } else if (floorUp && ((wallDown || grassDown) || y == 0) && (wallLeft || grassLeft) && (wallRight || grassRight)) {
+        } else if (floorUp && ((wallDown || grassDown) || y == 0) && (wallLeft || grassLeft)
+                && (wallRight || grassRight)) {
             world[x][y] = Tileset.BottomWall;
-        } else if (floorLeft && !floorRight && ((wallRight || grassRight) || x == Main.WIDTH - 1) && (wallUp || grassUp) && (wallDown || grassDown)) {
+        } else if (floorLeft && !floorRight && ((wallRight || grassRight) || x == Main.WIDTH - 1)
+                && (wallUp || grassUp) && (wallDown || grassDown)) {
             world[x][y] = Tileset.RightWall;
-        } else if (floorRight && !floorLeft && ((wallLeft || grassLeft) || x == 0) && (wallUp || grassUp) && (wallDown || grassDown)) {
+        } else if (floorRight && !floorLeft && ((wallLeft || grassLeft) || x == 0) && (wallUp || grassUp)
+                && (wallDown || grassDown)) {
             world[x][y] = Tileset.LeftWall;
-        }
-        else if ((grassUp || y == Main.HEIGHT - 1) && (grassLeft || x == 0) && (wallDown || floorDown) && (wallRight || floorRight) && !cornerUp && !cornerDown) {
+        } else if ((grassUp || y == Main.HEIGHT - 1) && (grassLeft || x == 0) && (wallDown || floorDown)
+                && (wallRight || floorRight) && !cornerUp && !cornerDown) {
             world[x][y] = Tileset.TopLeftCorner;
-        } else if ((grassUp || y == Main.HEIGHT - 1) && (grassRight || x == Main.WIDTH - 1) && (wallDown || floorDown) && (wallLeft || floorLeft) && !cornerUp && !cornerDown) {
+        } else if ((grassUp || y == Main.HEIGHT - 1) && (grassRight || x == Main.WIDTH - 1)
+                && (wallDown || floorDown) && (wallLeft || floorLeft) && !cornerUp && !cornerDown) {
             world[x][y] = Tileset.TopRightCorner;
-        } else if ((grassDown || y == 0) && (grassLeft || x == 0) && (wallUp || floorUp) && (wallRight || floorRight) && !cornerUp && !cornerDown) {
+        } else if ((grassDown || y == 0) && (grassLeft || x == 0) && (wallUp || floorUp)
+                && (wallRight || floorRight) && !cornerUp && !cornerDown) {
             world[x][y] = Tileset.BottomLeftCorner;
-        } else if ((grassDown || y == 0) && (grassRight || x == Main.WIDTH - 1) && (wallUp || floorUp) && (wallLeft || floorLeft) && !cornerUp && !cornerDown) {
+        } else if ((grassDown || y == 0) && (grassRight || x == Main.WIDTH - 1)
+                && (wallUp || floorUp) && (wallLeft || floorLeft) && !cornerUp && !cornerDown) {
             world[x][y] = Tileset.BottomRightCorner;
-        }
-        else if ((wallLeft || x == 0) && (wallDown || y == 0) && floorRight && floorUp) {
+        } else if ((wallLeft || x == 0) && (wallDown || y == 0) && floorRight && floorUp) {
             world[x][y] = Tileset.RightTopInnerCorner;
         } else if ((wallUp || y == Main.HEIGHT - 1) && (wallLeft || x == 0) && floorRight && floorDown) {
             world[x][y] = Tileset.RightInnerCorner;
@@ -224,8 +236,7 @@ public class Rooms {
             world[x][y] = Tileset.LeftTopInnerCorner;
         } else if ((wallUp || y == Main.HEIGHT - 1) && (wallRight || x == Main.WIDTH - 1) && floorLeft && floorDown) {
             world[x][y] = Tileset.LeftInnerCorner;
-        }
-        else if (floorDown && floorLeft && floorUp && (wallRight || x == Main.WIDTH - 1)) {
+        } else if (floorDown && floorLeft && floorUp && (wallRight || x == Main.WIDTH - 1)) {
             world[x][y] = Tileset.SingleWallLeft;
         } else if (floorDown && floorRight && floorUp && (wallLeft || x == 0)) {
             world[x][y] = Tileset.SingleWallRight;
@@ -248,9 +259,9 @@ public class Rooms {
     }
 
     private void applyEdgeCaseRules(TETile[][] world, int x, int y) {
-        if (world[x][y] == Tileset.SingleWallVertical ||
-                world[x][y] == Tileset.DoubleWallTop ||
-                world[x][y] == Tileset.DoubleWallBottom) {
+        if (world[x][y] == Tileset.SingleWallVertical
+                || world[x][y] == Tileset.DoubleWallTop
+                || world[x][y] == Tileset.DoubleWallBottom) {
             return;
         }
 
@@ -260,33 +271,47 @@ public class Rooms {
         boolean floorDown = y > 0 && world[x][y - 1] == Tileset.Floor;
 
         if (floorLeft && floorRight) {
-            if (y > 0 && (world[x][y - 1] == Tileset.Grass || world[x][y - 1] == Tileset.SingleWallVertical || world[x][y - 1] == Tileset.DoubleWallBottom)) {
+            if (y > 0 && (world[x][y - 1] == Tileset.Grass
+                    || world[x][y - 1] == Tileset.SingleWallVertical
+                    || world[x][y - 1] == Tileset.DoubleWallBottom)) {
                 world[x][y] = Tileset.DoubleWallTop;
                 return;
-            } else if (y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.Grass || world[x][y + 1] == Tileset.SingleWallVertical || world[x][y + 1] == Tileset.DoubleWallTop)) {
+            } else if (y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.Grass
+                    || world[x][y + 1] == Tileset.SingleWallVertical
+                    || world[x][y + 1] == Tileset.DoubleWallTop)) {
                 world[x][y] = Tileset.DoubleWallBottom;
                 return;
             }
-        }if (world[x][y] != Tileset.DoubleWallTop && world[x][y] != Tileset.DoubleWallBottom) {
-            if (floorDown && floorLeft && floorRight && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.SingleWallVertical) {
+        }
+        if (world[x][y] != Tileset.DoubleWallTop && world[x][y] != Tileset.DoubleWallBottom) {
+            if ((floorDown) && (floorLeft) && (floorRight) && (y < Main.HEIGHT - 1)
+                    && (world[x][y + 1] == Tileset.SingleWallVertical)) {
                 world[x][y] = Tileset.DoubleWallBottom;
-            }
-            else if (floorLeft && y > 0 && world[x][y - 1] == Tileset.SingleWallVertical && (y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.RightWall || world[x][y + 1] == Tileset.TopRightCorner))) {
+            } else if ((floorLeft) && (y > 0) && (world[x][y - 1] == Tileset.SingleWallVertical)
+                    && (y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.RightWall
+                            || world[x][y + 1] == Tileset.TopRightCorner))) {
                 world[x][y] = Tileset.WallAndTopLeftCorner;
-            }
-            else if (floorRight && y > 0 && world[x][y - 1] == Tileset.SingleWallVertical && (y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.LeftWall || world[x][y + 1] == Tileset.TopLeftCorner))) {
+            } else if ((floorRight) && (y > 0) && (world[x][y - 1] == Tileset.SingleWallVertical)
+                    && (y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.LeftWall
+                            || world[x][y + 1] == Tileset.TopLeftCorner))) {
                 world[x][y] = Tileset.WallAndTopRightCorner;
-            }
-            else if (floorDown && floorLeft && x < Main.WIDTH - 1 && (world[x + 1][y] == Tileset.SingleWallRight || world[x + 1][y] == Tileset.SingleWallMiddle) && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.RightWall) {
+            } else if ((floorDown) && (floorLeft) && (x < Main.WIDTH - 1)
+                    && (world[x + 1][y] == Tileset.SingleWallRight
+                            || (world[x + 1][y] == Tileset.SingleWallMiddle))
+                    && (y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.RightWall)) {
                 world[x][y] = Tileset.BottomWallAndLeftCorner;
-            }
-            else if (floorDown && floorRight && x > 0 && (world[x - 1][y] == Tileset.SingleWallLeft || world[x - 1][y] == Tileset.SingleWallMiddle) && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.LeftWall) {
+            } else if ((floorDown) && (floorRight) && (x > 0)
+                    && (world[x - 1][y] == Tileset.SingleWallLeft
+                            || world[x - 1][y] == Tileset.SingleWallMiddle)
+                    && (y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.LeftWall)) {
                 world[x][y] = Tileset.BottomWallAndRightCorner;
-            }
-            else if (floorRight && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.SingleWallVertical && x > 0 && (world[x - 1][y] == Tileset.BottomWall || world[x - 1][y] == Tileset.LeftWall)) {
+            } else if ((floorRight) && (y < Main.HEIGHT - 1) && (world[x][y + 1] == Tileset.SingleWallVertical)
+                    && (x > 0) && (world[x - 1][y] == Tileset.BottomWall
+                    || world[x - 1][y] == Tileset.LeftWall)) {
                 world[x][y] = Tileset.WallAndLeftBottomCorner;
-            }
-            else if (floorLeft && y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.SingleWallVertical && x < Main.WIDTH - 1 && (world[x + 1][y] == Tileset.BottomWall || world[x + 1][y] == Tileset.RightWall)) {
+            } else if ((floorLeft) && (y < Main.HEIGHT - 1) && (world[x][y + 1] == Tileset.SingleWallVertical)
+                    && (x < Main.WIDTH - 1) && (world[x + 1][y] == Tileset.BottomWall
+                    || world[x + 1][y] == Tileset.RightWall)) {
                 world[x][y] = Tileset.WallAndRightBottomCorner;
             }
         }
@@ -294,9 +319,9 @@ public class Rooms {
 
 
     private boolean isVerticalWall(TETile tile) {
-        return tile == Tileset.TopWall || tile == Tileset.BottomWall ||
-                tile == Tileset.SingleWallVertical || tile == Tileset.DoubleWallTop ||
-                tile == Tileset.DoubleWallBottom;
+        return tile == Tileset.TopWall || tile == Tileset.BottomWall
+                || tile == Tileset.SingleWallVertical || tile == Tileset.DoubleWallTop
+                || tile == Tileset.DoubleWallBottom;
     }
 
     public void buildWalls(TETile[][] world) {
@@ -333,38 +358,55 @@ public class Rooms {
         if (floorLeft && floorRight) {
             if (y > 0 && (world[x][y - 1] == Tileset.Grass || world[x][y - 1] == Tileset.DoubleWallBottom)) {
                 world[x][y] = Tileset.DoubleWallTop;
-            } else if (y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.Grass || world[x][y + 1] == Tileset.DoubleWallTop)) {
+            } else if (y < Main.HEIGHT - 1 && (world[x][y + 1] == Tileset.Grass
+                    || world[x][y + 1] == Tileset.DoubleWallTop)) {
                 world[x][y] = Tileset.DoubleWallBottom;
             }
         }
     }
 
     private void placeBasicWalls(TETile[][] world, int x, int y) {
-        if (x > 0 && world[x - 1][y] == Tileset.Grass) world[x - 1][y] = Tileset.LeftWall;
-        if (x < Main.WIDTH - 1 && world[x + 1][y] == Tileset.Grass) world[x + 1][y] = Tileset.RightWall;
-        if (y > 0 && world[x][y - 1] == Tileset.Grass) world[x][y - 1] = Tileset.BottomWall;
-        if (y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.Grass) world[x][y + 1] = Tileset.TopWall;
-        if (x > 0 && y < Main.HEIGHT - 1 && world[x - 1][y + 1] == Tileset.Grass) world[x - 1][y + 1] = Tileset.TopLeftCorner;
-        if (x < Main.WIDTH - 1 && y < Main.HEIGHT - 1 && world[x + 1][y + 1] == Tileset.Grass) world[x + 1][y + 1] = Tileset.TopRightCorner;
-        if (x > 0 && y > 0 && world[x - 1][y - 1] == Tileset.Grass) world[x - 1][y - 1] = Tileset.BottomLeftCorner;
-        if (x < Main.WIDTH - 1 && y > 0 && world[x + 1][y - 1] == Tileset.Grass) world[x + 1][y - 1] = Tileset.BottomRightCorner;
+        if (x > 0 && world[x - 1][y] == Tileset.Grass) {
+            world[x - 1][y] = Tileset.LeftWall;
+        }
+        if (x < Main.WIDTH - 1 && world[x + 1][y] == Tileset.Grass) {
+            world[x + 1][y] = Tileset.RightWall;
+        }
+        if (y > 0 && world[x][y - 1] == Tileset.Grass) {
+            world[x][y - 1] = Tileset.BottomWall;
+        }
+        if (y < Main.HEIGHT - 1 && world[x][y + 1] == Tileset.Grass) {
+            world[x][y + 1] = Tileset.TopWall;
+        }
+        if (x > 0 && y < Main.HEIGHT - 1 && world[x - 1][y + 1] == Tileset.Grass) {
+            world[x - 1][y + 1] = Tileset.TopLeftCorner;
+        }
+        if (x < Main.WIDTH - 1 && y < Main.HEIGHT - 1 && world[x + 1][y + 1] == Tileset.Grass) {
+            world[x + 1][y + 1] = Tileset.TopRightCorner;
+        }
+        if (x > 0 && y > 0 && world[x - 1][y - 1] == Tileset.Grass) {
+            world[x - 1][y - 1] = Tileset.BottomLeftCorner;
+        }
+        if (x < Main.WIDTH - 1 && y > 0 && world[x + 1][y - 1] == Tileset.Grass) {
+            world[x + 1][y - 1] = Tileset.BottomRightCorner;
+        }
     }
 
 
     private boolean isWall(TETile tile) {
-        return tile == Tileset.LeftWall || tile == Tileset.RightWall ||
-                tile == Tileset.TopWall || tile == Tileset.BottomWall ||
-                tile == Tileset.TopLeftCorner || tile == Tileset.TopRightCorner ||
-                tile == Tileset.BottomLeftCorner || tile == Tileset.BottomRightCorner ||
-                tile == Tileset.LeftInnerCorner || tile == Tileset.LeftTopInnerCorner ||
-                tile == Tileset.RightInnerCorner || tile == Tileset.RightTopInnerCorner ||
-                tile == Tileset.SingleWall || tile == Tileset.SingleWallLeft ||
-                tile == Tileset.SingleWallMiddle || tile == Tileset.SingleWallRight ||
-                tile == Tileset.SingleWallVertical || tile == Tileset.DoubleWallTop ||
-                tile == Tileset.DoubleWallBottom || tile == Tileset.WallAndTopLeftCorner ||
-                tile == Tileset.WallAndTopRightCorner || tile == Tileset.BottomWallAndLeftCorner ||
-                tile == Tileset.BottomWallAndRightCorner || tile == Tileset.WallAndLeftBottomCorner ||
-                tile == Tileset.WallAndRightBottomCorner;
+        return tile == Tileset.LeftWall || tile == Tileset.RightWall
+                || tile == Tileset.TopWall || tile == Tileset.BottomWall
+                || tile == Tileset.TopLeftCorner || tile == Tileset.TopRightCorner
+                || tile == Tileset.BottomLeftCorner || tile == Tileset.BottomRightCorner
+                || tile == Tileset.LeftInnerCorner || tile == Tileset.LeftTopInnerCorner
+                || tile == Tileset.RightInnerCorner || tile == Tileset.RightTopInnerCorner
+                || tile == Tileset.SingleWall || tile == Tileset.SingleWallLeft
+                || tile == Tileset.SingleWallMiddle || tile == Tileset.SingleWallRight
+                || tile == Tileset.SingleWallVertical || tile == Tileset.DoubleWallTop
+                || tile == Tileset.DoubleWallBottom || tile == Tileset.WallAndTopLeftCorner
+                || tile == Tileset.WallAndTopRightCorner || tile == Tileset.BottomWallAndLeftCorner
+                || tile == Tileset.BottomWallAndRightCorner || tile == Tileset.WallAndLeftBottomCorner
+                || tile == Tileset.WallAndRightBottomCorner;
     }
 
 }

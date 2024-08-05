@@ -55,6 +55,9 @@ public class Player implements Serializable {
             case RIGHT:
                 newX += 1;
                 break;
+            default:
+                System.out.println("Unknown direction: " + dir);
+                return;
         }
 
 
@@ -69,9 +72,9 @@ public class Player implements Serializable {
 
     private boolean canMoveTo(int newX, int newY) {
         TETile tile = world[newX][newY];
-        return newX >= 0 && newX < world.length &&
-                newY >= 0 && newY < world[0].length &&
-                (tile.id() == Tileset.Floor.id() || tile.id() == Tileset.FloorWithCoin.id());
+        return newX >= 0 && newX < world.length
+                && newY >= 0 && newY < world[0].length
+                && (tile.id() == Tileset.Floor.id() || tile.id() == Tileset.FloorWithCoin.id());
     }
 
 
@@ -102,6 +105,9 @@ public class Player implements Serializable {
             case RIGHT:
                 interactX++;
                 break;
+            default:
+                System.out.println("Unknown direction: " + facing);
+                return;
         }
 
         if (interactX >= 0 && interactX < world.length && interactY >= 0 && interactY < world[0].length) {
@@ -113,7 +119,9 @@ public class Player implements Serializable {
         lives--;
     }
 
-    public void gainLife() {lives++;}
+    public void gainLife() {
+        lives++;
+    }
 
     public int getLives() {
         return lives;

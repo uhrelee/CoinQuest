@@ -62,6 +62,9 @@ public class Enemy implements Serializable {
                     case RIGHT:
                         newX += 1;
                         break;
+                    default:
+                        System.out.println("Invalid direction: " + dir);
+                        break;
                 }
 
                 if (canMoveTo(newX, newY)) {
@@ -105,6 +108,9 @@ public class Enemy implements Serializable {
                     case RIGHT:
                         newX += 1;
                         break;
+                    default:
+                        System.out.println("Invalid direction: " + dir);
+                        break;
                 }
 
                 if (canMoveTo(newX, newY) && !visited[newX][newY]) {
@@ -142,10 +148,10 @@ public class Enemy implements Serializable {
     }
 
     private boolean canMoveTo(int newX, int newY) {
-        return newX >= 0 && newX < world.length &&
-                newY >= 0 && newY < world[0].length &&
-                (world[newX][newY].equals(Tileset.Floor) || world[newX][newY].equals(Tileset.FloorWithCoin)) &&
-                !game.isEnemyAt(newX, newY);
+        return newX >= 0 && newX < world.length
+                && newY >= 0 && newY < world[0].length
+                && (world[newX][newY].equals(Tileset.Floor) || world[newX][newY].equals(Tileset.FloorWithCoin))
+                && !game.isEnemyAt(newX, newY);
     }
 
     public int getX() {

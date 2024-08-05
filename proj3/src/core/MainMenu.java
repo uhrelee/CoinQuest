@@ -30,7 +30,8 @@ public class MainMenu {
         StdDraw.enableDoubleBuffering();
 
         try {
-            brickSansFont = Font.createFont(Font.TRUETYPE_FONT, new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(12f);
+            brickSansFont = Font.createFont(Font.TRUETYPE_FONT,
+                    new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(12f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(brickSansFont);
         } catch (IOException | FontFormatException e) {

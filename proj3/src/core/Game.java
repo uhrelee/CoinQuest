@@ -71,7 +71,8 @@ public class Game {
 
     private void initializeFont() {
         try {
-            brickSansFont = Font.createFont(Font.TRUETYPE_FONT, new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(13f);
+            brickSansFont = Font.createFont(Font.TRUETYPE_FONT,
+                    new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(13f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(brickSansFont);
         } catch (IOException | FontFormatException e) {
@@ -180,7 +181,7 @@ public class Game {
             handleInput();
             if (quitRequested) {
                 saveGame();
-                System.exit(0);;
+                System.exit(0);
             }
             moveEnemies();
             checkCollisions();
@@ -345,6 +346,9 @@ public class Game {
                     case 'e':
                         player.interact();
                         break;
+                    default:
+                        System.out.println("Invalid key: " + key);
+                        break;
                 }
             }
         }
@@ -416,13 +420,11 @@ public class Game {
             StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
             StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
         } else if (player.getLives() == 4) {
-        StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
-        StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
-        StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
-        StdDraw.picture(4, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
-
-        }
-        else if (player.getLives() == 1) {
+            StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+            StdDraw.picture(4, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
+        } else if (player.getLives() == 1) {
             StdDraw.picture(1, HEIGHT + HUD_HEIGHT - 1, HEART_RED);
             StdDraw.picture(2, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
             StdDraw.picture(3, HEIGHT + HUD_HEIGHT - 1, HEART_GRAY);
