@@ -18,7 +18,7 @@ public class Game {
     private static final int TILE_SIZE = 16;
     public static final int HUD_HEIGHT = 2;
     private static final int MAX_LEVEL = 2;
-    private static final int[] COINS_PER_LEVEL = {101, 201};
+    private final int[] COINS_PER_LEVEL = {101, 201};
     private static final String SAVE_FILE = "proj3/save_game.txt";
 
     private static final String HEART_RED = "proj3/src/core/game assets/HeartRed.PNG";
@@ -312,15 +312,14 @@ public class Game {
             long seed = Long.parseLong(parts[0].substring(1));
             int characterChoice = Integer.parseInt(parts[1]);
 
-            TETile[][] world = new TETile[WIDTH][HEIGHT];
+            TETile[][] newWorld = new TETile[WIDTH][HEIGHT];
             for (int x = 0; x < WIDTH; x++) {
                 for (int y = 0; y < HEIGHT; y++) {
-                    world[x][y] = Tileset.Grass;
+                    newWorld[x][y] = Tileset.Grass;
                 }
             }
-            Random rand = new Random(seed);
-            Main.createWorld(world, rand);
-            Game game = new Game(world, characterChoice, seed);
+            Main.createWorld(newWorld, rand);
+            Game game = new Game(newWorld, characterChoice, seed);
             game.gameLoop();
         } else if (input.startsWith("L")) {
             Game loadedGame = Game.loadGame();
