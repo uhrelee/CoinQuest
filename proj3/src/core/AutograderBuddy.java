@@ -57,7 +57,8 @@ public class AutograderBuddy {
                 || t.character() == Tileset.CustomFloor.character()
                 || t.character() == Tileset.AVATAR.character()
                 || t.character() == Tileset.FLOWER.character()
-                || t.character() == Tileset.Floor.character();
+                || t.character() == Tileset.Floor.character()
+                || t.character() == Tileset.FloorWithCoin.character();
     }
 
     /**
