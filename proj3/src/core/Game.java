@@ -407,7 +407,7 @@ public class Game {
         StdDraw.setFont(brickSansFont);
         StdDraw.setPenColor(Color.WHITE);
 
-        StdDraw.picture(10, HEIGHT + 1, COIN_IMAGE, 2.0, 2.0);
+        StdDraw.picture(9.8, HEIGHT + 1.1, COIN_IMAGE, 1.5, 1.5);
         StdDraw.textRight(9, HEIGHT + 1, collectedCoins + "/" + totalCoins);
         StdDraw.text(WIDTH / 2, HEIGHT + 1, "Level " + level);
 
