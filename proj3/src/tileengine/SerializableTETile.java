@@ -15,6 +15,7 @@ public class SerializableTETile implements Serializable {
     private final String filepath;
     private final int id;
 
+    // @source help from chatGPT
     public SerializableTETile(TETile tile) {
         this.character = tile.character();
         this.textColor = tile.getTextColor();
@@ -24,6 +25,7 @@ public class SerializableTETile implements Serializable {
         this.id = tile.id();
     }
 
+    // @source help from chatGPT
     public TETile toTETile() {
         return new TETile(character, textColor, backgroundColor, description, filepath, id);
     }

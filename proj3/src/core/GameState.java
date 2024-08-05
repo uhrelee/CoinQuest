@@ -20,6 +20,7 @@ public class GameState implements Serializable {
     private long randomSeed;
     private ArrayList<int[]> enemyPositions;
 
+    // @source help from chatGPT
     public GameState(TETile[][] world, Player player, ArrayList<Enemy> enemies, Game game) {
         this.world = new SerializableTETile[world.length][world[0].length];
         for (int x = 0; x < world.length; x++) {
@@ -41,6 +42,7 @@ public class GameState implements Serializable {
         }
     }
 
+    // @source help from chatGPT
     public TETile[][] getWorld() {
         TETile[][] worldCopy = new TETile[world.length][world[0].length];
         for (int x = 0; x < world.length; x++) {
@@ -87,6 +89,7 @@ public class GameState implements Serializable {
         return enemyPositions;
     }
 
+    // @source help from chatGPT
     public String serialize() {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -99,6 +102,7 @@ public class GameState implements Serializable {
         }
     }
 
+    // @source help from chatGPT
     public static GameState deserialize(String s) {
         try {
             byte[] data = Base64.getDecoder().decode(s);

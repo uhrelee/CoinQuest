@@ -29,6 +29,7 @@ public class MainMenu {
         StdDraw.clear(Color.BLACK);
         StdDraw.enableDoubleBuffering();
 
+        // @source help from chatGPT
         try {
             brickSansFont = Font.createFont(Font.TRUETYPE_FONT,
                     new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(12f);
@@ -67,6 +68,7 @@ public class MainMenu {
     }
 
     //collect seed based on user input
+    // @source help from chatGPT
     public String collectSeed() {
         StringBuilder typedString = new StringBuilder();
         drawSeedFrame(typedString.toString());
@@ -100,6 +102,7 @@ public class MainMenu {
         StdDraw.picture(this.width / 2, this.height / 2, CHARACTER_SELECTION_IMAGE);
         StdDraw.show();
 
+        // @source help from chatGPT
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();

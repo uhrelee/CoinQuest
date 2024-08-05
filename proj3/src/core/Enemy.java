@@ -25,7 +25,7 @@ public class Enemy implements Serializable {
     enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
-
+    // @source help from chatGPT
     public Enemy(int startX, int startY, TETile[][] world, Player player, Game game) {
         this.x = startX;
         this.y = startY;
@@ -33,11 +33,12 @@ public class Enemy implements Serializable {
         this.player = player;
         this.game = game;
     }
-
+    // @source help from chatGPT
     public void render() {
         StdDraw.picture(x + 0.5, y + 0.5, Sprite.getEnemyFilePath(spritePrefix, facing), 1, 1);
     }
 
+    // @source help from chatGPT
     public void move() {
         if (moveCounter >= MOVE_DELAY) {
             moveCounter = 0;
@@ -77,6 +78,7 @@ public class Enemy implements Serializable {
         }
     }
 
+    // @source help from chatGPT
     private List<Direction> findPathToPlayer() {
         int targetX = player.getX();
         int targetY = player.getY();
@@ -123,6 +125,7 @@ public class Enemy implements Serializable {
         return null;
     }
 
+    // @source help from chatGPT
     private List<Direction> reconstructPath(Map<Point, Point> cameFrom, Point start, Point end) {
         List<Direction> path = new LinkedList<>();
         Point current = end;
@@ -147,6 +150,7 @@ public class Enemy implements Serializable {
         return path;
     }
 
+    // @source help from chatGPT
     private boolean canMoveTo(int newX, int newY) {
         return newX >= 0 && newX < world.length
                 && newY >= 0 && newY < world[0].length

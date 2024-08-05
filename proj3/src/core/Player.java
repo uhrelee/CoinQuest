@@ -22,6 +22,7 @@ public class Player implements Serializable {
         UP, DOWN, LEFT, RIGHT
     }
 
+    // @source help from chatGPT
     public Player(int startX, int startY, TETile[][] world, Game game, int characterChoice) {
         this.x = startX;
         this.y = startY;
@@ -31,11 +32,13 @@ public class Player implements Serializable {
         spritePrefix = (characterChoice == 1) ? "Sprite" : "Guy";
     }
 
+    // @source help from chatGPT
     public void setPosition(int newX, int newY) {
         this.x = newX;
         this.y = newY;
     }
 
+    // @source help from chatGPT
     public void move(Direction dir) {
         int newX = x;
         int newY = y;
@@ -70,6 +73,7 @@ public class Player implements Serializable {
         }
     }
 
+    // @source help from chatGPT
     private boolean canMoveTo(int newX, int newY) {
         TETile tile = world[newX][newY];
         return newX >= 0 && newX < world.length
@@ -79,15 +83,18 @@ public class Player implements Serializable {
 
 
 
+    // @source help from chatGPT
     public void render() {
         StdDraw.picture(x + 0.5, y + 0.5, Sprite.getSpriteFilePath(spritePrefix, facing), 1, 1);
     }
 
+    // @source help from chatGPT
     private void collectCoin(int newX, int newY) {
         world[newX][newY] = Tileset.Floor;
         game.incrementCollectedCoins();
     }
 
+    // @source help from chatGPT
     public void interact() {
         int interactX = x;
         int interactY = y;

@@ -8,6 +8,7 @@ import java.io.IOException;
 public class Sprite {
     private static final String SPRITE_PATH = "proj3/src/core/game assets/";
 
+    // @source help from chatGPT
     public static BufferedImage loadSprite(String filename) {
         BufferedImage sprite = null;
         try {
@@ -25,6 +26,7 @@ public class Sprite {
         return sprite;
     }
 
+    // @source help from chatGPT
     public static String getSpriteFilePath(String prefix, Player.Direction direction) {
         switch (direction) {
             case UP:
@@ -40,6 +42,7 @@ public class Sprite {
         }
     }
 
+    // @source help from chatGPT
     public static String getEnemyFilePath(String prefix, Enemy.Direction direction) {
         switch (direction) {
             case UP:
