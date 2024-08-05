@@ -25,9 +25,13 @@ public class AutograderBuddy {
     public static final int HEIGHT = 55;
 
     public static TETile[][] getWorldFromInput(String input) {
+
         if (input.isEmpty()) {
-            throw new RuntimeException("Input cannot be empty!");
+            throw new RuntimeException("Please fill out AutograderBuddy!");
         }
+
+        String inputSeed = input.substring(1, input.length() - 1);
+        long seed = Long.parseLong(inputSeed);
 
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
@@ -35,47 +39,11 @@ public class AutograderBuddy {
                 world[x][y] = Tileset.CustomNothing;
             }
         }
-
-        char firstChar = input.charAt(0);
-        if (firstChar == 'N') {
-            int endIndex = input.indexOf('S');
-            if (endIndex == -1) {
-                throw new RuntimeException("Invalid input format.");
-            }
-            String seedString = input.substring(1, endIndex);
-            long seed;
-            try {
-                seed = Long.parseLong(seedString);
-            } catch (NumberFormatException e) {
-                throw new RuntimeException("Invalid seed format.");
-            }
-            String movements = input.substring(endIndex + 1);
-
-            Random rand = new Random(seed);
-            Main.createWorld(world, rand);
-
-            Game game = new Game(world, 0, seed);
-            game.simulateMovements(movements);
-            if (movements.endsWith(":Q")) {
-                game.saveGame();
-            }
-        } else if (firstChar == 'L') {
-            Game loadedGame = Game.loadGame();
-            if (loadedGame == null) {
-                throw new RuntimeException("No saved game found.");
-            }
-            String movements = input.substring(1);
-            loadedGame.simulateMovements(movements);
-            if (movements.endsWith(":Q")) {
-                loadedGame.saveGame();
-            }
-            world = loadedGame.getWorld();
-        } else {
-            throw new RuntimeException("Invalid input format.");
-        }
-
+        Random rand = new Random(seed);
+        Main.createWorld(world, rand);
         return world;
     }
+
 
 
     /**
