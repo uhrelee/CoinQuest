@@ -38,22 +38,25 @@ public class AutograderBuddy {
 
         char firstChar = input.charAt(0);
         if (firstChar == 'N') {
-            String[] parts = input.split(":");
-            long seed = Long.parseLong(parts[0].substring(1));
-
-            String movements;
-            if (parts.length > 1) {
-                movements = parts[1];
-            } else {
-                movements = "";
+            int endIndex = input.indexOf('S');
+            if (endIndex == -1) {
+                throw new RuntimeException("Invalid input format.");
             }
+            String seedString = input.substring(1, endIndex);
+            long seed;
+            try {
+                seed = Long.parseLong(seedString);
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("Invalid seed format.");
+            }
+            String movements = input.substring(endIndex + 1);
 
             Random rand = new Random(seed);
             Main.createWorld(world, rand);
 
-            Game game = new Game(world, 1, seed);
+            Game game = new Game(world, 0, seed);
             game.simulateMovements(movements);
-            if (movements.endsWith("Q")) {
+            if (movements.endsWith(":Q")) {
                 game.saveGame();
             }
         } else if (firstChar == 'L') {
@@ -63,7 +66,7 @@ public class AutograderBuddy {
             }
             String movements = input.substring(1);
             loadedGame.simulateMovements(movements);
-            if (movements.endsWith("Q")) {
+            if (movements.endsWith(":Q")) {
                 loadedGame.saveGame();
             }
             world = loadedGame.getWorld();
