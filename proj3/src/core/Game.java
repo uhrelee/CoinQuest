@@ -492,11 +492,20 @@ public class Game {
                 break;
             }
             switch (move) {
-                case 'W': player.move(Player.Direction.UP); break;
-                case 'S': player.move(Player.Direction.DOWN); break;
-                case 'A': player.move(Player.Direction.LEFT); break;
-                case 'D': player.move(Player.Direction.RIGHT); break;
-                default: break;
+                case 'W':
+                    player.move(Player.Direction.UP);
+                    break;
+                case 'S':
+                    player.move(Player.Direction.DOWN);
+                    break;
+                case 'A':
+                    player.move(Player.Direction.LEFT);
+                    break;
+                case 'D':
+                    player.move(Player.Direction.RIGHT);
+                    break;
+                default:
+                    break;
             }
         }
     }
