@@ -316,7 +316,7 @@ public class Game {
         }
     }
 
-
+    // @source help from chatGPT
     private void restartGame() {
         MainMenu menu = new MainMenu(WIDTH, HEIGHT);
         menu.displayMenu();
