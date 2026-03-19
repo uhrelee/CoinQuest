@@ -22,10 +22,30 @@ public class Enemy implements Serializable {
     private TETile[][] world;
     private Game game;
 
+    private static class Node {
+        Point point;
+        int gCost;
+        int hCost;
+
+        Node(Point point, int gCost, int hCost) {
+            this.point = point;
+            this.gCost = gCost;
+            this.hCost = hCost;
+        }
+
+        int fCost() {
+            return gCost + hCost;
+        }
+    }
+
+    private int heuristic(Point a, Point b) {
+        return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+    }
+
     enum Direction {
         UP, DOWN, LEFT, RIGHT
     }
-    // @source help from chatGPT
+
     public Enemy(int startX, int startY, TETile[][] world, Player player, Game game) {
         this.x = startX;
         this.y = startY;
@@ -33,12 +53,11 @@ public class Enemy implements Serializable {
         this.player = player;
         this.game = game;
     }
-    // @source help from chatGPT
+
     public void render() {
         StdDraw.picture(x + 0.5, y + 0.5, Sprite.getEnemyFilePath(spritePrefix, facing), 1, 1);
     }
 
-    // @source help from chatGPT
     public void move() {
         if (moveCounter >= MOVE_DELAY) {
             moveCounter = 0;
@@ -78,54 +97,57 @@ public class Enemy implements Serializable {
         }
     }
 
-    // @source help from chatGPT
     private List<Direction> findPathToPlayer() {
-        int targetX = player.getX();
-        int targetY = player.getY();
-        boolean[][] visited = new boolean[world.length][world[0].length];
-        Map<Point, Point> cameFrom = new HashMap<>();
-        Queue<Point> queue = new LinkedList<>();
-        queue.add(new Point(x, y));
-        visited[x][y] = true;
+        Point start = new Point(x, y);
+        Point target = new Point(player.getX(), player.getY());
 
-        while (!queue.isEmpty()) {
-            Point current = queue.poll();
-            if (current.x == targetX && current.y == targetY) {
-                return reconstructPath(cameFrom, new Point(x, y), current);
+        PriorityQueue<Node> openSet =
+                new PriorityQueue<>(Comparator.comparingInt(node -> node.fCost()));
+
+        Map<Point, Point> cameFrom = new HashMap<>();
+        Map<Point, Integer> gScore = new HashMap<>();
+
+        gScore.put(start, 0);
+        openSet.add(new Node(start, 0, heuristic(start, target)));
+
+        while (!openSet.isEmpty()) {
+            Node currentNode = openSet.poll();
+            Point current = currentNode.point;
+
+            // Reached player
+            if (current.equals(target)) {
+                return reconstructPath(cameFrom, start, current);
             }
 
             for (Direction dir : Direction.values()) {
                 int newX = current.x;
                 int newY = current.y;
+
                 switch (dir) {
-                    case UP:
-                        newY += 1;
-                        break;
-                    case DOWN:
-                        newY -= 1;
-                        break;
-                    case LEFT:
-                        newX -= 1;
-                        break;
-                    case RIGHT:
-                        newX += 1;
-                        break;
-                    default:
-                        System.out.println("Invalid direction: " + dir);
-                        break;
+                    case UP: newY += 1; break;
+                    case DOWN: newY -= 1; break;
+                    case LEFT: newX -= 1; break;
+                    case RIGHT: newX += 1; break;
                 }
 
-                if (canMoveTo(newX, newY) && !visited[newX][newY]) {
-                    queue.add(new Point(newX, newY));
-                    visited[newX][newY] = true;
-                    cameFrom.put(new Point(newX, newY), current);
+                if (!canMoveTo(newX, newY)) continue;
+
+                Point neighbor = new Point(newX, newY);
+                int tentativeG = gScore.get(current) + 1;
+
+                if (!gScore.containsKey(neighbor) || tentativeG < gScore.get(neighbor)) {
+                    cameFrom.put(neighbor, current);
+                    gScore.put(neighbor, tentativeG);
+
+                    int h = heuristic(neighbor, target);
+                    openSet.add(new Node(neighbor, tentativeG, h));
                 }
             }
         }
+
         return null;
     }
 
-    // @source help from chatGPT
     private List<Direction> reconstructPath(Map<Point, Point> cameFrom, Point start, Point end) {
         List<Direction> path = new LinkedList<>();
         Point current = end;
@@ -150,7 +172,6 @@ public class Enemy implements Serializable {
         return path;
     }
 
-    // @source help from chatGPT
     private boolean canMoveTo(int newX, int newY) {
         return newX >= 0 && newX < world.length
                 && newY >= 0 && newY < world[0].length
