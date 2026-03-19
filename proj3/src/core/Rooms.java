@@ -77,7 +77,6 @@ public class Rooms {
         }
     }
 
-    // @source help from chatGPT
     public boolean ifRoomsOverlap(Rooms other) {
         return this.CenterX + this.width / 2 + 1 >= other.CenterX - other.width / 2
                 && this.CenterX - this.width / 2 - 1 <= other.CenterX + other.width / 2
@@ -130,7 +129,6 @@ public class Rooms {
         }
     }
 
-    // @source help from chatGPT
     private void drawHallway(TETile[][] tiles, int x1, int y1, int x2, int y2) {
         int currentX = x1;
         int currentY = y1;
@@ -151,8 +149,6 @@ public class Rooms {
         tiles[x2][y2] = Tileset.Floor;
     }
 
-
-    // @source help from chatGPT
     private void refineWallType(TETile[][] world, int x, int y) {
         boolean[] floor = {
             x > 0 && world[x - 1][y] == Tileset.Floor,
@@ -187,7 +183,6 @@ public class Rooms {
         setWallType(world, x, y, floor, grass, wall, corner);
     }
 
-    // @source help from chatGPT
     private void setWallType(
             TETile[][] world, int x, int y,
             boolean[] floor, boolean[] grass,
@@ -212,7 +207,6 @@ public class Rooms {
         }
     }
 
-    // @source help from chatGPT
     private boolean setDoubleWall(TETile[][] world, int x, int y, boolean[] grass, boolean[] floor) {
         if (grass[3] && (floor[2] || y == Main.HEIGHT - 1)) {
             world[x][y] = Tileset.DoubleWallTop;
@@ -224,7 +218,6 @@ public class Rooms {
         return false;
     }
 
-    // @source help from chatGPT
     private boolean setVerticalWall(TETile[][] world, int x, int y, boolean[] floor, boolean[] grass, boolean[] wall) {
         if (floor[0] && floor[1] && (grass[2] || wall[2]) && (grass[3] || wall[3])) {
             world[x][y] = Tileset.SingleWallVertical;
@@ -242,7 +235,6 @@ public class Rooms {
         return false;
     }
 
-    // @source help from chatGPT
     private boolean setHorizontalWall(
             TETile[][] world, int x, int y,
             boolean[] floor, boolean[] grass,
@@ -275,7 +267,6 @@ public class Rooms {
         return false;
     }
 
-    // @source help from chatGPT
     private boolean setCornerWall(
             TETile[][] world, int x, int y,
             boolean[] floor, boolean[] grass,
@@ -320,7 +311,6 @@ public class Rooms {
         return false;
     }
 
-    // @source help from chatGPT
     private boolean setInnerCornerWall(TETile[][] world, int x, int y, boolean[] floor, boolean[] wall) {
         if ((wall[0] || x == 0)
                 && (wall[3] || y == 0) && floor[1] && floor[2]) {
@@ -357,9 +347,6 @@ public class Rooms {
         return false;
     }
 
-
-
-    // @source help from chatGPT
     public void handleEdgeCases(TETile[][] world) {
         for (int x = 0; x < Main.WIDTH; x++) {
             for (int y = 0; y < Main.HEIGHT; y++) {
@@ -370,7 +357,6 @@ public class Rooms {
         }
     }
 
-    // @source help from chatGPT
     private void applyEdgeCaseRules(TETile[][] world, int x, int y) {
         if (world[x][y] == Tileset.SingleWallVertical
                 || world[x][y] == Tileset.DoubleWallTop
@@ -430,8 +416,6 @@ public class Rooms {
         }
     }
 
-
-    // @source help from chatGPT
     public void buildWalls(TETile[][] world) {
         for (int x = 0; x < Main.WIDTH; x++) {
             for (int y = 0; y < Main.HEIGHT; y++) {

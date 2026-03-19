@@ -17,7 +17,7 @@ public class MainMenu {
     private static final String CHARACTER_SELECTION_IMAGE = "proj3/src/core/game assets/CharacterSelection.png";
     private Font brickSansFont;
 
-    //constructor
+    // Constructor
     public MainMenu(int width, int height) {
         this.width = width;
         this.height = height;
@@ -29,7 +29,6 @@ public class MainMenu {
         StdDraw.clear(Color.BLACK);
         StdDraw.enableDoubleBuffering();
 
-        // @source help from chatGPT
         try {
             brickSansFont = Font.createFont(Font.TRUETYPE_FONT,
                     new File("proj3/src/core/game assets/NTBrickSans.ttf")).deriveFont(12f);
@@ -40,14 +39,14 @@ public class MainMenu {
         }
     }
 
-    //display main menu
+    // Display main menu
     public void displayMenu() {
         StdDraw.clear();
         StdDraw.picture(this.width / 2, this.height / 2, MAIN_MENU_IMAGE);
         StdDraw.show();
     }
 
-    //get string input from user
+    // Get string input from user
     public String getInput() {
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
@@ -67,8 +66,7 @@ public class MainMenu {
         }
     }
 
-    //collect seed based on user input
-    // @source help from chatGPT
+    // Collect seed based on user input
     public String collectSeed() {
         StringBuilder typedString = new StringBuilder();
         drawSeedFrame(typedString.toString());
@@ -86,7 +84,7 @@ public class MainMenu {
         return typedString.toString();
     }
 
-    //make the second frame after main where user inputs the seed
+    // Make the second frame after main where user inputs the seed
     public void drawSeedFrame(String seed) {
         StdDraw.clear();
         StdDraw.picture(this.width / 2, this.height / 2, SEED_SCREEN_IMAGE);
@@ -102,7 +100,6 @@ public class MainMenu {
         StdDraw.picture(this.width / 2, this.height / 2, CHARACTER_SELECTION_IMAGE);
         StdDraw.show();
 
-        // @source help from chatGPT
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();

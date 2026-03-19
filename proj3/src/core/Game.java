@@ -41,8 +41,6 @@ public class Game {
     private int potionX;
     private int potionY;
 
-
-    // @source help from chatGPT
     public Game(TETile[][] generatedWorld, int characterChoice, long seed) {
         this.world = generatedWorld;
         this.randomSeed = seed;
@@ -53,7 +51,6 @@ public class Game {
         setupGraphics();
     }
 
-    // @source help from chatGPT
     private Game(GameState state) {
         this.world = state.getWorld();
         this.randomSeed = state.getRandomSeed();
@@ -71,7 +68,6 @@ public class Game {
         setupGraphics();
     }
 
-    // @source help from chatGPT
     private void initializeFont() {
         try {
             brickSansFont = Font.createFont(Font.TRUETYPE_FONT,
@@ -83,7 +79,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void initializeWorld(int characterChoice) {
         placeCoins();
         placePlayer(characterChoice);
@@ -110,7 +105,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void placeCoins() {
         int coinsToPlace = COINS_PER_LEVEL[level - 1];
         totalCoins = coinsToPlace;
@@ -132,7 +126,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void placePlayer(int characterChoice) {
         List<int[]> floorTiles = new ArrayList<>();
         Random random = new Random();
@@ -154,7 +147,6 @@ public class Game {
         totalCoins--;
     }
 
-    // @source help from chatGPT
     private void initializeEnemies() {
         enemies = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
@@ -162,7 +154,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void initializeEnemies(ArrayList<int[]> enemyPositions) {
         enemies = new ArrayList<>();
         for (int[] pos : enemyPositions) {
@@ -170,7 +161,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void placeEnemy() {
         int attempts = 0;
         while (attempts < 100) {
@@ -185,7 +175,6 @@ public class Game {
         System.out.println("Warning: Could not place an enemy after 100 attempts");
     }
 
-    // @source help from chatGPT
     private void setupGraphics() {
         StdDraw.setCanvasSize(WIDTH * TILE_SIZE, (HEIGHT + HUD_HEIGHT) * TILE_SIZE);
         StdDraw.setXscale(0, WIDTH);
@@ -193,8 +182,6 @@ public class Game {
         StdDraw.enableDoubleBuffering();
     }
 
-
-    // @source help from chatGPT
     public void gameLoop() {
         while (!gameCompleted && !gameOver && !quitRequested) {
             handleInput();
@@ -224,14 +211,12 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void moveEnemies() {
         for (Enemy enemy : enemies) {
             enemy.move();
         }
     }
 
-    // @source help from chatGPT
     private void checkCollisions() {
         for (Enemy enemy : enemies) {
             if (enemy.getX() == player.getX() && enemy.getY() == player.getY()) {
@@ -245,7 +230,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void respawnPlayer() {
         ArrayList<Point> floorTiles = new ArrayList<>();
         for (int x = 0; x < WIDTH; x++) {
@@ -261,7 +245,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void checkLevelCompletion() {
         if (collectedCoins == totalCoins) {
             if (level < MAX_LEVEL) {
@@ -273,7 +256,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void generateNewLevel() {
         TETile[][] newWorld = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x++) {
@@ -288,7 +270,6 @@ public class Game {
         initializeEnemies();
     }
 
-    // @source help from chatGPT
     private void displayGameCompletionScreen() {
         StdDraw.clear(Color.BLACK);
         String winScreenPath = "proj3/src/core/game assets/Win Screen Resized.png";
@@ -316,7 +297,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void restartGame() {
         MainMenu menu = new MainMenu(WIDTH, HEIGHT);
         menu.displayMenu();
@@ -348,7 +328,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     public void handleInput() {
         if (StdDraw.hasNextKeyTyped()) {
             char key = StdDraw.nextKeyTyped();
@@ -379,7 +358,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void waitForQuitCommand() {
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
@@ -391,7 +369,7 @@ public class Game {
             }
         }
     }
-    // @source help from chatGPT
+
     public void render() {
         StdDraw.clear(Color.BLACK);
         renderWorld();
@@ -402,7 +380,7 @@ public class Game {
         }
         StdDraw.show();
     }
-    // @source help from chatGPT
+
     private void renderWorld() {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
@@ -413,7 +391,6 @@ public class Game {
         }
     }
 
-    // @source help from chatGPT
     private void renderPlayerAndEnemies() {
         player.render();
         for (Enemy enemy : enemies) {
@@ -427,8 +404,6 @@ public class Game {
         }
     }
 
-
-    // @source help from chatGPT
     private void renderHUD() {
         Color hudColor = Color.decode("#92D34E");
         StdDraw.setPenColor(hudColor);
@@ -477,7 +452,6 @@ public class Game {
         collectedCoins++;
     }
 
-    // @source help from chatGPT
     public boolean isEnemyAt(int x, int y) {
         for (Enemy enemy : enemies) {
             if (enemy.getX() == x && enemy.getY() == y) {
@@ -486,7 +460,6 @@ public class Game {
         }
         return false;
     }
-
 
     public int getCollectedCoins() {
         return collectedCoins;
@@ -504,19 +477,16 @@ public class Game {
         return randomSeed;
     }
 
-
     public TETile[][] getWorld() {
         return world;
     }
 
-    // @source help from chatGPT
     public void saveGame() {
         GameState state = new GameState(world, player, enemies, this);
         String serializedState = state.serialize();
         FileUtils.writeFile(SAVE_FILE, serializedState);
     }
 
-    // @source help from chatGPT
     public static Game loadGame() {
         if (FileUtils.fileExists(SAVE_FILE)) {
             String serializedState = FileUtils.readFile(SAVE_FILE);
