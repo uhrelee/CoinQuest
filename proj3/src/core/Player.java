@@ -1,0 +1,152 @@
+package core;
+
+import edu.princeton.cs.algs4.StdDraw;
+import tileengine.TETile;
+import tileengine.Tileset;
+
+import java.io.Serializable;
+
+public class Player implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private static final int TILE_SIZE = 16;
+
+    private String spritePrefix;
+    private int x, y;
+    private Direction facing = Direction.DOWN;
+    private TETile[][] world;
+    private Game game;
+    private int characterChoice;
+    private int lives = 3;
+
+    enum Direction {
+        UP, DOWN, LEFT, RIGHT
+    }
+
+    // @source help from chatGPT
+    public Player(int startX, int startY, TETile[][] world, Game game, int characterChoice) {
+        this.x = startX;
+        this.y = startY;
+        this.world = world;
+        this.game = game;
+        this.characterChoice = characterChoice;
+        spritePrefix = (characterChoice == 1) ? "Sprite" : "Guy";
+    }
+
+    // @source help from chatGPT
+    public void setPosition(int newX, int newY) {
+        this.x = newX;
+        this.y = newY;
+    }
+
+    // @source help from chatGPT
+    public void move(Direction dir) {
+        int newX = x;
+        int newY = y;
+
+        facing = dir;
+
+        switch (dir) {
+            case UP:
+                newY += 1;
+                break;
+            case DOWN:
+                newY -= 1;
+                break;
+            case LEFT:
+                newX -= 1;
+                break;
+            case RIGHT:
+                newX += 1;
+                break;
+            default:
+                System.out.println("Unknown direction: " + dir);
+                return;
+        }
+
+
+        if (canMoveTo(newX, newY)) {
+            if (world[newX][newY].equals(Tileset.FloorWithCoin)) {
+                collectCoin(newX, newY);
+            }
+            x = newX;
+            y = newY;
+        }
+    }
+
+    // @source help from chatGPT
+    private boolean canMoveTo(int newX, int newY) {
+        TETile tile = world[newX][newY];
+        return newX >= 0 && newX < world.length
+                && newY >= 0 && newY < world[0].length
+                && (tile.id() == Tileset.Floor.id() || tile.id() == Tileset.FloorWithCoin.id());
+    }
+
+
+
+    // @source help from chatGPT
+    public void render() {
+        StdDraw.picture(x + 0.5, y + 0.5, Sprite.getSpriteFilePath(spritePrefix, facing), 1, 1);
+    }
+
+    // @source help from chatGPT
+    private void collectCoin(int newX, int newY) {
+        world[newX][newY] = Tileset.Floor;
+        game.incrementCollectedCoins();
+    }
+
+    // @source help from chatGPT
+    public void interact() {
+        int interactX = x;
+        int interactY = y;
+
+        switch (facing) {
+            case UP:
+                interactY++;
+                break;
+            case DOWN:
+                interactY--;
+                break;
+            case LEFT:
+                interactX--;
+                break;
+            case RIGHT:
+                interactX++;
+                break;
+            default:
+                System.out.println("Unknown direction: " + facing);
+                return;
+        }
+
+        if (interactX >= 0 && interactX < world.length && interactY >= 0 && interactY < world[0].length) {
+            System.out.println("Interacting with tile: " + world[interactX][interactY]);
+        }
+    }
+
+    public void loseLife() {
+        lives--;
+    }
+
+    public void gainLife() {
+        lives++;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getCharacterChoice() {
+        return characterChoice;
+    }
+}
